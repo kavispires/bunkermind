@@ -7,7 +7,12 @@ const initialState = {
   game: GameEngine.state,
   gameID: null,
   isLoading: false,
+  nickname: null,
   screen: null,
+  toast: {
+    isVisible: false,
+    message: '',
+  },
 };
 
 const { useGlobalState } = createGlobalState(initialState);

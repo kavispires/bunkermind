@@ -6,6 +6,7 @@ import useGlobalState from '../useGlobalState';
 import { SCREENS } from '../utils/contants';
 
 import Home from './Home';
+import Toast from './Toast';
 import WaitingRoom from './WaitingRoom';
 
 const Screen = () => {
@@ -27,6 +28,7 @@ const App = () => {
     <Container maxWidth="lg" className="app-container">
       {isLoading ? <LinearProgress /> : <div className="progress-bar-placeholder" />}
       <Screen />
+      <Toast />
     </Container>
   );
 };
