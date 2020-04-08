@@ -1,0 +1,767 @@
+{
+  "1": {
+    "id": 1,
+    "answers": 3,
+    "question": "What are 3 things found in a pocket?"
+  },
+  "2": {
+    "id": 2,
+    "answers": 5,
+    "question": "Who are 5 excellent actresses?"
+  },
+  "3": {
+    "id": 3,
+    "answers": 3,
+    "question": "What are 3 Zodiac signs?"
+  },
+  "4": {
+    "id": 4,
+    "answers": 3,
+    "question": "What are 3 award shows?"
+  },
+  "5": {
+    "id": 5,
+    "answers": 4,
+    "question": "What are 4 ways to fill in the blank? Instead of a wedding cake, they had ___ for dessert at their wedding."
+  },
+  "6": {
+    "id": 6,
+    "answers": 3,
+    "question": "What are 3 things that are unpredictable?"
+  },
+  "7": {
+    "id": 7,
+    "answers": 3,
+    "question": "What are 3 men's names beginning with \"H\"?"
+  },
+  "8": {
+    "id": 8,
+    "answers": 5,
+    "question": "What are 5 grey things?"
+  },
+  "9": {
+    "id": 9,
+    "answers": 4,
+    "question": "What are 4 things there are 7 of?"
+  },
+  "10": {
+    "id": 10,
+    "answers": 3,
+    "question": "What are 3 jobs you don't want if you have a great sense of smell?"
+  },
+  "11": {
+    "id": 11,
+    "answers": 2,
+    "question": "What are 2 ways to fill the blank? ___belt"
+  },
+  "12": {
+    "id": 12,
+    "answers": 4,
+    "question": "What are 4 unusual things people eat?"
+  },
+  "13": {
+    "id": 13,
+    "answers": 3,
+    "question": "What are 3 animal sounds you might hear on a farm?"
+  },
+  "14": {
+    "id": 14,
+    "answers": 2,
+    "question": "Which 2 people in the room would not enjoy being a police officer?"
+  },
+  "15": {
+    "id": 15,
+    "answers": 5,
+    "question": "What are 5 things that come to mind when you think of night?"
+  },
+  "16": {
+    "id": 16,
+    "answers": 4,
+    "question": "What are 4 alarms people ignore?"
+  },
+  "17": {
+    "id": 17,
+    "answers": 2,
+    "question": "Which 2 people in the room would make the best teachers?"
+  },
+  "18": {
+    "id": 18,
+    "answers": 5,
+    "question": "What are 5 things that come to mind when you think of New York?"
+  },
+  "19": {
+    "id": 19,
+    "answers": 2,
+    "question": "What are 2 Asian languages?"
+  },
+  "20": {
+    "id": 20,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? There was no knife, so William used ___ to spread the butter."
+  },
+  "21": {
+    "id": 21,
+    "answers": 4,
+    "question": "What are 4 things that might happen to your luggage while traveling?"
+  },
+  "22": {
+    "id": 22,
+    "answers": 3,
+    "question": "What are 3 stars?"
+  },
+  "23": {
+    "id": 23,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? full___"
+  },
+  "24": {
+    "id": 24,
+    "answers": 3,
+    "question": "What are 3 things people use to protect themselves from the rain?"
+  },
+  "25": {
+    "id": 25,
+    "answers": 3,
+    "question": "What are 3 animals that begin with the letter \"I\"?"
+  },
+  "26": {
+    "id": 26,
+    "answers": 5,
+    "question": "What are 5 things you might find in a toolbox?"
+  },
+  "27": {
+    "id": 27,
+    "answers": 4,
+    "question": "What are 4 things you do when you are hot?"
+  },
+  "28": {
+    "id": 28,
+    "answers": 4,
+    "question": "What are 4 foods that come on a stick?"
+  },
+  "29": {
+    "id": 29,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? blind___"
+  },
+  "30": {
+    "id": 30,
+    "answers": 3,
+    "question": "What are 3 words that rhyme with feel?"
+  },
+  "31": {
+    "id": 31,
+    "answers": 3,
+    "question": "What are 3 European languages?"
+  },
+  "32": {
+    "id": 32,
+    "answers": 5,
+    "question": "What are 5 things that might break a window?"
+  },
+  "33": {
+    "id": 33,
+    "answers": 3,
+    "question": "What are 3 things with wires?"
+  },
+  "34": {
+    "id": 34,
+    "answers": 3,
+    "question": "What are 3 of the most intelligent dog breeds?"
+  },
+  "35": {
+    "id": 35,
+    "answers": 5,
+    "question": "What are 5 ways to fill in the blank? ___bed"
+  },
+  "36": {
+    "id": 36,
+    "answers": 3,
+    "question": "What are 3 ways someone might cheat on a test?"
+  },
+  "37": {
+    "id": 37,
+    "answers": 3,
+    "question": "What are 3 animals that might headbutt you?"
+  },
+  "38": {
+    "id": 38,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? ___pool"
+  },
+  "39": {
+    "id": 39,
+    "answers": 3,
+    "question": "Who are 3 comedians with TV shows?"
+  },
+  "40": {
+    "id": 40,
+    "answers": 3,
+    "question": "What are 3 gray things?"
+  },
+  "41": {
+    "id": 41,
+    "answers": 5,
+    "question": "What are 5 things you might put on ice cream?"
+  },
+  "42": {
+    "id": 42,
+    "answers": 4,
+    "question": "What are 4 things you flip?"
+  },
+  "43": {
+    "id": 43,
+    "answers": 3,
+    "question": "What are 3 things in a desert?"
+  },
+  "44": {
+    "id": 44,
+    "answers": 5,
+    "question": "What are 5 things there are 10 of?"
+  },
+  "45": {
+    "id": 45,
+    "answers": 4,
+    "question": "What are 4 things you find in a pencil case besides pencils?"
+  },
+  "46": {
+    "id": 46,
+    "answers": 3,
+    "question": "What are 3 sports you would rather watch than play?"
+  },
+  "47": {
+    "id": 47,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? Follow the ___."
+  },
+  "48": {
+    "id": 48,
+    "answers": 3,
+    "question": "What are 3 things people use to attract birds?"
+  },
+  "49": {
+    "id": 49,
+    "answers": 5,
+    "question": "What are 5 reasons to have a party?"
+  },
+  "50": {
+    "id": 50,
+    "answers": 5,
+    "question": "What are 5 ways to fill in the blank? Mr. ___"
+  },
+  "51": {
+    "id": 51,
+    "answers": 3,
+    "question": "What are 3 ways a movie director might use?"
+  },
+  "52": {
+    "id": 52,
+    "answers": 3,
+    "question": "What are 3 big black things?"
+  },
+  "53": {
+    "id": 53,
+    "answers": 5,
+    "question": "What are 5 things that come to mind when you think of snow?"
+  },
+  "54": {
+    "id": 54,
+    "answers": 5,
+    "question": "What are 5 things that snap?"
+  },
+  "55": {
+    "id": 55,
+    "answers": 3,
+    "question": "What are 3 small yellow things?"
+  },
+  "56": {
+    "id": 56,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? easy___"
+  },
+  "57": {
+    "id": 57,
+    "answers": 3,
+    "question": "What are 3 words that rhyme with \"win\"?"
+  },
+  "58": {
+    "id": 58,
+    "answers": 3,
+    "question": "What are 3 small white things?"
+  },
+  "59": {
+    "id": 59,
+    "answers": 2,
+    "question": "Which 2 people in the room are most likely to enjoy watching a cop show?"
+  },
+  "60": {
+    "id": 60,
+    "answers": 3,
+    "question": "What are 3 things you see a lot of in Florida?"
+  },
+  "61": {
+    "id": 61,
+    "answers": 4,
+    "question": "What are 4 things a cowboy might carry?"
+  },
+  "62": {
+    "id": 62,
+    "answers": 5,
+    "question": "What are 5 southernmost U.S. states?"
+  },
+  "63": {
+    "id": 63,
+    "answers": 3,
+    "question": "What are 3 types of mustard?"
+  },
+  "64": {
+    "id": 64,
+    "answers": 3,
+    "question": "What are 3 things from the Medieval period?"
+  },
+  "65": {
+    "id": 65,
+    "answers": 5,
+    "question": "Who are 5 excellent male actors?"
+  },
+  "66": {
+    "id": 66,
+    "answers": 3,
+    "question": "What are 3 women's names beginning with \"D\"?"
+  },
+  "67": {
+    "id": 67,
+    "answers": 3,
+    "question": "What are 3 movies with a direction in the title?"
+  },
+  "68": {
+    "id": 68,
+    "answers": 4,
+    "question": "What are 4 ways to fill in the blank? ___score"
+  },
+  "69": {
+    "id": 69,
+    "answers": 3,
+    "question": "Who are 3 kings?"
+  },
+  "70": {
+    "id": 70,
+    "answers": 3,
+    "question": "What are 3 purple things?"
+  },
+  "71": {
+    "id": 71,
+    "answers": 5,
+    "question": "Who are 5 males singles?"
+  },
+  "72": {
+    "id": 72,
+    "answers": 4,
+    "question": "What are 4 things you might earn a trophy for?"
+  },
+  "73": {
+    "id": 73,
+    "answers": 3,
+    "question": "What are 3 red flowers?"
+  },
+  "74": {
+    "id": 74,
+    "answers": 4,
+    "question": "What are 4 cities that would make good names for a child?"
+  },
+  "75": {
+    "id": 75,
+    "answers": 4,
+    "question": "What are 4 things you might find on a playground?"
+  },
+  "76": {
+    "id": 76,
+    "answers": 3,
+    "question": "What are 3 old-fashioned weapons?"
+  },
+  "77": {
+    "id": 77,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? monkey___"
+  },
+  "78": {
+    "id": 78,
+    "answers": 3,
+    "question": "What are 3 animals you might feed at a petting zoo?"
+  },
+  "79": {
+    "id": 79,
+    "answers": 2,
+    "question": "Which 2 people in the room are most likely to enjoy watching a sitcom?"
+  },
+  "80": {
+    "id": 80,
+    "answers": 3,
+    "question": "What are 3 things you see a lot of in New York?"
+  },
+  "81": {
+    "id": 81,
+    "answers": 3,
+    "question": "What are 3 smelly foods?"
+  },
+  "82": {
+    "id": 82,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? Eli was an engineering professor in his country, here, he ___."
+  },
+  "83": {
+    "id": 83,
+    "answers": 3,
+    "question": "What are 3 sports good for older people?"
+  },
+  "84": {
+    "id": 84,
+    "answers": 3,
+    "question": "What are 3 things people do in a booth?"
+  },
+  "85": {
+    "id": 85,
+    "answers": 4,
+    "question": "What are 4 kinds of cakes?"
+  },
+  "86": {
+    "id": 86,
+    "answers": 3,
+    "question": "What are 3 Chinese foods?"
+  },
+  "87": {
+    "id": 87,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? ___off"
+  },
+  "88": {
+    "id": 88,
+    "answers": 3,
+    "question": "What are 3 venomous things besides snakes?"
+  },
+  "89": {
+    "id": 89,
+    "answers": 3,
+    "question": "What are 3 foods you can eat hot or cold?"
+  },
+  "90": {
+    "id": 90,
+    "answers": 5,
+    "question": "What are 5 things you might need to work in the garden?"
+  },
+  "91": {
+    "id": 91,
+    "answers": 3,
+    "question": "What are 3 things you don't turn off?"
+  },
+  "92": {
+    "id": 92,
+    "answers": 3,
+    "question": "What are 3 balls you would be surprised to see a golfer tee off with?"
+  },
+  "93": {
+    "id": 93,
+    "answers": 2,
+    "question": "What are 2 ways to fill in the blank? ___plug"
+  },
+  "94": {
+    "id": 94,
+    "answers": 4,
+    "question": "What are 4 foods you need a napkin to eat?"
+  },
+  "95": {
+    "id": 95,
+    "answers": 2,
+    "question": "Which 2 people in the room would make the best police officers?"
+  },
+  "96": {
+    "id": 96,
+    "answers": 5,
+    "question": "What are 5 things that come to mind when you think of Korea?"
+  },
+  "97": {
+    "id": 97,
+    "answers": 3,
+    "question": "What are 3 musical instruments known for being noisy?"
+  },
+  "98": {
+    "id": 98,
+    "answers": 2,
+    "question": "Which 2 people in the room would make the best lumberjacks?"
+  },
+  "99": {
+    "id": 99,
+    "answers": 5,
+    "question": "What are 5 things that come to mind when you think of Ireland?"
+  },
+  "100": {
+    "id": 100,
+    "answers": 3,
+    "question": "What are 3 foods that are noisy to eat?"
+  },
+  "101": {
+    "id": 101,
+    "answers": 2,
+    "question": "Which 2 people in the room would you most like to speak at your funeral?"
+  },
+  "102": {
+    "id": 102,
+    "answers": 5,
+    "question": "What are 5 things that come to mind when you think of Scotland?"
+  },
+  "103": {
+    "id": 103,
+    "answers": 3,
+    "question": "What are 3 places with a waiting list?"
+  },
+  "104": {
+    "id": 104,
+    "answers": 4,
+    "question": "What are 4 ways to fill in the blank? Everyone was surprised to learn that a book about___ became a bestseller."
+  },
+  "105": {
+    "id": 105,
+    "answers": 5,
+    "question": "What are 5 herbs/spices?"
+  },
+  "106": {
+    "id": 106,
+    "answers": 3,
+    "question": "What are 3 animals that begin with the letter \"V\"?"
+  },
+  "107": {
+    "id": 107,
+    "answers": 5,
+    "question": "What are 5 Disney heroes?"
+  },
+  "108": {
+    "id": 108,
+    "answers": 3,
+    "question": "What are 3 wild animals you would like to have as a tamed pet?"
+  },
+  "109": {
+    "id": 109,
+    "answers": 4,
+    "question": "What are 4 things dragons might have in their hoard?"
+  },
+  "110": {
+    "id": 110,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? There's more than one way to ___ a cat."
+  },
+  "111": {
+    "id": 111,
+    "answers": 3,
+    "question": "What are 3 things that might hurt farmer's crop?"
+  },
+  "112": {
+    "id": 112,
+    "answers": 3,
+    "question": "What are 3 loud musical instruments that don't require electricity?"
+  },
+  "113": {
+    "id": 113,
+    "answers": 5,
+    "question": "What are 5 condiments?"
+  },
+  "114": {
+    "id": 114,
+    "answers": 4,
+    "question": "What are 4 ways to fill in the blank? ___diamond"
+  },
+  "115": {
+    "id": 115,
+    "answers": 4,
+    "question": "What are 4 movies with planes?"
+  },
+  "116": {
+    "id": 116,
+    "answers": 2,
+    "question": "Which 2 people in the room would make the best editors?"
+  },
+  "117": {
+    "id": 117,
+    "answers": 5,
+    "question": "What are 5 things that come to mind when you think of cooking?"
+  },
+  "118": {
+    "id": 118,
+    "answers": 3,
+    "question": "What are 3 animals with big ears?"
+  },
+  "119": {
+    "id": 119,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? ___trap"
+  },
+  "120": {
+    "id": 120,
+    "answers": 3,
+    "question": "What are 3 words people use for something they can't remember the name of?"
+  },
+  "121": {
+    "id": 121,
+    "answers": 3,
+    "question": "What are 3 animals that begin with the letter \"M\"?"
+  },
+  "122": {
+    "id": 122,
+    "answers": 4,
+    "question": "What are 4 domestic pets?"
+  },
+  "123": {
+    "id": 123,
+    "answers": 4,
+    "question": "What are 4 things you need ID for?"
+  },
+  "124": {
+    "id": 124,
+    "answers": 3,
+    "question": "What are 3 car brands that would make good names for a child?"
+  },
+  "125": {
+    "id": 125,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? Shawna went to medical school, but she works as a ___."
+  },
+  "126": {
+    "id": 126,
+    "answers": 3,
+    "question": "What are 3 things that get tangled?"
+  },
+  "127": {
+    "id": 127,
+    "answers": 4,
+    "question": "What are 4 reasons someone might smell bad?"
+  },
+  "128": {
+    "id": 128,
+    "answers": 4,
+    "question": "what are 4 animals with 4-letter names?"
+  },
+  "129": {
+    "id": 129,
+    "answers": 3,
+    "question": "What are 3 things you might find in a pool?"
+  },
+  "130": {
+    "id": 130,
+    "answers": 3,
+    "question": "What are 3 things in potato salad besides potato?"
+  },
+  "131": {
+    "id": 131,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? Jenny finished her presentation and then saw herself in the mirror. She had ___!"
+  },
+  "132": {
+    "id": 132,
+    "answers": 3,
+    "question": "What are 3 things that burn?"
+  },
+  "133": {
+    "id": 133,
+    "answers": 3,
+    "question": "What are 3 big white things?"
+  },
+  "134": {
+    "id": 134,
+    "answers": 5,
+    "question": "Who are 5 female celebrities?"
+  },
+  "135": {
+    "id": 135,
+    "answers": 3,
+    "question": "What are 3 types of tea?"
+  },
+  "136": {
+    "id": 136,
+    "answers": 3,
+    "question": "What are 3 movies with the word 'time' in the title?"
+  },
+  "137": {
+    "id": 137,
+    "answers": 2,
+    "question": "Which 2 people in the room would make the best interior designers?"
+  },
+  "138": {
+    "id": 138,
+    "answers": 5,
+    "question": "What are 5 things that come to mind when you think of dogs?"
+  },
+  "139": {
+    "id": 139,
+    "answers": 4,
+    "question": "What are 4 movies with talking animals?"
+  },
+  "140": {
+    "id": 140,
+    "answers": 2,
+    "question": "Which 2 people in the room would make the best engineers?"
+  },
+  "141": {
+    "id": 141,
+    "answers": 5,
+    "question": "What are 5 things that come to mind when you think of dinner?"
+  },
+  "142": {
+    "id": 142,
+    "answers": 3,
+    "question": "What are 3 men's names beginning with \"M\"?"
+  },
+  "143": {
+    "id": 143,
+    "answers": 5,
+    "question": "What are 5 insects?"
+  },
+  "144": {
+    "id": 144,
+    "answers": 4,
+    "question": "What are 4 ways to fill in the blank? I hired a clown to come to the birthday party, but they ___."
+  },
+  "145": {
+    "id": 145,
+    "answers": 3,
+    "question": "What are 3 German words everyone knows?"
+  },
+  "146": {
+    "id": 146,
+    "answers": 3,
+    "question": "What are 3 ways to fill in the blank? ___bottle."
+  },
+  "147": {
+    "id": 147,
+    "answers": 4,
+    "question": "What are 4 best amusement park rides?"
+  },
+  "148": {
+    "id": 148,
+    "answers": 4,
+    "question": "What are 4 major retail chains?"
+  },
+  "149": {
+    "id": 149,
+    "answers": 5,
+    "question": "What are 5 common women's names?"
+  },
+  "150": {
+    "id": 150,
+    "answers": 4,
+    "question": "What are 4 war films?"
+  },
+  "151": {
+    "id": 151,
+    "answers": 3,
+    "question": "What are 3 words that begin with \"THR\"?"
+  },
+  "152": {
+    "id": 152,
+    "answers": 4,
+    "question": "What are 4 ways to fill in the blank? ___box"
+  },
+  "153": {
+    "id": 153,
+    "answers": 3,
+    "question": "What are 3 ways people break into a house?"
+  }
+}
