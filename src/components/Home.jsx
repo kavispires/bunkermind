@@ -29,7 +29,7 @@ const Home = () => {
   const [isValidGameID, setIsValidGameID] = useState(false);
   const [isValidNickname, setIsValidNickname] = useState(false);
   const [tempGameID, setTempGameID] = useState(lsGameID);
-  const [tempNickname] = useState(lsNickname);
+  const [tempNickname, setTempNickname] = useState(lsNickname);
   const [showCreateGame, setShowCreateGame] = useState(0);
 
   // On Mount
@@ -72,6 +72,7 @@ const Home = () => {
 
     // Check if nickname is valid
     if (nickname?.length >= 3 || tempNickname?.length >= 3) {
+      setNickname(tempNickname || nickname);
       setIsValidNickname(true);
     } else {
       setIsValidNickname(false);
@@ -84,6 +85,7 @@ const Home = () => {
     setIsLoading,
     nickname,
     setIsValidNickname,
+    setNickname,
     tempNickname,
   ]);
 
@@ -147,7 +149,7 @@ const Home = () => {
           id="nickname"
           label="Nickname"
           defaultValue={tempNickname}
-          onChange={(e) => setNickname(e.target.value)}
+          onChange={(e) => setTempNickname(e.target.value)}
           inputProps={{ maxLength: '8' }}
           helperText={
             nickname && !isValidNickname ? 'Nickname must be at least 3 characters long.' : ''

@@ -29,6 +29,18 @@ body {
   background-color: #f2ede4;
 }
 
+.mock-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding: 4px;
+  justify-content: space-evenly;
+  background: burlywood;
+}
+.mock-buttons > button {
+  font-size: 50%;
+}
+
 .mui-block {
   display: block !important;
   margin-bottom: 16px !important;
@@ -72,35 +84,35 @@ body {
 
 .floating-animation--1 {
   animation-name: float;
-  animation-duration: 6.35s;
+  animation-duration: 2.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--2 {
   animation-name: float;
-  animation-duration: 1.35s;
+  animation-duration: 5.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 3.35s;
+  animation-duration: 1.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 3.35s;
+  animation-duration: 8.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--5 {
   animation-name: float;
-  animation-duration: 3.35s;
+  animation-duration: 6.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }

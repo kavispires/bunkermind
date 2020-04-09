@@ -31,7 +31,6 @@ const Game = () => {
 
   // Create database reference
   useEffect(() => {
-    console.log('HOW MANY TIMES THIS TRIGGER', game.gameID, gameID);
     if (game.gameID === null && gameID) {
       setIsLoading(true);
 
@@ -63,7 +62,6 @@ const Game = () => {
         setIsLoading(true);
         if (snap.val()) {
           setGame(gameEngine.update(snap.val()));
-          console.log('UPDATING');
         }
         setIsLoading(false);
       };

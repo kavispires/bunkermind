@@ -1,6 +1,8 @@
 import { shuffle } from './utils';
 import { AVATARS, ONE_MINUTE, ONLINE_MINIUTE_THRESHOLD } from './utils/contants';
 
+import mockTurns from './firebase/mock-turns';
+
 class GameEngine {
   constructor() {
     this._dbRef = null;
@@ -139,6 +141,11 @@ class GameEngine {
   }
 
   // SAVERS
+
+  /**
+   * Pulls or saves a new player instance to database
+   * @param {string} nickname the nickname of the user
+   */
   setPlayer(nickname) {
     if (this.players[nickname]) {
       this.me = {
@@ -161,6 +168,14 @@ class GameEngine {
     this._dbRef.child('players').update({
       [nickname]: this.me,
     });
+  }
+
+  /**
+   * Saves mock data to database
+   * @param {string} phase
+   */
+  mock(phase) {
+    this.save(mockTurns(phase));
   }
 }
 

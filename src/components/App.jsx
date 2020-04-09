@@ -8,6 +8,7 @@ import { SCREENS } from '../utils/contants';
 import Home from './Home';
 import Toast from './Toast';
 import Game from './Game';
+import Mocks from './Mocks';
 
 const Screen = () => {
   const [screen] = useGlobalState('screen');
@@ -29,6 +30,7 @@ const App = () => {
       {isLoading ? <LinearProgress /> : <div className="progress-bar-placeholder" />}
       <Screen />
       <Toast />
+      <Mocks />
     </Container>
   );
 };

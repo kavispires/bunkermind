@@ -5,3 +5,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: $color-pale;
 }
+
+.mock-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: $unit3;
+  padding: $unit1;
+  justify-content: space-evenly;
+  background: burlywood;
+
+  & > button {
+    font-size: 50%;
+  }
+}
