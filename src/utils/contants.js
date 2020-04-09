@@ -39,3 +39,10 @@ export const AVATARS = [
 export const ONE_MINUTE = 60000;
 
 export const ONLINE_MINIUTE_THRESHOLD = 3;
+
+export const TURN_TYPES = {
+  0: 'The lowest scores move up, the highets scores move down',
+  1: 'The lowest scores move up',
+  2: 'The 2 lowest scores move up',
+  3: 'The 3 lowest scores move up',
+};

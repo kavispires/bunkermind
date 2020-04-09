@@ -84,35 +84,35 @@ body {
 
 .floating-animation--1 {
   animation-name: float;
-  animation-duration: 2.35s;
+  animation-duration: 7.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--2 {
   animation-name: float;
-  animation-duration: 5.35s;
+  animation-duration: 4.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 1.35s;
+  animation-duration: 2.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 8.35s;
+  animation-duration: 2.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--5 {
   animation-name: float;
-  animation-duration: 6.35s;
+  animation-duration: 5.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -171,4 +171,35 @@ body {
 .game-waiting-room__actions {
   display: flex;
   justify-content: center;
+}
+
+.game-header.MuiAppBar-root {
+  flex-direction: row;
+}
+
+.game-header__badge {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.game-header__badge-name {
+  margin-left: 4px;
+}
+
+.game-header__turn-type {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.game-header__refresh {
+  background: violet;
+}
+
+.game-header__player-position {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
 }

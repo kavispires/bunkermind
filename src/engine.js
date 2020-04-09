@@ -16,6 +16,7 @@ class GameEngine {
     this.isLocked = false;
     this.turnOrder = [];
     this.turn = 0;
+    this.turnType = 1;
     this.phase = GAME_PHASES.WAITING_ROOM;
     this.usedQuestions = {};
 
@@ -38,6 +39,7 @@ class GameEngine {
       turnOrder: this.turnOrder,
       turn: this.turn,
       phase: this.phase,
+      turnType: this.turnType,
     };
   }
 
@@ -46,7 +48,7 @@ class GameEngine {
    * @type  {boolean}
    */
   get amISet() {
-    return this.me && this.players[this.me.nickname];
+    return this.me && this.players[this.me?.nickname];
   }
 
   /**
@@ -55,6 +57,14 @@ class GameEngine {
    */
   get isGameFull() {
     return !this.amISet && Object.keys(this.players).length === 12;
+  }
+
+  /**
+   * Flag indicating if every player is online
+   * @type  {boolean}
+   */
+  get amIOnline() {
+    return this.amISet && Date.now() - this.me.lastUpdated < ONE_MINUTE * ONLINE_MINIUTE_THRESHOLD;
   }
 
   /**
@@ -123,6 +133,7 @@ class GameEngine {
     this.isLocked = data.isLocked || false;
     this.turnOrder = data.turnOrder || [];
     this.turn = data.turn;
+    this.turnType = data.turnType;
     this.phase = data.phase;
 
     return this.state;
@@ -181,14 +192,25 @@ class GameEngine {
   }
 
   lockAndStart() {
-    const turnOrder = shuffle(Object.keys(this.players));
-
     this.save({
-      turnOrder,
+      turnOrder: shuffle(Object.keys(this.players)),
       phase: GAME_PHASES.ANNOUNCEMENT,
       isLocked: true,
       turn: 1,
+      turnType: 1,
     });
+  }
+
+  /**
+   * Saves new typestamp to user
+   */
+  refresh() {
+    console.log('refreshing...');
+    if (!this.amIOnline) {
+      this._dbRef.child('players').child(this.me?.nickname).update({
+        lastUpdated: Date.now(),
+      });
+    }
   }
 
   /**

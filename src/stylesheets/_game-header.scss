@@ -1,0 +1,32 @@
+.game-header {
+  &.MuiAppBar-root {
+    flex-direction: row;
+  }
+
+  &__badge {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 $unit2;
+  }
+
+  &__badge-name {
+    margin-left: $unit1;
+  }
+
+  &__turn-type {
+    display: flex;
+    align-items: center;
+    padding: 0 $unit3;
+  }
+
+  &__refresh {
+    background: violet;
+  }
+
+  &__player-position {
+    display: flex;
+    align-items: center;
+    padding: 0 $unit3;
+  }
+}
