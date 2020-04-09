@@ -1,7 +1,9 @@
+const ONE_MINUTE = 60000;
+
 /**
  * Generates a 4-digit game ID
  */
-export const generadeID = () => {
+export const generateID = () => {
   const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
   let id = '';
@@ -37,3 +39,16 @@ export const getRandomItems = (list, quantity) => {
   }
   return res;
 };
+
+/**
+ * Determines if current timestamp is considered online (less then 3 minutes lapsed)
+ * @param {number} timestamp
+ */
+export const isOnline = (timestamp) => Date.now() - timestamp < ONE_MINUTE * 3;
+
+/**
+ * Outputs a random number within range
+ * @param {number} min the start of the range (default 1)
+ * @param {number} max the end of the range (default 10)
+ */
+export const randomNumber = (min = 1, max = 10) => Math.floor(Math.random() * (max - min) + min);
