@@ -1,7 +1,7 @@
 import { shuffle } from '../utils';
-import { AVATARS } from '../utils/contants';
+import { AVATARS, GAME_PHASES } from '../utils/contants';
 
-const getPlayers = (number, avatars) => {
+const getPlayers = (number, avatars, floor = 6) => {
   const result = {};
   const names = [
     'Adam',
@@ -24,6 +24,7 @@ const getPlayers = (number, avatars) => {
       isAdmin: i === 0,
       lastUpdated: Date.now(),
       nickname: names[i],
+      floor: typeof floor === 'number' ? floor : floor[i] || 6,
     };
   }
   return result;
@@ -32,6 +33,8 @@ const getPlayers = (number, avatars) => {
 const basics = {
   gameID: 'ABCD',
   avatars: shuffle(AVATARS),
+  phase: GAME_PHASES.WAITING_ROOM,
+  turn: 0,
 };
 
 const mockTurns = (set) => {

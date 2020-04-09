@@ -4,16 +4,16 @@ import API from '../firebase';
 import gameEngine from '../engine';
 import useGlobalState from '../useGlobalState';
 
-import { GAME_SCREENS, SCREENS } from '../utils/contants';
+import { GAME_PHASES, SCREENS } from '../utils/contants';
 import toastService from '../utils/toastService';
 
 import GameWaitingRoom from './GameWaitingRoom';
 
 const GameScreen = () => {
-  const [gameScreen] = useGlobalState('gameScreen');
+  const [game] = useGlobalState('game');
 
-  switch (gameScreen) {
-    case GAME_SCREENS.WAITING_ROOM:
+  switch (game.phase) {
+    case GAME_PHASES.WAITING_ROOM:
       return <GameWaitingRoom />;
     default:
       return <GameWaitingRoom />;

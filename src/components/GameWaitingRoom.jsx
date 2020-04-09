@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import LockIcon from '@material-ui/icons/Lock';
 
 import gameEngine from '../engine';
@@ -33,8 +32,7 @@ const GameWaitingRoom = () => {
             gameEngine.setPlayer(nickname);
           }
         } catch (err) {
-          console.error(err);
-          setToast(toastService.error(toast, 'Game is full, try a different game ID'));
+          setToast(toastService.error(toast, err));
           setGameID(null);
           setScreen(SCREENS.HOME);
         } finally {
@@ -45,13 +43,13 @@ const GameWaitingRoom = () => {
   }, [dbRef, nickname, setGameID, setScreen, setToast, toast, game]);
 
   const lockAndStartGame = () => {
-    console.log('HEY');
+    gameEngine.lockAndStart();
   };
 
   return (
     <div className="game game-waiting-room">
       <header className="game-waiting-room__title">
-        <HourglassEmptyIcon />
+        <CircularProgress style={{ color: COLORS.PRIMARY }} />
         <h1>Waiting Room</h1>
       </header>
       <main>
@@ -71,11 +69,15 @@ const GameWaitingRoom = () => {
           for every match, including your own (so make sure to write something for everything!)
         </p>
         <p>
+          Every round a number of people will move up (BAD!) or move down (rare, but it could
+          happen). The important thing to remember is that the lowest scores move, so whoever is
+          tied in points move together (but points reset for every question). If you ever go above
+          the 1st floor. You lose the game!
+        </p>
+        <p>
           <b>Are you with us or against us? Do you have the bunker mind?</b>
         </p>
       </main>
-
-      <CircularProgress style={{ color: COLORS.PRIMARY }} className="game-waiting-room__spinner" />
       <div className="game-waiting-room__line">
         {Object.values(game.players).map((player, index) => (
           <PlayerBadge
