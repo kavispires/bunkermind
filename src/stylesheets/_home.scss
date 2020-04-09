@@ -1,0 +1,30 @@
+.home {
+  // background: $color-orange;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__logo {
+    max-width: 300px;
+    display: block;
+    margin: 0 auto;
+    padding: $unit2;
+  }
+
+  .home-section {
+    margin-top: $unit4;
+    max-width: 500px;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &--separator {
+      text-align: center;
+      margin: $unit4 0 $unit3;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+  }
+}
