@@ -1,0 +1,30 @@
+.game-waiting-room {
+  &__title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: $unit3;
+  }
+
+  &__spinner {
+    display: block !important;
+    margin: $unit4 auto;
+  }
+
+  &__line {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+  }
+
+  & .badge-container {
+    margin: 0 $unit3 $unit3;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+  }
+}

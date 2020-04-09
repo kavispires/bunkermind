@@ -1,4 +1,15 @@
 // Contants
 @import './constants';
+// Animations
+@import './animations';
 // Global
 @import './global';
+// Material UI Modifiers
+@import './mui-modifiers';
+
+// Components
+@import './player-badge';
+
+// Screens
+@import './home';
+@import './waiting-room';
