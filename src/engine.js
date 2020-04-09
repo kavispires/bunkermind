@@ -1,5 +1,5 @@
 import { shuffle } from './utils';
-import { AVATARS } from './utils/contants';
+import { AVATARS, ONE_MINUTE, ONLINE_MINIUTE_THRESHOLD } from './utils/contants';
 
 class GameEngine {
   constructor() {
@@ -48,6 +48,16 @@ class GameEngine {
    */
   get isGameFull() {
     return !this.amISet && Object.keys(this.players).length === 12;
+  }
+
+  /**
+   * Flag indicating if every player is online
+   * @type  {boolean}
+   */
+  get isEveryoneOnline() {
+    return Object.values(this.players).every(
+      (p) => Date.now() - p.lastUpdated < ONE_MINUTE * ONLINE_MINIUTE_THRESHOLD
+    );
   }
 
   // MAIN METHODS

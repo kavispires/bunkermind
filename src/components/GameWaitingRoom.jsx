@@ -87,18 +87,20 @@ const GameWaitingRoom = () => {
           />
         ))}
       </div>
-      <div className="game-waiting-room__actions">
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={false}
-          onClick={() => lockAndStartGame()}
-          style={{ background: COLORS.PRIMARY }}
-          startIcon={<LockIcon />}
-        >
-          Lock and Start Game
-        </Button>
-      </div>
+      {gameEngine?.me?.isAdmin && (
+        <div className="game-waiting-room__actions">
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={!gameEngine.isEveryoneOnline || Object.keys(game.players).length < 3}
+            onClick={() => lockAndStartGame()}
+            style={{ background: COLORS.PRIMARY }}
+            startIcon={<LockIcon />}
+          >
+            Lock and Start Game
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

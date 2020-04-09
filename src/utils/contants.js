@@ -34,3 +34,7 @@ export const AVATARS = [
   'toad',
   'turtle',
 ];
+
+export const ONE_MINUTE = 60000;
+
+export const ONLINE_MINIUTE_THRESHOLD = 3;

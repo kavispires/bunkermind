@@ -1,4 +1,4 @@
-const ONE_MINUTE = 60000;
+import { ONE_MINUTE, ONLINE_MINIUTE_THRESHOLD } from './contants';
 
 /**
  * Generates a 4-digit game ID
@@ -41,10 +41,11 @@ export const getRandomItems = (list, quantity) => {
 };
 
 /**
- * Determines if current timestamp is considered online (less then 3 minutes lapsed)
+ * Determines if current timestamp is considered online
  * @param {number} timestamp
  */
-export const isOnline = (timestamp) => Date.now() - timestamp < ONE_MINUTE * 3;
+export const isOnline = (timestamp) =>
+  Date.now() - timestamp < ONE_MINUTE * ONLINE_MINIUTE_THRESHOLD;
 
 /**
  * Outputs a random number within range
