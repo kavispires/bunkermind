@@ -1,4 +1,5 @@
 import { ONE_MINUTE, ONLINE_MINIUTE_THRESHOLD, TURN_TYPES_FLAVOR_TEXT } from './contants';
+import QUESTIONS from './questions.json';
 
 /**
  * Generates a 4-digit game ID
@@ -44,6 +45,15 @@ export const getRandomItems = (list, quantity) => {
 };
 
 /**
+ * Gets random item from list of items
+ * @param {array} items the list of items
+ * @returns {any} a random item from list of items
+ */
+export const getRandomItem = (items) => {
+  return items[Math.floor(Math.random() * items.length)];
+};
+
+/**
  * Determines if current timestamp is considered online
  * @param {number} timestamp
  * @returns {boolean}
@@ -79,4 +89,23 @@ export const getTurnType = (turn) => {
  */
 export const getTurnTypeFlavorText = (turn) => {
   return getRandomItems(TURN_TYPES_FLAVOR_TEXT[turn]);
+};
+
+/**
+ * Selects 4 random unique questions
+ * @param {object} usedQuestions an object containing questions previously used
+ * @returns array with the selected questions
+ */
+export const getUniqueQuestion = (usedQuestions) => {
+  const selectedQuestions = {};
+
+  while (Object.keys(selectedQuestions).length !== 4) {
+    const currentQuestion = getRandomItem(Object.values(QUESTIONS));
+
+    // Use question only if it has not been used or selected yet
+    if (!usedQuestions[currentQuestion.id] && !selectedQuestions[currentQuestion.id]) {
+      selectedQuestions[currentQuestion.id] = currentQuestion;
+    }
+  }
+  return Object.values(selectedQuestions);
 };

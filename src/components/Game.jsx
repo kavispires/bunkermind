@@ -10,6 +10,7 @@ import toastService from '../utils/toastService';
 import GameWaitingRoom from './GameWaitingRoom';
 import GameAnnouncement from './GameAnnouncement';
 import GameQuestion from './GameQuestion';
+import GameAnswer from './GameAnswer';
 
 const GameScreen = () => {
   const [game] = useGlobalState('game');
@@ -21,6 +22,8 @@ const GameScreen = () => {
       return <GameAnnouncement />;
     case GAME_PHASES.QUESTION:
       return <GameQuestion />;
+    case GAME_PHASES.ANSWER:
+      return <GameAnswer />;
     default:
       return <GameWaitingRoom />;
   }

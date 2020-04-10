@@ -85,7 +85,7 @@ body {
 
 .floating-animation--1 {
   animation-name: float;
-  animation-duration: 4.35s;
+  animation-duration: 5.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -99,14 +99,14 @@ body {
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 3.35s;
+  animation-duration: 6.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 3.35s;
+  animation-duration: 2.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -317,4 +317,25 @@ body {
 }
 .game-question-waiting .tip--not-ok {
   color: #a01d0b;
+}
+
+.game-question-selection {
+  max-width: 500px;
+}
+.game-question-selection h2 {
+  text-align: center;
+}
+.game-question-selection__icon {
+  text-align: center;
+  margin-top: 16px;
+}
+.game-question-selection p {
+  font-size: 90%;
+  text-align: center;
+}
+.game-question-selection__question {
+  margin: 8px 0;
+  border: 2px solid #ffa500;
+  border-radius: 4px;
+  transform: translateX(16px);
 }

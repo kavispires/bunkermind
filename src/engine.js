@@ -158,20 +158,26 @@ class GameEngine {
 
   save(dataObj = {}) {
     if (!this._dbRef) {
-      console.warn('Delaying save');
+      this.print('Delaing save...');
       this._tempSaveObj = dataObj;
       return this.delaySave();
     }
 
-    console.log('%cSaving...', 'background:LightSalmon', dataObj);
+    this.print('Saving...', dataObj);
 
     this._dbRef.update({
       ...dataObj,
     });
+
+    if (this.me?.nickname) {
+      this._dbRef.child('players').child(this.me.nickname).update({
+        lastUpdated: Date.now(),
+      });
+    }
   }
 
   update(data) {
-    console.log('%cUpdating game...', 'background:GreenYellow', data);
+    this.print('Updating game...', data);
 
     this.gameID = data.gameID;
     this.avatars = data.avatars || [];
@@ -193,6 +199,11 @@ class GameEngine {
 
   // SETTERS
 
+  /**
+   * Sets the the firebase reference
+   * @param {object} dbRef firebase database reference
+   * @returns {object} the reference itself
+   */
   setDbRef(dbRef) {
     if (!this._dbRef) {
       this._dbRef = dbRef;
@@ -200,8 +211,21 @@ class GameEngine {
     return this._dbRef;
   }
 
+  /**
+   * Sets the game ID
+   * @param {string} gameID four-digit unique id
+   */
   setGameID(gameID) {
     this.gameID = gameID;
+  }
+
+  /**
+   * Turns every every player isReady flag off
+   */
+  unReadyPlayers() {
+    Object.values(this.players).forEach((player) => {
+      player.isReady = false;
+    });
   }
 
   // SAVERS
@@ -235,7 +259,7 @@ class GameEngine {
       throw Error('Game is locked, you can not join this time');
     }
 
-    console.log('%cSaving player...', 'background:LightPink');
+    this.print('Adding player...');
 
     this._dbRef.child('players').update({
       [nickname]: this.me,
@@ -257,7 +281,7 @@ class GameEngine {
    */
   refresh() {
     if (!this.isUserOnline && this.me?.nickname) {
-      console.log('%cRefreshing player...', 'background:LightPink');
+      this.print('Refreshing player...');
 
       this._dbRef.child('players').child(this.me.nickname).update({
         lastUpdated: Date.now(),
@@ -270,7 +294,8 @@ class GameEngine {
    */
   setUserReady() {
     if (this.me?.nickname) {
-      console.log('%cReading player...', 'background:LightPink');
+      this.print('Reading player...');
+
       this._dbRef.child('players').child(this.me?.nickname).update({
         isReady: true,
         lastUpdated: Date.now(),
@@ -279,22 +304,26 @@ class GameEngine {
   }
 
   goToQuestionPhase() {
-    console.log('%cGoing to QUESTION phase...', 'background:LightPink');
+    this.print('Going to QUESTION phase...');
+
     this.save({
       phase: GAME_PHASES.QUESTION,
     });
   }
 
   goToAnswerPhase(questionID) {
-    console.log('%cGoing to ANSWER phase...', 'background:LightPink');
+    this.print('Going to ANSWER phase...');
+
+    this.unReadyPlayers();
+
     this.save({
-      phase: GAME_PHASES.QUESTION,
+      phase: GAME_PHASES.ANSWER,
       currentQuestionID: questionID,
       usedQuestions: {
         ...this.usedQuestions,
         [questionID]: true,
       },
-      // TO-DO: Make everybody not ready again
+      players: this.players,
     });
   }
 
@@ -303,8 +332,27 @@ class GameEngine {
    * @param {string} phase
    */
   mock(phase) {
-    console.log('%cMocking...', 'background:Orange');
+    this.print('Mocking...');
     this.save(mockTurns(phase));
+  }
+
+  print(message, data = '') {
+    if (process.env.NODE_ENV === 'development') {
+      let color = 'LavenderBlush';
+      if (message.startsWith('Updating')) {
+        color = 'GreenYellow';
+      } else if (message.startsWith('Saving')) {
+        color = 'LightCoral';
+      } else if (message.startsWith('Going')) {
+        color = 'LightPink';
+      } else if (message.includes('player')) {
+        color = 'LightSalmon';
+      } else if (message.startsWith('Mock')) {
+        color = 'Orange';
+      }
+
+      console.log(`%c${message}`, `background:${color}`, data);
+    }
   }
 }
 
