@@ -26,9 +26,9 @@ const GameWaitingRoom = () => {
   useEffect(() => {
     if (dbRef && !timeoutID) {
       timeoutID = setTimeout(() => {
-        console.log('TIMEOUT');
+        console.warn('TIMEOUT');
         try {
-          if (!gameEngine.amISet) {
+          if (!gameEngine.isUserSet) {
             gameEngine.setPlayer(nickname);
           }
         } catch (err) {
@@ -38,7 +38,7 @@ const GameWaitingRoom = () => {
         } finally {
           clearTimeout(timeoutID);
         }
-      }, 1000);
+      }, 500);
     }
   }, [dbRef, nickname, setGameID, setScreen, setToast, toast, game]);
 

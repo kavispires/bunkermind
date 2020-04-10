@@ -1,29 +1,30 @@
 import { shuffle } from '../utils';
 import { AVATARS, GAME_PHASES } from '../utils/contants';
 
+const playersNames = [
+  'Adam',
+  'Beth',
+  'Cam',
+  'Danny',
+  'Evan',
+  'Fred',
+  'Gabi',
+  'Helen',
+  'Ian',
+  'Jack',
+  'Kelly',
+  'Lin',
+];
+
 const getPlayers = (number, avatars, floor = 6, isReady = false) => {
   const result = {};
-  const names = [
-    'Adam',
-    'Beth',
-    'Cam',
-    'Danny',
-    'Evan',
-    'Fred',
-    'Gabi',
-    'Helen',
-    'Ian',
-    'Jack',
-    'Kelly',
-    'Lin',
-  ];
 
   for (let i = 0; i < number; i++) {
-    result[names[i]] = {
+    result[playersNames[i]] = {
       avatar: avatars[i],
       isAdmin: i === 0,
       lastUpdated: Date.now(),
-      nickname: names[i],
+      nickname: playersNames[i],
       floor: typeof floor === 'number' ? floor : floor[i] || 6,
       isReady: typeof isReady === 'object' ? isReady[i] || false : isReady,
     };
@@ -81,6 +82,26 @@ const mockTurns = (set) => {
         turnType: 1,
         players,
         turnOrder: shuffle(Object.keys(players)),
+      };
+    case 'question.active':
+      players = getPlayers(12, basics.avatars, 6, true);
+      return {
+        ...basics,
+        phase: GAME_PHASES.QUESTION,
+        turn: 1,
+        turnType: 1,
+        players,
+        turnOrder: [...playersNames],
+      };
+    case 'question.passive':
+      players = getPlayers(12, basics.avatars, 6, true);
+      return {
+        ...basics,
+        phase: GAME_PHASES.QUESTION,
+        turn: 1,
+        turnType: 1,
+        players,
+        turnOrder: [...playersNames].reverse(),
       };
     default:
       return {

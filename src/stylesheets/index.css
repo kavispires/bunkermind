@@ -85,35 +85,35 @@ body {
 
 .floating-animation--1 {
   animation-name: float;
-  animation-duration: 6.35s;
+  animation-duration: 4.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--2 {
   animation-name: float;
-  animation-duration: 7.35s;
+  animation-duration: 4.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 8.35s;
+  animation-duration: 3.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 6.35s;
+  animation-duration: 3.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--5 {
   animation-name: float;
-  animation-duration: 3.35s;
+  animation-duration: 5.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -293,4 +293,28 @@ body {
 }
 .whos-ready-line .badge-container {
   margin: 0 4px 4px;
+}
+
+.game-question-waiting {
+  max-width: 500px;
+}
+.game-question-waiting h1,
+.game-question-waiting h2 {
+  text-align: center;
+}
+.game-question-waiting__spinner {
+  display: flex;
+  justify-content: center;
+}
+.game-question-waiting__rules {
+  font-size: 90%;
+}
+.game-question-waiting__rules li {
+  margin-bottom: 8px;
+}
+.game-question-waiting .tip--ok {
+  color: #44b700;
+}
+.game-question-waiting .tip--not-ok {
+  color: #a01d0b;
 }

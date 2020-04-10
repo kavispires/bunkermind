@@ -100,13 +100,13 @@ const GameAnnouncement = () => {
           return <Floor key={floorNumber} floorNumber={floorNumber} players={players} />;
         })}
       </div>
-      {!gameEngine.amIReady ? (
+      {!gameEngine.isUserReady ? (
         <div className="action-button">
           <Button
             variant="contained"
             color="primary"
-            disabled={gameEngine.amIReady}
-            onClick={() => gameEngine.setIamReady()}
+            disabled={gameEngine.isUserReady}
+            onClick={() => gameEngine.setUserReady()}
             style={{ background: COLORS.PRIMARY }}
             startIcon={<ThumbUpIcon />}
           >

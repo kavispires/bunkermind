@@ -19,6 +19,7 @@ class GameEngine {
     this.turnType = 1;
     this.phase = GAME_PHASES.WAITING_ROOM;
     this.usedQuestions = {};
+    this.currentQuestionID = null;
 
     // Used by delay save
     this._interval = null;
@@ -40,6 +41,8 @@ class GameEngine {
       turn: this.turn,
       phase: this.phase,
       turnType: this.turnType,
+      currentQuestionID: this.currentQuestionID,
+      usedQuestions: this.usedQuestions,
     };
   }
 
@@ -47,7 +50,7 @@ class GameEngine {
    * Flag indicating if me property is set and included in players
    * @type  {boolean}
    */
-  get amISet() {
+  get isUserSet() {
     return this.me && this.players[this.me?.nickname];
   }
 
@@ -56,22 +59,24 @@ class GameEngine {
    * @type  {boolean}
    */
   get isGameFull() {
-    return !this.amISet && Object.keys(this.players).length === 12;
+    return !this.isUserSet && Object.keys(this.players).length === 12;
   }
 
   /**
    * Flag indicating if player is online
    * @type  {boolean}
    */
-  get amIOnline() {
-    return this.amISet && Date.now() - this.me.lastUpdated < ONE_MINUTE * ONLINE_MINIUTE_THRESHOLD;
+  get isUserOnline() {
+    return (
+      this.isUserSet && Date.now() - this.me?.lastUpdated < ONE_MINUTE * ONLINE_MINIUTE_THRESHOLD
+    );
   }
 
   /**
    * Flag indicating if player is ready
    * @type  {boolean}
    */
-  get amIReady() {
+  get isUserReady() {
     return Boolean(this.players[this.me?.nickname]?.isReady);
   }
 
@@ -114,8 +119,8 @@ class GameEngine {
    * Flag indicating if user is the active player
    * @type  {boolean}
    */
-  get amItheActivePlayer() {
-    return this.me.nickname === this.activePlayer;
+  get isUserActivePlayer() {
+    return this.me?.nickname === this.activePlayer.nickname;
   }
 
   // MAIN METHODS
@@ -176,6 +181,8 @@ class GameEngine {
     this.turn = data.turn;
     this.turnType = data.turnType;
     this.phase = data.phase;
+    this.currentQuestionID = data.currentQuestionID || null;
+    this.usedQuestions = data.usedQuestions || {};
 
     return this.state;
   }
@@ -249,7 +256,7 @@ class GameEngine {
    * Saves new typestamp to player/user
    */
   refresh() {
-    if (!this.amIOnline && this.me?.nickname) {
+    if (!this.isUserOnline && this.me?.nickname) {
       console.log('%cRefreshing player...', 'background:LightPink');
 
       this._dbRef.child('players').child(this.me.nickname).update({
@@ -261,7 +268,7 @@ class GameEngine {
   /**
    * Set user's/player's isReady to true with new timestamp
    */
-  setIamReady() {
+  setUserReady() {
     if (this.me?.nickname) {
       console.log('%cReading player...', 'background:LightPink');
       this._dbRef.child('players').child(this.me?.nickname).update({
@@ -283,10 +290,11 @@ class GameEngine {
     this.save({
       phase: GAME_PHASES.QUESTION,
       currentQuestionID: questionID,
-      questionsUsed: {
-        ...this.questionsUsed,
+      usedQuestions: {
+        ...this.usedQuestions,
         [questionID]: true,
       },
+      // TO-DO: Make everybody not ready again
     });
   }
 

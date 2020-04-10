@@ -1,20 +1,16 @@
 import React from 'react';
 
 import gameEngine from '../engine';
-import useGlobalState from '../useGlobalState';
 
 import GameHeader from './GameHeader';
+import GameQuestionSelection from './GameQuestionSelection';
+import GameQuestionWaiting from './GameQuestionWaiting';
 
 const GameQuestion = () => {
-  // const [game] = useGlobalState('game');
-  const [nickname] = useGlobalState('nickname');
-
-  const currentPlayer = gameEngine.players[nickname];
-
-  if (!currentPlayer) return <div></div>;
   return (
-    <div className="game game-container game-announcement">
+    <div className="game game-container game-question">
       <GameHeader />
+      {gameEngine.isUserActivePlayer ? <GameQuestionSelection /> : <GameQuestionWaiting />}
     </div>
   );
 };
