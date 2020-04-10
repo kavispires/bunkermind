@@ -92,28 +92,28 @@ body {
 
 .floating-animation--2 {
   animation-name: float;
-  animation-duration: 4.35s;
+  animation-duration: 2.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 6.35s;
+  animation-duration: 7.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 2.35s;
+  animation-duration: 4.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--5 {
   animation-name: float;
-  animation-duration: 5.35s;
+  animation-duration: 3.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -156,12 +156,18 @@ body {
   justify-content: center;
   align-items: center;
 }
+.action-button__warning {
+  text-align: center;
+  font-size: 80%;
+  margin-bottom: 8px;
+  color: #9b8579;
+}
 
 .game-admin-actions {
   width: 100%;
   max-width: 400px;
   text-align: center;
-  margin: 32px 8px 8px 8px;
+  margin: 32px auto 8px auto;
   padding: 8px;
   position: relative;
   border: 1px solid #9b8579;
@@ -170,7 +176,14 @@ body {
   content: 'Admin Actions';
   position: absolute;
   top: -15px;
+  left: 0;
   font-size: 80%;
+}
+.game-admin-actions__warning {
+  display: block;
+  font-size: 80%;
+  color: #a01d0b;
+  margin-bottom: 8px;
 }
 
 .game-waiting-room__title {
@@ -338,4 +351,31 @@ body {
   border: 2px solid #ffa500;
   border-radius: 4px;
   transform: translateX(16px);
+}
+
+.game-answer__icon {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.game-answer h2 {
+  text-align: center;
+  margin: 0;
+}
+
+.game-answer__current-question {
+  text-align: center;
+  padding: 8px;
+  border: 3px solid #ffa500;
+  border-radius: 4px;
+}
+
+.game-answer__answers {
+  width: 100%;
+  display: flex;
+}
+
+.game-answer .answer-input-field {
+  margin-bottom: 8px;
+  flex-grow: 1;
 }

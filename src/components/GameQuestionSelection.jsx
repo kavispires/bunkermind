@@ -8,7 +8,7 @@ import MailIcon from '@material-ui/icons/Mail';
 
 import gameEngine from '../engine';
 
-import { getUniqueQuestion } from '../utils';
+import { getUniqueQuestions } from '../utils';
 import { COLORS } from '../utils/contants';
 
 const GameQuestionSelection = () => {
@@ -18,7 +18,7 @@ const GameQuestionSelection = () => {
 
   // Get questions on mount
   useEffect(() => {
-    setQuestions(getUniqueQuestion(gameEngine.usedQuestions));
+    setQuestions(getUniqueQuestions(gameEngine.usedQuestions));
   }, [setQuestions]);
 
   const chooseQuestion = (event) => {

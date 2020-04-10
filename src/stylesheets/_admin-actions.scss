@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 400px;
   text-align: center;
-  margin: $unit4 $unit2 $unit2 $unit2;
+  margin: $unit4 auto $unit2 auto;
   padding: $unit2;
   position: relative;
   border: 1px solid $color-brown;
@@ -11,8 +11,14 @@
     content: 'Admin Actions';
     position: absolute;
     top: -15px;
+    left: 0;
     font-size: 80%;
-    // left: 25%;
-    // text-align: right;
+  }
+
+  &__warning {
+    display: block;
+    font-size: 80%;
+    color: $color-red;
+    margin-bottom: $unit2;
   }
 }

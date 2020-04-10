@@ -327,6 +327,26 @@ class GameEngine {
     });
   }
 
+  goToComparePhase() {
+    this.print('Going to COMPARE phase...');
+
+    this.unReadyPlayers();
+
+    this.save({
+      phase: GAME_PHASES.COMPARE,
+      players: this.players,
+      // ??
+    });
+  }
+
+  submitAnswers() {
+    // Set answers
+    console.log('submit bitch!');
+    // Set isReady
+
+    // If everybody is ready, trigger next phase
+  }
+
   /**
    * Saves mock data to database
    * @param {string} phase

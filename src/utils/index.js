@@ -96,7 +96,7 @@ export const getTurnTypeFlavorText = (turn) => {
  * @param {object} usedQuestions an object containing questions previously used
  * @returns array with the selected questions
  */
-export const getUniqueQuestion = (usedQuestions) => {
+export const getUniqueQuestions = (usedQuestions) => {
   const selectedQuestions = {};
 
   while (Object.keys(selectedQuestions).length !== 4) {
@@ -108,4 +108,13 @@ export const getUniqueQuestion = (usedQuestions) => {
     }
   }
   return Object.values(selectedQuestions);
+};
+
+/**
+ * Gets the question from the questions json file that matches given id
+ * @param {string} questionID the unique question id
+ * @returns {object} the question object with question, id, and answers
+ */
+export const getQuestion = (questionID) => {
+  return QUESTIONS[questionID];
 };

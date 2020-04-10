@@ -8,4 +8,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  &__warning {
+    text-align: center;
+    font-size: 80%;
+    margin-bottom: $unit2;
+    color: $color-brown;
+  }
 }
