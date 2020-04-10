@@ -101,6 +101,23 @@ class GameEngine {
     return Object.values(this.players).filter((p) => p.isReady);
   }
 
+  /**
+   * Return active player object based on turn and turnOrder
+   * @type  {object}
+   */
+  get activePlayer() {
+    const index = (this.turn - 1) % this.turnOrder.length;
+    return this.players[this.turnOrder[index]];
+  }
+
+  /**
+   * Flag indicating if user is the active player
+   * @type  {boolean}
+   */
+  get amItheActivePlayer() {
+    return this.me.nickname === this.activePlayer;
+  }
+
   // MAIN METHODS
 
   init(gameID) {
@@ -252,6 +269,25 @@ class GameEngine {
         lastUpdated: Date.now(),
       });
     }
+  }
+
+  goToQuestionPhase() {
+    console.log('%cGoing to QUESTION phase...', 'background:LightPink');
+    this.save({
+      phase: GAME_PHASES.QUESTION,
+    });
+  }
+
+  goToAnswerPhase(questionID) {
+    console.log('%cGoing to ANSWER phase...', 'background:LightPink');
+    this.save({
+      phase: GAME_PHASES.QUESTION,
+      currentQuestionID: questionID,
+      questionsUsed: {
+        ...this.questionsUsed,
+        [questionID]: true,
+      },
+    });
   }
 
   /**

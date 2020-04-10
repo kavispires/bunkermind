@@ -1,0 +1,18 @@
+.game-admin-actions {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  margin: $unit4 $unit2 $unit2 $unit2;
+  padding: $unit2;
+  position: relative;
+  border: 1px solid $color-brown;
+
+  &:before {
+    content: 'Admin Actions';
+    position: absolute;
+    top: -15px;
+    font-size: 80%;
+    // left: 25%;
+    // text-align: right;
+  }
+}

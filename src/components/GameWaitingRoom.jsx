@@ -42,10 +42,6 @@ const GameWaitingRoom = () => {
     }
   }, [dbRef, nickname, setGameID, setScreen, setToast, toast, game]);
 
-  const lockAndStartGame = () => {
-    gameEngine.lockAndStart();
-  };
-
   return (
     <div className="game game-waiting-room">
       <header className="game-waiting-room__title">
@@ -90,18 +86,19 @@ const GameWaitingRoom = () => {
         ))}
       </div>
       {gameEngine?.me?.isAdmin && (
-        <div className="game-waiting-room__actions">
+        <fieldset className="game-admin-actions">
+          <legend>Admin Actions</legend>
           <Button
             variant="contained"
             color="primary"
             disabled={!gameEngine.isEveryoneOnline || Object.keys(game.players).length < 3}
-            onClick={() => lockAndStartGame()}
+            onClick={() => gameEngine.lockAndStart()}
             style={{ background: COLORS.PRIMARY }}
             startIcon={<LockIcon />}
           >
             Lock and Start Game
           </Button>
-        </div>
+        </fieldset>
       )}
     </div>
   );

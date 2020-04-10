@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import Button from '@material-ui/core/Button';
+import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
 import floorTopImg from '../images/bunker/floor-top.svg';
@@ -87,7 +88,7 @@ const GameAnnouncement = () => {
             <p className="bunker-info--flavor-text">{getTurnTypeFlavorText(game.turn)}</p>
             <p className="bunker-info--turn-type">{TURN_TYPES[game.turnType]}</p>
             <p className="bunker-info--active-player">
-              <strong>Bob</strong> will choose the question.
+              <strong>{gameEngine.activePlayer.nickname}</strong> will choose the question.
             </p>
             <p className="bunker-info--risk-warning">
               If someone is at risk, message will be here.
@@ -128,6 +129,20 @@ const GameAnnouncement = () => {
               ))}
             </div>
           )}
+        </div>
+      )}
+      {gameEngine?.me?.isAdmin && (
+        <div className="game-admin-actions">
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={!gameEngine.isEveryoneReady}
+            onClick={() => gameEngine.goToQuestionPhase()}
+            style={{ background: COLORS.PRIMARY }}
+            endIcon={<DoubleArrowIcon />}
+          >
+            Begin Turn
+          </Button>
         </div>
       )}
     </div>

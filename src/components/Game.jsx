@@ -9,6 +9,7 @@ import toastService from '../utils/toastService';
 
 import GameWaitingRoom from './GameWaitingRoom';
 import GameAnnouncement from './GameAnnouncement';
+import GameQuestion from './GameQuestion';
 
 const GameScreen = () => {
   const [game] = useGlobalState('game');
@@ -18,6 +19,8 @@ const GameScreen = () => {
       return <GameWaitingRoom />;
     case GAME_PHASES.ANNOUNCEMENT:
       return <GameAnnouncement />;
+    case GAME_PHASES.QUESTION:
+      return <GameQuestion />;
     default:
       return <GameWaitingRoom />;
   }

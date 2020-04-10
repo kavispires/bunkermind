@@ -42,14 +42,6 @@ body {
   margin-bottom: 4px;
 }
 
-.action-button {
-  margin: 16px 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 .mui-block {
   display: block !important;
   margin-bottom: 16px !important;
@@ -93,35 +85,35 @@ body {
 
 .floating-animation--1 {
   animation-name: float;
-  animation-duration: 7.35s;
+  animation-duration: 6.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--2 {
   animation-name: float;
-  animation-duration: 8.35s;
+  animation-duration: 7.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 7.35s;
+  animation-duration: 8.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 8.35s;
+  animation-duration: 6.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--5 {
   animation-name: float;
-  animation-duration: 5.35s;
+  animation-duration: 3.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -153,6 +145,34 @@ body {
   font-weight: bold;
 }
 
+.game-container {
+  width: 100%;
+}
+
+.action-button {
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.game-admin-actions {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  margin: 32px 8px 8px 8px;
+  padding: 8px;
+  position: relative;
+  border: 1px solid #9b8579;
+}
+.game-admin-actions:before {
+  content: 'Admin Actions';
+  position: absolute;
+  top: -15px;
+  font-size: 80%;
+}
+
 .game-waiting-room__title {
   display: flex;
   flex-direction: column;
@@ -175,11 +195,6 @@ body {
 
 .game-waiting-room .badge-container {
   margin: 0 16px 16px;
-}
-
-.game-waiting-room__actions {
-  display: flex;
-  justify-content: center;
 }
 
 .game-header.MuiAppBar-root {
@@ -268,6 +283,7 @@ body {
 }
 
 .whos-ready-line {
+  width: 100%;
   display: flex;
   justify-content: space-evenly;
   flex-wrap: wrap;

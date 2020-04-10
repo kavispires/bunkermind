@@ -1,0 +1,11 @@
+.game-container {
+  width: 100%;
+}
+
+.action-button {
+  margin: $unit3 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
