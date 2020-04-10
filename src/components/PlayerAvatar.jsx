@@ -18,45 +18,26 @@ import avatarToad from '../images/avatars/avatar-toad.svg';
 import avatarTurtle from '../images/avatars/avatar-turtle.svg';
 import avatarUnknown from '../images/avatars/avatar-unknown.svg';
 
-const getAvatarImageSource = (avatar) => {
-  switch (avatar) {
-    case 'axolotl':
-      return avatarAxolotl;
-    case 'cardinal':
-      return avatarCardinal;
-    case 'fox':
-      return avatarFox;
-    case 'hedgehog':
-      return avatarHedgehog;
-    case 'lizard':
-      return avatarLizard;
-    case 'mole':
-      return avatarMole;
-    case 'mouse':
-      return avatarMouse;
-    case 'otter':
-      return avatarOtter;
-    case 'owl':
-      return avatarOwl;
-    case 'platypus':
-      return avatarPlatypus;
-    case 'rat':
-      return avatarRat;
-    case 'squirrel':
-      return avatarSquirrel;
-    case 'starling':
-      return avatarStarling;
-    case 'toad':
-      return avatarToad;
-    case 'turtle':
-      return avatarTurtle;
-    default:
-      return avatarUnknown;
-  }
+const AVATAR_IMAGE_SOURCE = {
+  axolotl: avatarAxolotl,
+  cardinal: avatarCardinal,
+  fox: avatarFox,
+  hedgehog: avatarHedgehog,
+  lizard: avatarLizard,
+  mole: avatarMole,
+  mouse: avatarMouse,
+  otter: avatarOtter,
+  owl: avatarOwl,
+  platypus: avatarPlatypus,
+  rat: avatarRat,
+  squirrel: avatarSquirrel,
+  starling: avatarStarling,
+  toad: avatarToad,
+  turtle: avatarTurtle,
 };
 
 const PlayerAvatar = ({ avatar }) => {
-  return <Avatar alt={avatar} src={getAvatarImageSource(avatar)} />;
+  return <Avatar alt={avatar} src={AVATAR_IMAGE_SOURCE[avatar] || avatarUnknown} />;
 };
 
 export default PlayerAvatar;

@@ -1,7 +1,7 @@
 import { shuffle } from '../utils';
 import { AVATARS, GAME_PHASES } from '../utils/contants';
 
-const getPlayers = (number, avatars, floor = 6) => {
+const getPlayers = (number, avatars, floor = 6, isReady = false) => {
   const result = {};
   const names = [
     'Adam',
@@ -25,6 +25,7 @@ const getPlayers = (number, avatars, floor = 6) => {
       lastUpdated: Date.now(),
       nickname: names[i],
       floor: typeof floor === 'number' ? floor : floor[i] || 6,
+      isReady: typeof isReady === 'object' ? isReady[i] || false : isReady,
     };
   }
   return result;
@@ -38,6 +39,8 @@ const basics = {
 };
 
 const mockTurns = (set) => {
+  let players;
+
   switch (set) {
     case 'waiting.incomplete':
       return {
@@ -53,6 +56,31 @@ const mockTurns = (set) => {
       return {
         ...basics,
         players: getPlayers(12, basics.avatars),
+      };
+    case 'announcement':
+      players = getPlayers(
+        12,
+        basics.avatars,
+        [6, 6, 6, 6, 6, 5, 4, 4, 6, 2, 2, 6],
+        [false, true, true, true]
+      );
+      return {
+        ...basics,
+        phase: GAME_PHASES.ANNOUNCEMENT,
+        turn: 1,
+        turnType: 1,
+        players,
+        turnOrder: shuffle(Object.keys(players)),
+      };
+    case 'announcement.ready':
+      players = getPlayers(12, basics.avatars, [6, 6, 6, 6, 6, 5, 4, 4, 6, 2, 2, 6], true);
+      return {
+        ...basics,
+        phase: GAME_PHASES.ANNOUNCEMENT,
+        turn: 1,
+        turnType: 1,
+        players,
+        turnOrder: shuffle(Object.keys(players)),
       };
     default:
       return {

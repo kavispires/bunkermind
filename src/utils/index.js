@@ -1,4 +1,4 @@
-import { ONE_MINUTE, ONLINE_MINIUTE_THRESHOLD } from './contants';
+import { ONE_MINUTE, ONLINE_MINIUTE_THRESHOLD, TURN_TYPES_FLAVOR_TEXT } from './contants';
 
 /**
  * Generates a 4-digit game ID
@@ -70,4 +70,13 @@ export const getTurnType = (turn) => {
   if (turn < 6) return getRandomItems([1, 1, 1, 1, 1, 2, 2, 0], 1)[0];
 
   return getRandomItems([0, 1, 2, 2, 3, 3], 1)[0];
+};
+
+/**
+ * Returns a random flavor text for the round
+ * @param {number} turn the current turn
+ * @return {string} the flavor text
+ */
+export const getTurnTypeFlavorText = (turn) => {
+  return getRandomItems(TURN_TYPES_FLAVOR_TEXT[turn]);
 };

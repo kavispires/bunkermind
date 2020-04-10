@@ -33,12 +33,21 @@ body {
   display: flex;
   flex-wrap: wrap;
   margin-top: 16px;
-  padding: 4px;
+  padding: 4px 4px 0 4px;
   justify-content: space-evenly;
   background: burlywood;
 }
 .mock-buttons > button {
   font-size: 50%;
+  margin-bottom: 4px;
+}
+
+.action-button {
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .mui-block {
@@ -91,21 +100,21 @@ body {
 
 .floating-animation--2 {
   animation-name: float;
-  animation-duration: 4.35s;
+  animation-duration: 8.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 2.35s;
+  animation-duration: 7.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 2.35s;
+  animation-duration: 8.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -202,4 +211,70 @@ body {
   display: flex;
   align-items: center;
   padding: 0 16px;
+}
+
+.game-announcement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.game-announcement__content {
+  display: flex;
+  flex-direction: column;
+  max-width: 450px;
+}
+
+.bunker {
+  display: flex;
+  margin: 4px 0;
+  background: rgba(255, 255, 255, 0.5);
+}
+.bunker--top {
+  align-items: flex-end;
+}
+.bunker__info-container {
+  width: 100%;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 8px;
+  margin: 8px;
+}
+.bunker__info-container h2 {
+  margin: 4px;
+}
+.bunker__floor-image {
+  height: 40px;
+}
+.bunker__floor-image--top {
+  height: 107px;
+}
+
+.bunker-info--flavor-text {
+  font-style: italic;
+  font-size: 85%;
+  color: #9b8579;
+}
+
+.bunker-info--turn-type {
+  color: #ffa500;
+}
+
+.bunker-info--risk-warning {
+  border: 2px solid #ffa500;
+  margin-bottom: 4px;
+  padding: 4px;
+  font-size: 85%;
+}
+
+.whos-ready-line {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  margin: 0 4px;
+  padding: 8px;
+  border: 1px solid #9b8579;
+}
+.whos-ready-line .badge-container {
+  margin: 0 4px 4px;
 }

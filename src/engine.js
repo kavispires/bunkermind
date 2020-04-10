@@ -60,11 +60,19 @@ class GameEngine {
   }
 
   /**
-   * Flag indicating if every player is online
+   * Flag indicating if player is online
    * @type  {boolean}
    */
   get amIOnline() {
     return this.amISet && Date.now() - this.me.lastUpdated < ONE_MINUTE * ONLINE_MINIUTE_THRESHOLD;
+  }
+
+  /**
+   * Flag indicating if player is ready
+   * @type  {boolean}
+   */
+  get amIReady() {
+    return Boolean(this.players[this.me?.nickname]?.isReady);
   }
 
   /**
@@ -75,6 +83,22 @@ class GameEngine {
     return Object.values(this.players).every(
       (p) => Date.now() - p.lastUpdated < ONE_MINUTE * ONLINE_MINIUTE_THRESHOLD
     );
+  }
+
+  /**
+   * Flag indicating if every player is ready (and online)
+   * @type  {boolean}
+   */
+  get isEveryoneReady() {
+    return this.isEveryoneOnline && Object.values(this.players).every((p) => p.isReady);
+  }
+
+  /**
+   * Get every player that is ready
+   * @type  {array}
+   */
+  get whosReady() {
+    return Object.values(this.players).filter((p) => p.isReady);
   }
 
   // MAIN METHODS
@@ -175,6 +199,7 @@ class GameEngine {
         avatar: this.avatars[Object.keys(this.players).length],
         isAdmin: this._isAdmin,
         floor: 6,
+        isReady: false,
       };
     }
 
@@ -185,6 +210,8 @@ class GameEngine {
     if (!this.players[nickname] && this.isLocked) {
       throw Error('Game is locked, you can not join this time');
     }
+
+    console.log('%cSaving player...', 'background:LightPink');
 
     this._dbRef.child('players').update({
       [nickname]: this.me,
@@ -202,12 +229,26 @@ class GameEngine {
   }
 
   /**
-   * Saves new typestamp to user
+   * Saves new typestamp to player/user
    */
   refresh() {
-    console.log('refreshing...');
-    if (!this.amIOnline) {
+    if (!this.amIOnline && this.me?.nickname) {
+      console.log('%cRefreshing player...', 'background:LightPink');
+
+      this._dbRef.child('players').child(this.me.nickname).update({
+        lastUpdated: Date.now(),
+      });
+    }
+  }
+
+  /**
+   * Set user's/player's isReady to true with new timestamp
+   */
+  setIamReady() {
+    if (this.me?.nickname) {
+      console.log('%cReading player...', 'background:LightPink');
       this._dbRef.child('players').child(this.me?.nickname).update({
+        isReady: true,
         lastUpdated: Date.now(),
       });
     }
@@ -218,6 +259,7 @@ class GameEngine {
    * @param {string} phase
    */
   mock(phase) {
+    console.log('%cMocking...', 'background:Orange');
     this.save(mockTurns(phase));
   }
 }
