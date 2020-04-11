@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
-
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 
 import gameEngine from '../engine';
@@ -99,7 +99,7 @@ const GameCompare = () => {
               onClick={() => gameEngine.doneComparing()}
               style={{ background: COLORS.PRIMARY }}
             >
-              Done
+              {gameEngine.isUserReady ? <DoneOutlineIcon /> : 'Done'}
             </Button>
           </div>
         </Fragment>

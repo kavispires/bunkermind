@@ -62,7 +62,7 @@ const GameQuestionSelection = () => {
           style={{ background: COLORS.PRIMARY }}
           endIcon={<MailIcon />}
         >
-          Next Phase
+          Submit QUestion to Players
         </Button>
       </div>
     </div>

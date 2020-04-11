@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import CreateIcon from '@material-ui/icons/Create';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import LooksOneIcon from '@material-ui/icons/LooksOne';
 import LooksTwoIcon from '@material-ui/icons/LooksTwo';
 import LooksThreeIcon from '@material-ui/icons/Looks3';
@@ -87,7 +88,7 @@ const GameAnswer = () => {
           onClick={() => gameEngine.submitAnswers(answers)}
           style={{ background: COLORS.PRIMARY }}
         >
-          Submit Answers
+          {gameEngine.isUserReady ? <DoneOutlineIcon /> : 'Submit Answers'}
         </Button>
       </div>
       {gameEngine?.me?.isAdmin && (

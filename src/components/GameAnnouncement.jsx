@@ -2,6 +2,7 @@ import React from 'react';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import Button from '@material-ui/core/Button';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 
 import floorTopImg from '../images/bunker/floor-top.svg';
@@ -110,7 +111,7 @@ const GameAnnouncement = () => {
             style={{ background: COLORS.PRIMARY }}
             startIcon={<ThumbUpIcon />}
           >
-            I'm ready
+            {gameEngine.isUserReady ? <DoneOutlineIcon /> : "I'm ready"}
           </Button>
         </div>
       ) : (

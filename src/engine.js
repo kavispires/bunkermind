@@ -340,6 +340,13 @@ class GameEngine {
         isReady: true,
         lastUpdated: Date.now(),
       });
+
+      setTimeout(() => {
+        // If everybody is ready, trigger next phase
+        if (this.isEveryoneReady && this.phase !== GAME_PHASES.QUESTION) {
+          this.goToQuestionPhase();
+        }
+      }, 1000);
     }
   }
 
