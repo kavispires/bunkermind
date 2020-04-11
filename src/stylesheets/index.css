@@ -99,21 +99,21 @@ body {
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 1.35s;
+  animation-duration: 4.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 1.35s;
+  animation-duration: 3.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--5 {
   animation-name: float;
-  animation-duration: 7.35s;
+  animation-duration: 6.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -448,8 +448,12 @@ body {
   right: 8px;
   top: 4px;
   color: #9b8579;
-  font-size: 0.5%;
+  font-size: 0.5rem;
   text-align: left;
   transform: rotate(-90deg);
   transform-origin: right;
+}
+
+.app-container {
+  padding-bottom: 3rem;
 }
