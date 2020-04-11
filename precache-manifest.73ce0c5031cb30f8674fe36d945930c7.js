@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "4b5e94abe921457431064967601e24e9",
+    "revision": "348f991845ee8dcedc0dcb8c09b56221",
     "url": "/bunkermind/index.html"
   },
   {
