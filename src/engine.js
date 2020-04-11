@@ -168,6 +168,17 @@ export class GameEngine {
     return Object.values(this.players).filter((p) => p.isReady);
   }
 
+  // DYNAMIC GETTER
+
+  /**
+   * Gets given players avatar
+   * @param {string} playerNickname
+   * @returns {string} the avatar
+   */
+  getPlayerAvatar(playerNickname) {
+    return this.players[playerNickname].avatar;
+  }
+
   // MAIN METHODS
 
   init(gameID) {
@@ -283,15 +294,6 @@ export class GameEngine {
    */
   setGameID(gameID) {
     this.gameID = gameID;
-  }
-
-  /**
-   * Gets given players avatar
-   * @param {string} playerNickname
-   * @returns {string} the avatar
-   */
-  getPlayerAvatar(playerNickname) {
-    return this.players[playerNickname].avatar;
   }
 
   /**

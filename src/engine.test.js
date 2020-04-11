@@ -283,6 +283,22 @@ describe('gameEngine', () => {
     });
   });
 
+  describe('DYNAMIC GETTERS', () => {
+    beforeEach(() => {
+      gameEngine.me = NICKNAME;
+    });
+
+    it('getPlayerAvatar', () => {
+      gameEngine.players = getPlayers({ number: 3 });
+
+      expect(gameEngine.getPlayerAvatar(NICKNAME)).toBe('axolotl');
+
+      expect(gameEngine.getPlayerAvatar('Beth')).toBe('cardinal');
+
+      expect(gameEngine.getPlayerAvatar('Cam')).toBe('fox');
+    });
+  });
+
   describe('MAIN METHODS', () => {
     beforeEach(() => {
       gameEngine.me = NICKNAME;
@@ -424,4 +440,53 @@ describe('gameEngine', () => {
       expect(gameEngine._dbRef).toBeFalsy();
     });
   });
+
+  describe('SETTERS', () => {
+    beforeEach(() => {
+      gameEngine.me = NICKNAME;
+    });
+
+    it('setDbRef', () => {
+      expect(gameEngine._dbRef).toBe(null);
+
+      gameEngine.setDbRef('HAHAHA');
+
+      expect(gameEngine._dbRef).toBe('HAHAHA');
+
+      gameEngine.setDbRef('HOHOHO');
+
+      expect(gameEngine._dbRef).toBe('HAHAHA');
+    });
+
+    it('setGameID', () => {
+      expect(gameEngine.gameID).toBe(null);
+
+      gameEngine.setGameID(GAME_ID);
+
+      expect(gameEngine.gameID).toBe(GAME_ID);
+
+      gameEngine.setGameID('ABCD');
+
+      expect(gameEngine.gameID).toBe('ABCD');
+    });
+
+    it('unReadyPlayers', () => {
+      expect(gameEngine.isEveryoneReady).toBe(FALSE);
+
+      gameEngine.players = getPlayers({ number: 3, isReady: true });
+
+      expect(gameEngine.isEveryoneReady).toBe(TRUE);
+
+      gameEngine.unReadyPlayers();
+
+      expect(gameEngine.isEveryoneReady).toBe(FALSE);
+    });
+  });
+
+  // describe('SAVERS', () => {
+  //   beforeEach(() => {
+  //     gameEngine.me = NICKNAME;
+  //     gameEngine._dbRef = mockFirebaseDbRef();
+  //   });
+  // });
 });
