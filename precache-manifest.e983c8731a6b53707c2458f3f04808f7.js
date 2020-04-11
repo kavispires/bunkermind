@@ -1,23 +1,23 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "2085684115f2a082a6cfa2b2a103f91d",
+    "revision": "86a6dc3df99f2127bf51758efac62cf9",
     "url": "/bunkermind/index.html"
   },
   {
-    "revision": "2e99db8c68d3c4b0ef26",
-    "url": "/bunkermind/static/css/main.1b0a573a.chunk.css"
+    "revision": "f2bb36678339d8981726",
+    "url": "/bunkermind/static/css/main.236248dc.chunk.css"
   },
   {
-    "revision": "4835ea575d580afe5a9b",
-    "url": "/bunkermind/static/js/2.6be1cdbc.chunk.js"
+    "revision": "85a88d178cb4a239dde6",
+    "url": "/bunkermind/static/js/2.036401c0.chunk.js"
   },
   {
     "revision": "265068e7f3bc904803e029152d67e9a1",
-    "url": "/bunkermind/static/js/2.6be1cdbc.chunk.js.LICENSE.txt"
+    "url": "/bunkermind/static/js/2.036401c0.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "2e99db8c68d3c4b0ef26",
-    "url": "/bunkermind/static/js/main.ffce713b.chunk.js"
+    "revision": "f2bb36678339d8981726",
+    "url": "/bunkermind/static/js/main.602da6fc.chunk.js"
   },
   {
     "revision": "456db29ba85e74e839cd",
