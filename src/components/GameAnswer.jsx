@@ -72,6 +72,8 @@ const GameAnswer = () => {
               variant="outlined"
               className="answer-input-field"
               onChange={(e) => updateAnswer(e.target.value, index)}
+              disabled={gameEngine.isUserReady}
+              inputProps={{ autocomplete: 'off' }}
             />
           </div>
         );

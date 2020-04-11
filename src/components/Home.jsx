@@ -141,7 +141,7 @@ const Home = () => {
           value={tempGameID}
           onChange={(e) => setTempGameID(e.target.value)}
           helperText={errorGameID}
-          inputProps={{ maxLength: '4' }}
+          inputProps={{ maxLength: '4', autocomplete: 'off' }}
         />
         <TextField
           className="mui-full-width"
@@ -150,7 +150,7 @@ const Home = () => {
           label="Nickname"
           defaultValue={tempNickname}
           onChange={(e) => setTempNickname(e.target.value)}
-          inputProps={{ maxLength: '8' }}
+          inputProps={{ maxLength: '10', autocomplete: 'off' }}
           helperText={
             nickname && !isValidNickname ? 'Nickname must be at least 3 characters long.' : ''
           }
