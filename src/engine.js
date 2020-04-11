@@ -103,7 +103,7 @@ class GameEngine {
    * Get user answer in the compare matches object
    */
   get userCompareMatchingAnswer() {
-    return this.compare?.matches[this?.me?.nickname];
+    return this.compare?.matches?.[this?.me?.nickname];
   }
 
   /**
@@ -184,7 +184,7 @@ class GameEngine {
 
   save(dataObj = {}) {
     if (!this._dbRef) {
-      this.print('Delaing save...');
+      this.print('Delaying save...');
       this._tempSaveObj = dataObj;
       return this.delaySave();
     }
@@ -193,6 +193,7 @@ class GameEngine {
 
     this._dbRef.update({
       ...dataObj,
+      lastUpdatedBy: this.me.nickname,
     });
 
     if (this.me?.nickname) {
@@ -203,7 +204,7 @@ class GameEngine {
   }
 
   update(data) {
-    this.print('Updating game...', data);
+    this.print(`Updating game (by ${data.lastUpdatedBy})...`, data);
 
     this.gameID = data.gameID;
     this.avatars = data.avatars || [];
@@ -347,6 +348,7 @@ class GameEngine {
 
     this.save({
       phase: GAME_PHASES.QUESTION,
+      lastUpdatedBy: this.me?.nickname,
     });
   }
 
@@ -356,6 +358,7 @@ class GameEngine {
     this.unReadyPlayers();
 
     this.save({
+      lastUpdatedBy: this.me?.nickname,
       phase: GAME_PHASES.ANSWER,
       currentQuestionID: questionID,
       usedQuestions: {
@@ -369,8 +372,6 @@ class GameEngine {
   goToComparePhase() {
     this.print('Going to COMPARE phase...');
 
-    this.unReadyPlayers();
-
     this.answersSet = [
       ...new Set(
         Object.values(this.players)
@@ -382,8 +383,8 @@ class GameEngine {
     ];
 
     this.save({
+      lastUpdatedBy: this.me?.nickname,
       phase: GAME_PHASES.COMPARE,
-      players: this.players,
       answersSet: this.answersSet,
     });
 
@@ -421,6 +422,9 @@ class GameEngine {
   }
 
   prepareCompare() {
+    // Unready players
+    this.unReadyPlayers();
+
     // Get currentAnswer
     const currentAnswer = this.answersSet.pop();
 
@@ -428,11 +432,12 @@ class GameEngine {
 
     // Auto-match all users
     Object.values(this.players).forEach((player) =>
-      Object.values(player.answers).forEach((answer) => {
+      Object.entries(player.answers).forEach(([answerId, answer]) => {
         if (answer.text === currentAnswer) {
           matches[player.nickname] = {
             answer: answer.text,
             isLocked: true,
+            answerId,
           };
           // Mark as matched in the player object
           answer.isMatch = true;
@@ -441,6 +446,7 @@ class GameEngine {
     );
 
     this.save({
+      lastUpdatedBy: this.me?.nickname,
       phase: GAME_PHASES.COMPARE,
       players: this.players,
       answersSet: this.answersSet,
@@ -471,6 +477,7 @@ class GameEngine {
 
     // Save
     this.save({
+      lastUpdatedBy: this.me?.nickname,
       compare: this.compare,
       players: this.players,
     });
@@ -489,12 +496,11 @@ class GameEngine {
 
     // Remove player answer to compare.matches
     this.compare.matches[name] = {};
-    console.log(this.userAnswers);
     const userAnswersCopy = deepCopy(this.userAnswers);
-    console.log(userAnswersCopy);
 
     // Save
     this.save({
+      lastUpdatedBy: this.me?.nickname,
       compare: this.compare,
     });
 
@@ -515,13 +521,87 @@ class GameEngine {
 
     // Save
     this.save({
+      lastUpdatedBy: this.me?.nickname,
       compare: this.compare,
     });
   }
 
   doneComparing() {
-    // set player to ready
-    // If everybody is ready, run score then (prepare or results)
+    this._dbRef.child('players').child(this.me.nickname).update({
+      isReady: true,
+      lastUpdated: Date.now(),
+    });
+
+    setTimeout(() => {
+      // If everybody is ready, run score then (prepare or results)
+      if (this.isEveryoneReady && this.phase === GAME_PHASES.COMPARE) {
+        this.score();
+      }
+    }, 1000);
+  }
+
+  score() {
+    // Build invalid dictionary
+    const invalidDict = Object.values(this.compare.matches).reduce((acc, matchEntry) => {
+      const numPlayers = Object.keys(this.players).length;
+      const numDownvotes = Object.keys(matchEntry).length;
+
+      if (!matchEntry.isLocked && numDownvotes / numPlayers > 0.4) {
+        acc[matchEntry.answer] = true;
+      }
+
+      return acc;
+    }, {});
+
+    // Reset any player that has more than 30% of players downvoted
+    Object.entries(this.compare.matches).forEach(([playerName, matchEntry]) => {
+      if (invalidDict[matchEntry.answer]) {
+        // Dis-match
+        this.players[playerName].answers[matchEntry.answerId].isMatch = false;
+        // Remove from matches
+        delete this.compare.matches[playerName];
+      } else {
+        // Remove any non exact macthes that were accepted from answersSet
+        const toRemoveIndex = this.answersSet.findIndex((a) => a === matchEntry.answer);
+        if (toRemoveIndex > -1) {
+          this.answersSet[toRemoveIndex] = '';
+        }
+      }
+    });
+
+    // Score
+    const totalPointsForAnswer = Object.keys(this.compare.matches).length;
+
+    Object.keys(this.compare.matches).forEach((playerName) => {
+      this.players[playerName].score += totalPointsForAnswer;
+    });
+
+    // Reset set
+    this.answersSet = [...new Set(this.answersSet)];
+
+    // Save
+    this.save({
+      lastUpdatedBy: this.me?.nickname,
+      players: this.players,
+      answersSet: this.answersSet,
+      compare: this.compare,
+    });
+
+    setTimeout(() => {
+      console.log(this.answersSet);
+      // Call prepare or result if no more words in set
+      if (this.answersSet.length > 0) {
+        console.log('PREPARE!!!');
+        this.prepareCompare();
+      } else {
+        console.log('RESULTS!!!');
+        this.turnResult();
+      }
+    }, 1000);
+  }
+
+  turnResult() {
+    console.log('turnResult!');
   }
 
   /**

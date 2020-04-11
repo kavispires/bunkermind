@@ -42,28 +42,29 @@ const GameCompare = () => {
           <div className="game-compare__accepted-answers">
             <div className="game-compare__current-answer">{gameEngine.compare.currentAnswer}</div>
             <div className="game-compare__accepted-chips">
-              {Object.entries(gameEngine.compare.matches).map(([nicknameKey, answerObj]) => {
-                const key = `matched-answer-${nicknameKey}`;
+              {gameEngine?.compare?.matches &&
+                Object.entries(gameEngine.compare.matches).map(([nicknameKey, answerObj]) => {
+                  const key = `matched-answer-${nicknameKey}`;
 
-                let type = 'votable';
-                if (answerObj.isLocked) {
-                  type = 'locked';
-                } else if (nicknameKey === nickname) {
-                  type = 'mine';
-                }
+                  let type = 'votable';
+                  if (answerObj.isLocked) {
+                    type = 'locked';
+                  } else if (nicknameKey === nickname) {
+                    type = 'mine';
+                  }
 
-                return (
-                  <AnswerChip
-                    key={key}
-                    type={type}
-                    answer={answerObj.answer}
-                    avatar={gameEngine.getPlayerAvatar(nicknameKey)}
-                    answerId={type === 'votable' ? nicknameKey : answerObj.answerId}
-                    currentUser={nickname}
-                    downvotes={answerObj?.downvotes}
-                  />
-                );
-              })}
+                  return (
+                    <AnswerChip
+                      key={key}
+                      type={type}
+                      answer={answerObj.answer}
+                      avatar={gameEngine.getPlayerAvatar(nicknameKey)}
+                      answerId={type === 'votable' ? nicknameKey : answerObj.answerId}
+                      currentUser={nickname}
+                      downvotes={answerObj?.downvotes}
+                    />
+                  );
+                })}
             </div>
           </div>
           <ul className="game-compare__instructions">
@@ -96,7 +97,7 @@ const GameCompare = () => {
               variant="contained"
               color="primary"
               disabled={gameEngine.isUserReady}
-              onClick={() => NOOP()}
+              onClick={() => gameEngine.doneComparing()}
               style={{ background: COLORS.PRIMARY }}
             >
               Done
