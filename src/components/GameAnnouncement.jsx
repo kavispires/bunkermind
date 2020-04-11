@@ -86,7 +86,9 @@ const GameAnnouncement = () => {
           />
           <div className="bunker__info-container">
             <h2>Round {game.turn}</h2>
-            <p className="bunker-info--flavor-text">{getTurnTypeFlavorText(game.turn)}</p>
+            <p className="bunker-info--flavor-text">
+              {getTurnTypeFlavorText(game.turnType, game.turn)}
+            </p>
             <p className="bunker-info--turn-type">{TURN_TYPES[game.turnType]}</p>
             <p className="bunker-info--active-player">
               <strong>{gameEngine.activePlayer.nickname}</strong> will choose the question.

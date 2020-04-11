@@ -73,7 +73,7 @@ const GameAnswer = () => {
               className="answer-input-field"
               onChange={(e) => updateAnswer(e.target.value, index)}
               disabled={gameEngine.isUserReady}
-              inputProps={{ autocomplete: 'off' }}
+              inputProps={{ autoComplete: 'off' }}
             />
           </div>
         );

@@ -84,11 +84,13 @@ export const getTurnType = (turn) => {
 
 /**
  * Returns a random flavor text for the round
+ * @param {number} turnType the current turn type
  * @param {number} turn the current turn
  * @return {string} the flavor text
  */
-export const getTurnTypeFlavorText = (turn) => {
-  return getRandomItems(TURN_TYPES_FLAVOR_TEXT[turn]);
+export const getTurnTypeFlavorText = (turnType, turn) => {
+  const flavorTexts = TURN_TYPES_FLAVOR_TEXT[turnType];
+  return flavorTexts[(turn - 1) % flavorTexts.length];
 };
 
 /**
