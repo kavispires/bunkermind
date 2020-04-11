@@ -1,5 +1,5 @@
 import { shuffle, getRandomItems } from '../utils';
-import { AVATARS, GAME_PHASES } from '../utils/contants';
+import { AVATARS, GAME_PHASES, ONE_MINUTE, TEST_NOW } from '../utils/contants';
 
 const playersNames = [
   'Adam',
@@ -16,7 +16,11 @@ const playersNames = [
   'Lin',
 ];
 
-const getAnswers = (nickname) => {
+if (process.env.NODE_ENV === 'test') {
+  playersNames[0] = 'Tester';
+}
+
+export const getAnswers = (nickname) => {
   const answers = getRandomItems(
     ['keys', 'money', 'coin', 'coins', 'hand', 'wallet', 'clips', 'lint', 'fabric'],
     3
@@ -32,17 +36,23 @@ const getAnswers = (nickname) => {
   }, {});
 };
 
-const getPlayers = ({ number, avatars, floor = 6, isReady = false, addAnswers = false }) => {
+export const getPlayers = ({
+  number,
+  floor = 6,
+  isReady = false,
+  addAnswers = false,
+  isOnline = true,
+}) => {
   const result = {};
 
   for (let i = 0; i < number; i++) {
     result[playersNames[i]] = {
-      avatar: avatars[i],
+      avatar: AVATARS[i],
       isAdmin: i === 0,
-      lastUpdated: Date.now(),
+      lastUpdated: isOnline ? TEST_NOW : TEST_NOW - ONE_MINUTE * 300,
       nickname: playersNames[i],
       floor: typeof floor === 'number' ? floor : floor[i] || 6,
-      isReady: typeof isReady === 'object' ? isReady[i] || false : isReady,
+      isReady: Array.isArray(isReady) ? isReady[i] || false : isReady,
       score: 0,
       answers: addAnswers ? getAnswers(playersNames[i]) : {},
     };
@@ -50,9 +60,9 @@ const getPlayers = ({ number, avatars, floor = 6, isReady = false, addAnswers = 
   return result;
 };
 
-const basics = {
+export const basics = {
   gameID: 'ABCD',
-  avatars: shuffle(AVATARS),
+  avatars: [...AVATARS],
   phase: GAME_PHASES.WAITING_ROOM,
   turn: 0,
   isLocked: true,
@@ -65,25 +75,24 @@ const mockTurns = (set) => {
     case 'waiting.incomplete':
       return {
         ...basics,
-        players: getPlayers({ number: 2, avatars: basics.avatars }),
+        players: getPlayers({ number: 2 }),
         isLocked: false,
       };
     case 'waiting.sufficient':
       return {
         ...basics,
-        players: getPlayers({ number: 4, avatars: basics.avatars }),
+        players: getPlayers({ number: 4 }),
         isLocked: false,
       };
     case 'waiting.full':
       return {
         ...basics,
-        players: getPlayers({ number: 12, avatars: basics.avatars }),
+        players: getPlayers({ number: 12 }),
         isLocked: false,
       };
     case 'announcement':
       players = getPlayers({
         number: 12,
-        avatars: basics.avatars,
         floor: [6, 6, 6, 6, 6, 5, 4, 4, 6, 2, 2, 6],
         isReady: [false, true, true, true],
       });
@@ -98,7 +107,6 @@ const mockTurns = (set) => {
     case 'announcement.ready':
       players = getPlayers({
         number: 12,
-        avatars: basics.avatars,
         floor: [6, 6, 6, 6, 6, 5, 4, 4, 6, 2, 2, 6],
         isReady: true,
       });
@@ -113,7 +121,6 @@ const mockTurns = (set) => {
     case 'question.active':
       players = getPlayers({
         number: 12,
-        avatars: basics.avatars,
         floor: 6,
         isReady: true,
       });
@@ -128,7 +135,6 @@ const mockTurns = (set) => {
     case 'question.passive':
       players = getPlayers({
         number: 12,
-        avatars: basics.avatars,
         floor: 6,
         isReady: true,
       });
@@ -143,7 +149,6 @@ const mockTurns = (set) => {
     case 'answer.ready':
       players = getPlayers({
         number: 12,
-        avatars: basics.avatars,
         floor: 6,
         isReady: true,
         addAnswers: true,
@@ -160,7 +165,6 @@ const mockTurns = (set) => {
     case 'answer.ready3':
       players = getPlayers({
         number: 3,
-        avatars: basics.avatars,
         floor: 6,
         isReady: true,
         addAnswers: true,
@@ -177,7 +181,6 @@ const mockTurns = (set) => {
     case 'answer.ready4':
       players = getPlayers({
         number: 4,
-        avatars: basics.avatars,
         floor: 6,
         isReady: true,
         addAnswers: true,

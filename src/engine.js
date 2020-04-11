@@ -1,9 +1,15 @@
 import { deepCopy, shuffle } from './utils';
-import { AVATARS, GAME_PHASES, ONE_MINUTE, ONLINE_MINIUTE_THRESHOLD } from './utils/contants';
+import {
+  AVATARS,
+  GAME_PHASES,
+  ONE_MINUTE,
+  ONLINE_MINIUTE_THRESHOLD,
+  TEST_NOW,
+} from './utils/contants';
 
 import mockTurns from './firebase/mock-turns';
 
-class GameEngine {
+export class GameEngine {
   constructor() {
     this._dbRef = null;
     this._isAdmin = false;
@@ -51,90 +57,8 @@ class GameEngine {
   }
 
   /**
-   * Flag indicating if me property is set and included in players
-   * @type  {boolean}
-   */
-  get isUserSet() {
-    return this.me && this.players[this.me?.nickname];
-  }
-
-  /**
-   * Flag indicating if game has already two players set
-   * @type  {boolean}
-   */
-  get isGameFull() {
-    return !this.isUserSet && Object.keys(this.players).length === 12;
-  }
-
-  /**
-   * Flag indicating if player is online
-   * @type  {boolean}
-   */
-  get isUserOnline() {
-    return (
-      this.isUserSet && Date.now() - this.me?.lastUpdated < ONE_MINUTE * ONLINE_MINIUTE_THRESHOLD
-    );
-  }
-
-  /**
-   * Flag indicating if player is ready
-   * @type  {boolean}
-   */
-  get isUserReady() {
-    return Boolean(this.players[this.me?.nickname]?.isReady);
-  }
-
-  /**
-   * Gets user (me) from the live players object
-   */
-  get user() {
-    return this.players[this.me?.nickname];
-  }
-
-  /**
-   * Get user's answers
-   * @type  {boolean}
-   */
-  get userAnswers() {
-    return this.players[this.me?.nickname]?.answers || {};
-  }
-
-  /**
-   * Get user answer in the compare matches object
-   */
-  get userCompareMatchingAnswer() {
-    return this.compare?.matches?.[this?.me?.nickname];
-  }
-
-  /**
-   * Flag indicating if every player is online
-   * @type  {boolean}
-   */
-  get isEveryoneOnline() {
-    return Object.values(this.players).every(
-      (p) => Date.now() - p.lastUpdated < ONE_MINUTE * ONLINE_MINIUTE_THRESHOLD
-    );
-  }
-
-  /**
-   * Flag indicating if every player is ready (and online)
-   * @type  {boolean}
-   */
-  get isEveryoneReady() {
-    return this.isEveryoneOnline && Object.values(this.players).every((p) => p.isReady);
-  }
-
-  /**
-   * Get every player that is ready
-   * @type  {array}
-   */
-  get whosReady() {
-    return Object.values(this.players).filter((p) => p.isReady);
-  }
-
-  /**
    * Return active player object based on turn and turnOrder
-   * @type  {object}
+   * @returns  {object}
    */
   get activePlayer() {
     const index = (this.turn - 1) % this.turnOrder.length;
@@ -142,11 +66,106 @@ class GameEngine {
   }
 
   /**
-   * Flag indicating if user is the active player
+   * Flag indicating if every player is online
    * @type  {boolean}
    */
+  get isEveryoneOnline() {
+    return Boolean(
+      Object.keys(this.players).length &&
+        Object.values(this.players).every(
+          (p) => this.now - p.lastUpdated < ONE_MINUTE * ONLINE_MINIUTE_THRESHOLD
+        )
+    );
+  }
+
+  /**
+   * Flag indicating if every player is ready (and online)
+   * @returns  {boolean}
+   */
+  get isEveryoneReady() {
+    return this.isEveryoneOnline && Object.values(this.players).every((p) => p.isReady);
+  }
+
+  /**
+   * Flag indicating if game has already two players set
+   * @returns  {boolean}
+   */
+  get isGameFull() {
+    return !this.isUserSet && Object.keys(this.players).length === 12;
+  }
+
+  /**
+   * Flag indicating if user is the active player
+   * @returns  {boolean}
+   */
   get isUserActivePlayer() {
-    return this.me?.nickname === this.activePlayer.nickname;
+    return this.me === this.activePlayer?.nickname;
+  }
+
+  /**
+   * Flag indicating if player is online
+   * @returns  {boolean}
+   */
+  get isUserOnline() {
+    return (
+      this.isUserSet && this.now - this.user.lastUpdated < ONE_MINUTE * ONLINE_MINIUTE_THRESHOLD
+    );
+  }
+
+  /**
+   * Flag indicating if me property is set and included in players
+   * @returns  {boolean}
+   */
+  get isUserSet() {
+    return Boolean(this.me && this.players[this.me]);
+  }
+
+  /**
+   * Flag indicating if player is ready
+   * @returns  {boolean}
+   */
+  get isUserReady() {
+    return Boolean(this.players[this.me]?.isReady);
+  }
+
+  /**
+   * Returns current time in miliseconds
+   * @returns {number}
+   */
+  get now() {
+    return process.env.NODE_ENV === 'test' ? TEST_NOW : Date.now();
+  }
+
+  /**
+   * Gets user (me) from the live players object
+   * @returns {object}
+   */
+  get user() {
+    return this.players[this.me];
+  }
+
+  /**
+   * Get user's answers
+   * @returns  {object}
+   */
+  get userAnswers() {
+    return this.players[this.me]?.answers || {};
+  }
+
+  /**
+   * Get user answer in the compare matches object
+   * @returns {object}
+   */
+  get userCompareMatchingAnswer() {
+    return this.compare?.matches?.[this.me];
+  }
+
+  /**
+   * Get every player that is ready
+   * @returns  {array}
+   */
+  get whosReady() {
+    return Object.values(this.players).filter((p) => p.isReady);
   }
 
   // MAIN METHODS
@@ -193,12 +212,12 @@ class GameEngine {
 
     this._dbRef.update({
       ...dataObj,
-      lastUpdatedBy: this.me.nickname,
+      lastUpdatedBy: this.me,
     });
 
-    if (this.me?.nickname) {
-      this._dbRef.child('players').child(this.me.nickname).update({
-        lastUpdated: Date.now(),
+    if (this.me) {
+      this._dbRef.child('players').child(this.me).update({
+        lastUpdated: this.now,
       });
     }
   }
@@ -273,22 +292,30 @@ class GameEngine {
    * @param {string} nickname the nickname of the user
    */
   setPlayer(nickname) {
+    // Set me
+    this.me = nickname;
+
+    // Define new player
+    let newPlayer;
     if (this.players[nickname]) {
-      this.me = {
+      newPlayer = {
         ...this.players[nickname],
-        lastUpdated: Date.now(),
+        lastUpdated: this.now,
       };
     } else {
-      this.me = {
-        lastUpdated: Date.now(),
+      newPlayer = {
+        lastUpdated: this.now,
         nickname,
         avatar: this.avatars[Object.keys(this.players).length],
-        isAdmin: this._isAdmin,
         floor: 6,
         isReady: false,
         score: 0,
         answers: {},
       };
+
+      if (this._isAdmin) {
+        newPlayer.isAdmin = true;
+      }
     }
 
     if (this.isGameFull) {
@@ -302,7 +329,7 @@ class GameEngine {
     this.print('Adding player...');
 
     this._dbRef.child('players').update({
-      [nickname]: this.me,
+      [nickname]: newPlayer,
     });
   }
 
@@ -320,11 +347,11 @@ class GameEngine {
    * Saves new typestamp to player/user
    */
   refresh() {
-    if (!this.isUserOnline && this.me?.nickname) {
+    if (!this.isUserOnline && this.me) {
       this.print('Refreshing player...');
 
-      this._dbRef.child('players').child(this.me.nickname).update({
-        lastUpdated: Date.now(),
+      this._dbRef.child('players').child(this.me).update({
+        lastUpdated: this.now,
       });
     }
   }
@@ -333,12 +360,12 @@ class GameEngine {
    * Set user's/player's isReady to true with new timestamp
    */
   setUserReady() {
-    if (this.me?.nickname) {
+    if (this.me) {
       this.print('Reading player...');
 
-      this._dbRef.child('players').child(this.me?.nickname).update({
+      this._dbRef.child('players').child(this.me).update({
         isReady: true,
-        lastUpdated: Date.now(),
+        lastUpdated: this.now,
       });
 
       setTimeout(() => {
@@ -355,7 +382,7 @@ class GameEngine {
 
     this.save({
       phase: GAME_PHASES.QUESTION,
-      lastUpdatedBy: this.me?.nickname,
+      lastUpdatedBy: this.me,
     });
   }
 
@@ -365,7 +392,7 @@ class GameEngine {
     this.unReadyPlayers();
 
     this.save({
-      lastUpdatedBy: this.me?.nickname,
+      lastUpdatedBy: this.me,
       phase: GAME_PHASES.ANSWER,
       currentQuestionID: questionID,
       usedQuestions: {
@@ -390,7 +417,7 @@ class GameEngine {
     ];
 
     this.save({
-      lastUpdatedBy: this.me?.nickname,
+      lastUpdatedBy: this.me,
       phase: GAME_PHASES.COMPARE,
       answersSet: this.answersSet,
     });
@@ -402,10 +429,10 @@ class GameEngine {
   }
 
   submitAnswers(answers) {
-    if (this.me?.nickname) {
+    if (this.me) {
       // Set answers, uppercase
       const userAnswers = answers.reduce((acc, answer, index) => {
-        const id = `${this.currentQuestionID};${this.me.nickname};${index}`;
+        const id = `${this.currentQuestionID};${this.me};${index}`;
         acc[id] = {
           text: answer.toUpperCase(),
           isMatch: false,
@@ -413,9 +440,9 @@ class GameEngine {
         return acc;
       }, {});
 
-      this._dbRef.child('players').child(this.me.nickname).update({
+      this._dbRef.child('players').child(this.me).update({
         isReady: true,
-        lastUpdated: Date.now(),
+        lastUpdated: this.now,
         answers: userAnswers,
       });
 
@@ -453,7 +480,7 @@ class GameEngine {
     );
 
     this.save({
-      lastUpdatedBy: this.me?.nickname,
+      lastUpdatedBy: this.me,
       phase: GAME_PHASES.COMPARE,
       players: this.players,
       answersSet: this.answersSet,
@@ -484,13 +511,13 @@ class GameEngine {
 
     // Save
     this.save({
-      lastUpdatedBy: this.me?.nickname,
+      lastUpdatedBy: this.me,
       compare: this.compare,
       players: this.players,
     });
 
     this._dbRef.child('players').child(name).update({
-      lastUpdated: Date.now(),
+      lastUpdated: this.now,
       answers: userAnswersCopy,
     });
   }
@@ -507,12 +534,12 @@ class GameEngine {
 
     // Save
     this.save({
-      lastUpdatedBy: this.me?.nickname,
+      lastUpdatedBy: this.me,
       compare: this.compare,
     });
 
     this._dbRef.child('players').child(name).update({
-      lastUpdated: Date.now(),
+      lastUpdated: this.now,
       answers: userAnswersCopy,
     });
   }
@@ -528,15 +555,15 @@ class GameEngine {
 
     // Save
     this.save({
-      lastUpdatedBy: this.me?.nickname,
+      lastUpdatedBy: this.me,
       compare: this.compare,
     });
   }
 
   doneComparing() {
-    this._dbRef.child('players').child(this.me.nickname).update({
+    this._dbRef.child('players').child(this.me).update({
       isReady: true,
-      lastUpdated: Date.now(),
+      lastUpdated: this.now,
     });
 
     setTimeout(() => {
@@ -588,7 +615,7 @@ class GameEngine {
 
     // Save
     this.save({
-      lastUpdatedBy: this.me?.nickname,
+      lastUpdatedBy: this.me,
       players: this.players,
       answersSet: this.answersSet,
       compare: this.compare,
