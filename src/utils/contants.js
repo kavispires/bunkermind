@@ -41,6 +41,8 @@ export const ONE_MINUTE = 60000;
 
 export const ONLINE_MINIUTE_THRESHOLD = 5;
 
+export const DISCONNECT_MINIUTE_THRESHOLD = 15;
+
 export const NOOP = () => {};
 
 export const TURN_TYPES = {

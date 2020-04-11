@@ -15,6 +15,7 @@ const initialState = {
     isVisible: false,
     message: '',
   },
+  lastUpdatedAt: Date.now(),
 };
 
 const { useGlobalState } = createGlobalState(initialState);

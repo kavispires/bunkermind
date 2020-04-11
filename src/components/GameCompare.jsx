@@ -12,8 +12,6 @@ import { COLORS } from '../utils/contants';
 import GameHeader from './GameHeader';
 import AnswerChip from './AnswerChip';
 
-const NOOP = () => console.log('CLICK!');
-
 const GameCompare = () => {
   // Global States
   const [nickname] = useGlobalState('nickname');
@@ -89,6 +87,7 @@ const GameCompare = () => {
                   />
                 );
               }
+              return <span></span>;
             })}
           </div>
 

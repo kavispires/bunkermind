@@ -159,7 +159,7 @@ const mockTurns = (set) => {
       };
     case 'answer.ready3':
       players = getPlayers({
-        number: 3,
+        number: 4,
         avatars: basics.avatars,
         floor: 6,
         isReady: true,

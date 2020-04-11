@@ -31,7 +31,7 @@ const App = () => {
       <Screen />
       <Toast />
       <Mocks />
-      <span class="release-number">v0.5.0</span>
+      <span className="release-number">v0.5</span>
     </Container>
   );
 };

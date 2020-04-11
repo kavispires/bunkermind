@@ -4,7 +4,7 @@ import API from '../firebase';
 import gameEngine from '../engine';
 import useGlobalState from '../useGlobalState';
 
-import { GAME_PHASES, SCREENS } from '../utils/contants';
+import { DISCONNECT_MINIUTE_THRESHOLD, GAME_PHASES, ONE_MINUTE, SCREENS } from '../utils/contants';
 import toastService from '../utils/toastService';
 
 import GameWaitingRoom from './GameWaitingRoom';
@@ -12,6 +12,8 @@ import GameAnnouncement from './GameAnnouncement';
 import GameQuestion from './GameQuestion';
 import GameAnswer from './GameAnswer';
 import GameCompare from './GameCompare';
+
+let disconnectInterval;
 
 const GameScreen = () => {
   const [game] = useGlobalState('game');
@@ -40,6 +42,7 @@ const Game = () => {
   const [, setIsLoading] = useGlobalState('isLoading');
   const [, setScreen] = useGlobalState('screen');
   const [toast, setToast] = useGlobalState('toast');
+  const [lastUpdatedAt, setLastUpdatedAt] = useGlobalState('lastUpdatedAt');
 
   // Create database reference
   useEffect(() => {
@@ -74,6 +77,7 @@ const Game = () => {
         setIsLoading(true);
         if (snap.val()) {
           setGame(gameEngine.update(snap.val()));
+          setLastUpdatedAt(Date.now());
         }
         setIsLoading(false);
       };
@@ -90,7 +94,26 @@ const Game = () => {
         dbRef.off('value', handleGameDisconnect);
       };
     }
-  }, [dbRef, setGame, setIsLoading, setScreen, setToast, toast]);
+  }, [dbRef, setGame, setIsLoading, setScreen, setToast, setLastUpdatedAt, toast]);
+
+  // Forces disconnect ater 15 minutes of inactivity
+  useEffect(() => {
+    clearInterval(disconnectInterval);
+
+    if (dbRef) {
+      disconnectInterval = setInterval(() => {
+        if (Date.now() - lastUpdatedAt > ONE_MINUTE * DISCONNECT_MINIUTE_THRESHOLD) {
+          dbRef.off('value', () => {
+            setIsLoading(false);
+            setToast(toastService.info(toast, 'Server disconnected for inactivity'));
+            setScreen(SCREENS.HOME);
+          });
+
+          clearInterval(disconnectInterval);
+        }
+      }, ONE_MINUTE * DISCONNECT_MINIUTE_THRESHOLD);
+    }
+  }, [lastUpdatedAt, setIsLoading, setToast, setScreen, dbRef, toast]);
 
   return <GameScreen />;
 };
