@@ -10,6 +10,8 @@ import Toast from './Toast';
 import Game from './Game';
 import Mocks from './Mocks';
 
+const version = '0.5.642'; // patch number is always equal to the number of questions
+
 const Screen = () => {
   const [screen] = useGlobalState('screen');
 
@@ -31,7 +33,7 @@ const App = () => {
       <Screen />
       <Toast />
       <Mocks />
-      <span className="release-number">v0.5</span>
+      <span className="release-number">v{version}</span>
     </Container>
   );
 };
