@@ -11,6 +11,7 @@ export const GAME_PHASES = {
   COMPARE: 'COMPARE',
   RESULT: 'RESULT',
   GAMEOVER: 'GAMEOVER',
+  NONE: 'NONE',
 };
 
 export const COLORS = {

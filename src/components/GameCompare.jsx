@@ -87,7 +87,7 @@ const GameCompare = () => {
                   />
                 );
               }
-              return <span></span>;
+              return <span key={answerId}></span>;
             })}
           </div>
 
@@ -104,7 +104,7 @@ const GameCompare = () => {
           </div>
         </Fragment>
       ) : (
-        <div>What? Something's wrong</div>
+        <div className="general-error">What? Something's wrong</div>
       )}
     </div>
   );

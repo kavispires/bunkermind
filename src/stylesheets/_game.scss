@@ -16,3 +16,21 @@
     color: $color-brown;
   }
 }
+
+.game-loading {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.general-error {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $unit3 $unit2;
+  background: red;
+  color: $color-white;
+}

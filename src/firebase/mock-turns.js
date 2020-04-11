@@ -159,6 +159,23 @@ const mockTurns = (set) => {
       };
     case 'answer.ready3':
       players = getPlayers({
+        number: 3,
+        avatars: basics.avatars,
+        floor: 6,
+        isReady: true,
+        addAnswers: true,
+      });
+      return {
+        ...basics,
+        currentQuestionID: 'q1',
+        phase: GAME_PHASES.ANSWER,
+        turn: 1,
+        turnType: 1,
+        players,
+        turnOrder: [...playersNames],
+      };
+    case 'answer.ready4':
+      players = getPlayers({
         number: 4,
         avatars: basics.avatars,
         floor: 6,

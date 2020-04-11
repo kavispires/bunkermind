@@ -17,7 +17,7 @@ class GameEngine {
     this.turnOrder = [];
     this.turn = 0;
     this.turnType = 1;
-    this.phase = GAME_PHASES.WAITING_ROOM;
+    this.phase = GAME_PHASES.NONE;
     this.usedQuestions = {};
     this.currentQuestionID = null;
     this.answersSet = [];
