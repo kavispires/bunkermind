@@ -28,7 +28,7 @@ const GameQuestionSelection = () => {
   return (
     <div className="game-question-selection">
       <div className="game-question-selection__icon">
-        <LiveHelpIcon />
+        <LiveHelpIcon fontSize="large" />
       </div>
       <h2 className="game-question-selection__title">
         {gameEngine.activePlayer.nickname}, it's time to select a question!

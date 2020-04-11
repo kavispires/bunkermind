@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import CreateIcon from '@material-ui/icons/Create';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import LooksOneIcon from '@material-ui/icons/LooksOne';
 import LooksTwoIcon from '@material-ui/icons/LooksTwo';
 import LooksThreeIcon from '@material-ui/icons/Looks3';
 import LooksFourIcon from '@material-ui/icons/Looks4';
 import LooksFiveIcon from '@material-ui/icons/Looks5';
-import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 
 import gameEngine from '../engine';
 
@@ -24,7 +24,7 @@ const ANSWER_ICONS = {
   4: <LooksFiveIcon fontSize="large" />,
 };
 
-const GameQuestionSelection = () => {
+const GameAnswer = () => {
   // Local States
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [answers, setAnswers] = useState([]);
@@ -55,7 +55,7 @@ const GameQuestionSelection = () => {
     <div className="game-game game-container game-answer">
       <GameHeader />
       <div className="game-answer__icon">
-        <QuestionAnswerIcon />
+        <CreateIcon fontSize="large" />
       </div>
       <h2>Answer Time!</h2>
       <h3 className="game-answer__current-question">{currentQuestion?.question}</h3>
@@ -112,4 +112,4 @@ const GameQuestionSelection = () => {
   );
 };
 
-export default GameQuestionSelection;
+export default GameAnswer;

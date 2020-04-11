@@ -16,6 +16,7 @@ export const GAME_PHASES = {
 export const COLORS = {
   PRIMARY: '#ffa500',
   SECONDARY: '#594A42',
+  RED: '#a01d0b',
 };
 
 export const AVATARS = [
@@ -39,6 +40,8 @@ export const AVATARS = [
 export const ONE_MINUTE = 60000;
 
 export const ONLINE_MINIUTE_THRESHOLD = 5;
+
+export const NOOP = () => {};
 
 export const TURN_TYPES = {
   0: 'The lowest scores move up, the highets scores move down!',

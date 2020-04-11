@@ -1,4 +1,4 @@
-import { shuffle } from './utils';
+import { deepCopy, shuffle } from './utils';
 import { AVATARS, GAME_PHASES, ONE_MINUTE, ONLINE_MINIUTE_THRESHOLD } from './utils/contants';
 
 import mockTurns from './firebase/mock-turns';
@@ -20,6 +20,8 @@ class GameEngine {
     this.phase = GAME_PHASES.WAITING_ROOM;
     this.usedQuestions = {};
     this.currentQuestionID = null;
+    this.answersSet = [];
+    this.compare = null;
 
     // Used by delay save
     this._interval = null;
@@ -43,6 +45,8 @@ class GameEngine {
       turnType: this.turnType,
       currentQuestionID: this.currentQuestionID,
       usedQuestions: this.usedQuestions,
+      answersSet: this.answersSet,
+      compare: this.compare,
     };
   }
 
@@ -78,6 +82,28 @@ class GameEngine {
    */
   get isUserReady() {
     return Boolean(this.players[this.me?.nickname]?.isReady);
+  }
+
+  /**
+   * Gets user (me) from the live players object
+   */
+  get user() {
+    return this.players[this.me?.nickname];
+  }
+
+  /**
+   * Get user's answers
+   * @type  {boolean}
+   */
+  get userAnswers() {
+    return this.players[this.me?.nickname]?.answers || {};
+  }
+
+  /**
+   * Get user answer in the compare matches object
+   */
+  get userCompareMatchingAnswer() {
+    return this.compare?.matches[this?.me?.nickname];
   }
 
   /**
@@ -189,6 +215,8 @@ class GameEngine {
     this.phase = data.phase;
     this.currentQuestionID = data.currentQuestionID || null;
     this.usedQuestions = data.usedQuestions || {};
+    this.answersSet = data.answersSet || [];
+    this.compare = data.compare || null;
 
     return this.state;
   }
@@ -220,6 +248,15 @@ class GameEngine {
   }
 
   /**
+   * Gets given players avatar
+   * @param {string} playerNickname
+   * @returns {string} the avatar
+   */
+  getPlayerAvatar(playerNickname) {
+    return this.players[playerNickname].avatar;
+  }
+
+  /**
    * Turns every every player isReady flag off
    */
   unReadyPlayers() {
@@ -248,6 +285,8 @@ class GameEngine {
         isAdmin: this._isAdmin,
         floor: 6,
         isReady: false,
+        score: 0,
+        answers: {},
       };
     }
 
@@ -332,19 +371,157 @@ class GameEngine {
 
     this.unReadyPlayers();
 
+    this.answersSet = [
+      ...new Set(
+        Object.values(this.players)
+          .map((player) => Object.values(player.answers).map((answer) => answer.text))
+          .flat()
+          .sort()
+          .reverse()
+      ),
+    ];
+
     this.save({
       phase: GAME_PHASES.COMPARE,
       players: this.players,
-      // ??
+      answersSet: this.answersSet,
+    });
+
+    setTimeout(() => {
+      // After a second, prepare
+      this.prepareCompare();
+    }, 1000);
+  }
+
+  submitAnswers(answers) {
+    if (this.me?.nickname) {
+      // Set answers, uppercase
+      const userAnswers = answers.reduce((acc, answer, index) => {
+        const id = `${this.currentQuestionID};${this.me.nickname};${index}`;
+        acc[id] = {
+          text: answer.toUpperCase(),
+          isMatch: false,
+        };
+        return acc;
+      }, {});
+
+      this._dbRef.child('players').child(this.me.nickname).update({
+        isReady: true,
+        lastUpdated: Date.now(),
+        answers: userAnswers,
+      });
+
+      setTimeout(() => {
+        // If everybody is ready, trigger next phase
+        if (this.isEveryoneReady && this.phase !== GAME_PHASES.COMPARE) {
+          this.goToComparePhase();
+        }
+      }, 1000);
+    }
+  }
+
+  prepareCompare() {
+    // Get currentAnswer
+    const currentAnswer = this.answersSet.pop();
+
+    const matches = {};
+
+    // Auto-match all users
+    Object.values(this.players).forEach((player) =>
+      Object.values(player.answers).forEach((answer) => {
+        if (answer.text === currentAnswer) {
+          matches[player.nickname] = {
+            answer: answer.text,
+            isLocked: true,
+          };
+          // Mark as matched in the player object
+          answer.isMatch = true;
+        }
+      })
+    );
+
+    this.save({
+      phase: GAME_PHASES.COMPARE,
+      players: this.players,
+      answersSet: this.answersSet,
+      compare: {
+        currentAnswer,
+        matches,
+      },
     });
   }
 
-  submitAnswers() {
-    // Set answers
-    console.log('submit bitch!');
-    // Set isReady
+  addMatch(id, nickname) {
+    // Mark player answer as match
+    this.players[nickname].answers[id].isMatch = true;
 
-    // If everybody is ready, trigger next phase
+    const [, name] = id.split(';');
+
+    // Add player answer to compare.matches
+    this.compare.matches[name] = {
+      answer: this.userAnswers[id].text,
+      isLocked: false,
+      downvotes: {
+        [name]: true,
+      },
+      answerId: id,
+    };
+
+    const userAnswersCopy = deepCopy(this.userAnswers);
+
+    // Save
+    this.save({
+      compare: this.compare,
+      players: this.players,
+    });
+
+    this._dbRef.child('players').child(name).update({
+      lastUpdated: Date.now(),
+      answers: userAnswersCopy,
+    });
+  }
+
+  removeMatch(id, nickname) {
+    // Mark player answer as NOT match
+    this.players[nickname].answers[id].isMatch = false;
+
+    const [, name] = id.split(';');
+
+    // Remove player answer to compare.matches
+    this.compare.matches[name] = {};
+    console.log(this.userAnswers);
+    const userAnswersCopy = deepCopy(this.userAnswers);
+    console.log(userAnswersCopy);
+
+    // Save
+    this.save({
+      compare: this.compare,
+    });
+
+    this._dbRef.child('players').child(name).update({
+      lastUpdated: Date.now(),
+      answers: userAnswersCopy,
+    });
+  }
+
+  voteForAnswer(id, voterName) {
+    if (this.compare.matches[id]) {
+      if (this.compare.matches[id].downvotes[voterName]) {
+        delete this.compare.matches[id].downvotes[voterName];
+      } else {
+        this.compare.matches[id].downvotes[voterName] = true;
+      }
+    }
+
+    // Save
+    this.save({
+      compare: this.compare,
+    });
+  }
+
+  doneComparing() {
+    // set player to ready
+    // If everybody is ready, run score then (prepare or results)
   }
 
   /**

@@ -1,4 +1,4 @@
-import { shuffle } from '../utils';
+import { shuffle, getRandomItems } from '../utils';
 import { AVATARS, GAME_PHASES } from '../utils/contants';
 
 const playersNames = [
@@ -16,7 +16,23 @@ const playersNames = [
   'Lin',
 ];
 
-const getPlayers = (number, avatars, floor = 6, isReady = false) => {
+const getAnswers = (nickname) => {
+  const answers = getRandomItems(
+    ['keys', 'money', 'coin', 'coins', 'hand', 'wallet', 'clips', 'lint', 'fabric'],
+    3
+  );
+
+  return answers.reduce((acc, answer, index) => {
+    const id = `q1;${nickname};${index}`;
+    acc[id] = {
+      text: answer.toUpperCase(),
+      isMatch: false,
+    };
+    return acc;
+  }, {});
+};
+
+const getPlayers = ({ number, avatars, floor = 6, isReady = false, addAnswers = false }) => {
   const result = {};
 
   for (let i = 0; i < number; i++) {
@@ -27,6 +43,8 @@ const getPlayers = (number, avatars, floor = 6, isReady = false) => {
       nickname: playersNames[i],
       floor: typeof floor === 'number' ? floor : floor[i] || 6,
       isReady: typeof isReady === 'object' ? isReady[i] || false : isReady,
+      score: 0,
+      answers: addAnswers ? getAnswers(playersNames[i]) : {},
     };
   }
   return result;
@@ -37,6 +55,7 @@ const basics = {
   avatars: shuffle(AVATARS),
   phase: GAME_PHASES.WAITING_ROOM,
   turn: 0,
+  isLocked: true,
 };
 
 const mockTurns = (set) => {
@@ -46,25 +65,28 @@ const mockTurns = (set) => {
     case 'waiting.incomplete':
       return {
         ...basics,
-        players: getPlayers(2, basics.avatars),
+        players: getPlayers({ number: 2, avatars: basics.avatars }),
+        isLocked: false,
       };
     case 'waiting.sufficient':
       return {
         ...basics,
-        players: getPlayers(4, basics.avatars),
+        players: getPlayers({ number: 4, avatars: basics.avatars }),
+        isLocked: false,
       };
     case 'waiting.full':
       return {
         ...basics,
-        players: getPlayers(12, basics.avatars),
+        players: getPlayers({ number: 12, avatars: basics.avatars }),
+        isLocked: false,
       };
     case 'announcement':
-      players = getPlayers(
-        12,
-        basics.avatars,
-        [6, 6, 6, 6, 6, 5, 4, 4, 6, 2, 2, 6],
-        [false, true, true, true]
-      );
+      players = getPlayers({
+        number: 12,
+        avatars: basics.avatars,
+        floor: [6, 6, 6, 6, 6, 5, 4, 4, 6, 2, 2, 6],
+        isReady: [false, true, true, true],
+      });
       return {
         ...basics,
         phase: GAME_PHASES.ANNOUNCEMENT,
@@ -74,7 +96,12 @@ const mockTurns = (set) => {
         turnOrder: shuffle(Object.keys(players)),
       };
     case 'announcement.ready':
-      players = getPlayers(12, basics.avatars, [6, 6, 6, 6, 6, 5, 4, 4, 6, 2, 2, 6], true);
+      players = getPlayers({
+        number: 12,
+        avatars: basics.avatars,
+        floor: [6, 6, 6, 6, 6, 5, 4, 4, 6, 2, 2, 6],
+        isReady: true,
+      });
       return {
         ...basics,
         phase: GAME_PHASES.ANNOUNCEMENT,
@@ -84,7 +111,12 @@ const mockTurns = (set) => {
         turnOrder: shuffle(Object.keys(players)),
       };
     case 'question.active':
-      players = getPlayers(12, basics.avatars, 6, true);
+      players = getPlayers({
+        number: 12,
+        avatars: basics.avatars,
+        floor: 6,
+        isReady: true,
+      });
       return {
         ...basics,
         phase: GAME_PHASES.QUESTION,
@@ -94,7 +126,12 @@ const mockTurns = (set) => {
         turnOrder: [...playersNames],
       };
     case 'question.passive':
-      players = getPlayers(12, basics.avatars, 6, true);
+      players = getPlayers({
+        number: 12,
+        avatars: basics.avatars,
+        floor: 6,
+        isReady: true,
+      });
       return {
         ...basics,
         phase: GAME_PHASES.QUESTION,
@@ -102,6 +139,40 @@ const mockTurns = (set) => {
         turnType: 1,
         players,
         turnOrder: [...playersNames].reverse(),
+      };
+    case 'answer.ready':
+      players = getPlayers({
+        number: 12,
+        avatars: basics.avatars,
+        floor: 6,
+        isReady: true,
+        addAnswers: true,
+      });
+      return {
+        ...basics,
+        currentQuestionID: 'q1',
+        phase: GAME_PHASES.ANSWER,
+        turn: 1,
+        turnType: 1,
+        players,
+        turnOrder: [...playersNames],
+      };
+    case 'answer.ready3':
+      players = getPlayers({
+        number: 3,
+        avatars: basics.avatars,
+        floor: 6,
+        isReady: true,
+        addAnswers: true,
+      });
+      return {
+        ...basics,
+        currentQuestionID: 'q1',
+        phase: GAME_PHASES.ANSWER,
+        turn: 1,
+        turnType: 1,
+        players,
+        turnOrder: [...playersNames],
       };
     default:
       return {

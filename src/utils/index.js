@@ -118,3 +118,12 @@ export const getUniqueQuestions = (usedQuestions) => {
 export const getQuestion = (questionID) => {
   return QUESTIONS[questionID];
 };
+
+/**
+ * Cheaply deep copyes object
+ * @param {object} obj
+ * @returns deep copied object
+ */
+export const deepCopy = (obj) => {
+  return JSON.parse(JSON.stringify(obj));
+};

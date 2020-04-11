@@ -4,13 +4,14 @@ import IconButton from '@material-ui/core/IconButton';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
 import BusinessIcon from '@material-ui/icons/Business';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import ImportExportIcon from '@material-ui/icons/ImportExport';
 import NotListedLocationIcon from '@material-ui/icons/NotListedLocation';
 
 import gameEngine from '../engine';
 import useGlobalState from '../useGlobalState';
 
-import { COLORS } from '../utils/contants';
+import { COLORS, GAME_PHASES } from '../utils/contants';
 
 import PlayerBadge from './PlayerBadge';
 
@@ -48,6 +49,15 @@ const FloorPosition = ({ floor }) => {
   );
 };
 
+const Score = ({ score }) => {
+  return (
+    <div className="game-header__score" title="Your score this turn">
+      <span className="game-header__score-number">{score}</span>
+      <FavoriteIcon />
+    </div>
+  );
+};
+
 const Player = ({ player }) => {
   return (
     <div className="game-header__badge">
@@ -70,6 +80,7 @@ const GameHeader = () => {
   return (
     <AppBar position="static" style={{ background: COLORS.PRIMARY }} className="game-header">
       <Player player={currentPlayer} />
+      {gameEngine.phase === GAME_PHASES.COMPARE && <Score score={currentPlayer.score} />}
       <TurnIcon turnType={game.turnType} />
       <FloorPosition floor={currentPlayer.floor} />
     </AppBar>

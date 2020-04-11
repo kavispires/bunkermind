@@ -1,0 +1,6 @@
+.answer-chip {
+  &.MuiButtonBase-root,
+  &.MuiChip-root {
+    margin: 0 $unit1 $unit2 $unit1;
+  }
+}

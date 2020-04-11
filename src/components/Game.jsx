@@ -11,6 +11,7 @@ import GameWaitingRoom from './GameWaitingRoom';
 import GameAnnouncement from './GameAnnouncement';
 import GameQuestion from './GameQuestion';
 import GameAnswer from './GameAnswer';
+import GameCompare from './GameCompare';
 
 const GameScreen = () => {
   const [game] = useGlobalState('game');
@@ -24,6 +25,8 @@ const GameScreen = () => {
       return <GameQuestion />;
     case GAME_PHASES.ANSWER:
       return <GameAnswer />;
+    case GAME_PHASES.COMPARE:
+      return <GameCompare />;
     default:
       return <GameWaitingRoom />;
   }

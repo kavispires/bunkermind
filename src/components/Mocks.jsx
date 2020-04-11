@@ -49,6 +49,12 @@ const Mocks = ({ avatar }) => {
           >
             Question Passive
           </Button>
+          <Button variant="contained" size="small" onClick={() => gameEngine.mock('answer.ready')}>
+            Answers Ready
+          </Button>
+          <Button variant="contained" size="small" onClick={() => gameEngine.mock('answer.ready3')}>
+            Answers Ready 3
+          </Button>
         </div>
       )}
     </Fragment>
