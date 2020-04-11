@@ -62,7 +62,9 @@ const Player = ({ player }) => {
   return (
     <div className="game-header__badge">
       <PlayerBadge player={player} />
-      <span className="game-header__badge-name">{player.nickname}</span>
+      <span className="game-header__badge-name">
+        <strong>{player.nickname}</strong>, the {player.avatar}
+      </span>
       <IconButton className="game-header__refresh" onClick={() => gameEngine.refresh()}>
         <AutorenewIcon />
       </IconButton>
