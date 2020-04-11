@@ -22,6 +22,7 @@
     padding: $unit3 $unit2 $unit2 $unit2;
     border: 3px solid $color-brown;
     border-radius: $unit1;
+    flex-wrap: wrap;
   }
 
   &__current-answer {

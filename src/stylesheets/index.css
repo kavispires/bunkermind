@@ -92,28 +92,28 @@ body {
 
 .floating-animation--2 {
   animation-name: float;
-  animation-duration: 8.35s;
+  animation-duration: 1.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 6.35s;
+  animation-duration: 5.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 8.35s;
+  animation-duration: 4.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--5 {
   animation-name: float;
-  animation-duration: 6.35s;
+  animation-duration: 8.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -415,6 +415,7 @@ body {
   padding: 16px 8px 8px 8px;
   border: 3px solid #9b8579;
   border-radius: 4px;
+  flex-wrap: wrap;
 }
 
 .game-compare__current-answer {

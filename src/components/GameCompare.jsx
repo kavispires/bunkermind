@@ -68,7 +68,7 @@ const GameCompare = () => {
           <ul className="game-compare__instructions">
             <li>Locked answered above are exact matches and can't be changed.</li>
             <li>
-              If you disagree with someone's answer, you can click on the Thumbs Down icon if
+              If you disagree with someone's answer, you can click on the Thumbs Down icon, if
               available.
             </li>
             <li>If you believe one of your answers below, click to add it to the pool:</li>
