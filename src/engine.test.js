@@ -3,6 +3,7 @@ import { GameEngine } from './engine';
 import { GAME_PHASES, TEST_NOW } from './utils/contants';
 
 import { getPlayers } from './firebase/mock-turns';
+import mockFirebaseDbRef from './firebase/mock-firebase';
 
 describe('gameEngine', () => {
   let gameEngine;
@@ -10,6 +11,7 @@ describe('gameEngine', () => {
   const TRUE = true;
   const FALSE = false;
   const NICKNAME = 'Tester';
+  const GAME_ID = 'TEST';
 
   beforeAll(() => {
     gameEngine = new GameEngine();
@@ -278,6 +280,148 @@ describe('gameEngine', () => {
       gameEngine.players = getPlayers({ number: 3, isReady: [true, false, true] });
 
       expect(gameEngine.whosReady.length).toBe(2);
+    });
+  });
+
+  describe('MAIN METHODS', () => {
+    beforeEach(() => {
+      gameEngine.me = NICKNAME;
+      gameEngine._dbRef = mockFirebaseDbRef();
+    });
+
+    it('init', () => {
+      const result = gameEngine.init(GAME_ID);
+
+      expect(result.gameID).toBe(GAME_ID);
+      expect(result.avatars.length).toBe(15);
+    });
+
+    it('setup', () => {
+      expect(gameEngine.avatars.length).toBe(0);
+
+      gameEngine.setup();
+
+      expect(gameEngine.avatars.length).toBe(15);
+    });
+
+    it('save', () => {
+      gameEngine.save({ test: 'testing' });
+
+      expect(gameEngine._dbRef.update).toHaveBeenCalledWith({
+        lastUpdatedBy: NICKNAME,
+        test: 'testing',
+      });
+
+      expect(gameEngine._dbRef.child).toHaveBeenCalledWith('players');
+    });
+
+    it('update', () => {
+      gameEngine.update({
+        gameID: 'UUUU',
+        turn: 10,
+        turnType: 1,
+        phase: GAME_PHASES.WAITING_ROOM,
+      });
+
+      expect(gameEngine.state).toStrictEqual({
+        gameID: 'UUUU',
+        players: {},
+        isLocked: false,
+        turnOrder: [],
+        turn: 10,
+        phase: 'WAITING_ROOM',
+        turnType: 1,
+        currentQuestionID: null,
+        usedQuestions: {},
+        answersSet: [],
+        compare: null,
+      });
+
+      gameEngine.update({
+        gameID: 'UUUU',
+        avatars: ['elephant'],
+        players: getPlayers({ number: 1 }),
+        isLocked: true,
+        turnOrder: ['Beth', NICKNAME],
+        turn: 10,
+        turnType: 1,
+        phase: GAME_PHASES.COMPARE,
+        currentQuestionID: 'q100',
+        usedQuestions: { q1: true, q2: true },
+        answerSet: ['ARC', 'BALL'],
+        compare: {
+          matches: {},
+        },
+      });
+
+      expect(gameEngine.state).toStrictEqual({
+        gameID: 'UUUU',
+        players: {
+          Tester: {
+            avatar: 'axolotl',
+            isAdmin: true,
+            lastUpdated: 1586640900000,
+            nickname: 'Tester',
+            floor: 6,
+            isReady: false,
+            score: 0,
+            answers: {},
+          },
+        },
+        isLocked: true,
+        turnOrder: ['Beth', 'Tester'],
+        turn: 10,
+        phase: 'COMPARE',
+        turnType: 1,
+        currentQuestionID: 'q100',
+        usedQuestions: { q1: true, q2: true },
+        answersSet: [],
+        compare: { matches: {} },
+      });
+    });
+
+    it('reset', () => {
+      // Add properties
+      gameEngine.gameID = GAME_ID;
+      gameEngine.players = {
+        Tester: {
+          avatar: 'axolotl',
+          isAdmin: true,
+          lastUpdated: 1586640900000,
+          nickname: NICKNAME,
+          floor: 6,
+          isReady: false,
+          score: 0,
+          answers: {},
+        },
+      };
+      gameEngine.isLocked = true;
+      gameEngine.turnOrder = ['Beth', NICKNAME];
+      gameEngine.turn = 10;
+      gameEngine.phase = GAME_PHASES.COMPARE;
+      gameEngine.turnType = 1;
+      gameEngine.currentQuestionID = 'q100';
+      gameEngine.usedQuestions = { q1: true, q2: true };
+      gameEngine.answersSet = [];
+      gameEngine.compare = { matches: {} };
+
+      gameEngine.reset();
+
+      expect(gameEngine.state).toStrictEqual({
+        gameID: null,
+        players: {},
+        isLocked: false,
+        turnOrder: [],
+        turn: 0,
+        phase: 'NONE',
+        turnType: 1,
+        currentQuestionID: null,
+        usedQuestions: {},
+        answersSet: [],
+        compare: null,
+      });
+
+      expect(gameEngine._dbRef).toBeFalsy();
     });
   });
 });

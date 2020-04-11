@@ -242,7 +242,25 @@ export class GameEngine {
   }
 
   reset() {
-    // TO-DO reset all properties
+    this._dbRef = null;
+    this._isAdmin = false;
+    this.me = null;
+    this.gameID = null;
+    this.avatars = [];
+    this.players = {};
+    this.isLocked = false;
+    this.turnOrder = [];
+    this.turn = 0;
+    this.turnType = 1;
+    this.phase = GAME_PHASES.NONE;
+    this.usedQuestions = {};
+    this.currentQuestionID = null;
+    this.answersSet = [];
+    this.compare = null;
+    this._interval = null;
+    this._tempSaveObj = null;
+
+    this.save(this.state);
   }
 
   // SETTERS
