@@ -21,3 +21,11 @@
 @import './game-questions';
 @import './game-answer';
 @import './game-compare';
+
+.release-number {
+  position: absolute;
+  right: $unit1;
+  bottom: $unit1;
+  color: $color-brown;
+  font-size: 0.5%;
+}

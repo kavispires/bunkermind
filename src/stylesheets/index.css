@@ -99,21 +99,21 @@ body {
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 1.35s;
+  animation-duration: 7.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 4.35s;
+  animation-duration: 7.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--5 {
   animation-name: float;
-  animation-duration: 6.35s;
+  animation-duration: 4.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -441,4 +441,12 @@ body {
 
 .game-compare__instructions {
   font-size: 90%;
+}
+
+.release-number {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  color: #9b8579;
+  font-size: 0.5%;
 }
