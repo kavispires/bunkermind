@@ -1,4 +1,4 @@
-import { deepCopy, shuffle } from './utils';
+import { deepCopy, getTurnType, shuffle } from './utils';
 import {
   AVATARS,
   GAME_PHASES,
@@ -138,6 +138,19 @@ export class GameEngine {
    */
   get isUserReady() {
     return Boolean(this.players[this.me]?.isReady);
+  }
+
+  /**
+   * Return the name of players with GAME_OVER action from result object
+   * @returns {array}
+   */
+  get losers() {
+    return this.flatOrderResults.reduce((acc, player) => {
+      if (player.action === RESULT_ACTION.GAME_OVER) {
+        acc.push(player.name);
+      }
+      return acc;
+    }, []);
   }
 
   /**
@@ -860,6 +873,64 @@ export class GameEngine {
       result,
       phase: GAME_PHASES.RESULT,
       gameOver: isGameOver,
+    });
+  }
+
+  readyForNewTurn() {
+    if (this.me) {
+      this.print('Reading player for next round...');
+
+      this._dbRef.child('players').child(this.me).update({
+        isReady: true,
+        lastUpdated: this.now,
+      });
+
+      setTimeout(() => {
+        // If everybody is ready, trigger next phase
+        if (this.isEveryoneReady && this.phase !== GAME_PHASES.ANNOUNCEMENT) {
+          this.startNewTurn();
+        }
+      }, ENGINE_TIMEOUT);
+    }
+  }
+
+  startNextTurn() {
+    if (this.gameOver) {
+      this.save({
+        phase: GAME_PHASES.GAME_OVER,
+      });
+      return;
+    }
+
+    // Increase turn
+    const newTurn = this.turn + 1;
+    // Reset what needs to be reset
+    this.resetPlayersForRound();
+
+    this.save({
+      phase: GAME_PHASES.ANNOUNCEMENT,
+      turn: newTurn,
+      turnType: getTurnType(newTurn),
+      players: this.players,
+      currentQuestionID: '',
+      answersSet: {},
+      compare: {},
+      result: {},
+    });
+
+    // TO-DO; save all data somewhere
+  }
+
+  resetPlayersForRound() {
+    const getNewFloor = (playerName) => {
+      return this.flatOrderResults.find((res) => res.name === playerName).to;
+    };
+
+    Object.values(this.players).forEach((player) => {
+      player.isReady = false;
+      player.floor = getNewFloor(player.nickname);
+      player.score = 0;
+      player.anwers = {};
     });
   }
 
