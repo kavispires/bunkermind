@@ -53,13 +53,13 @@
 }
 
 .result-explanation__line {
-  @for $i from 0 through 12 {
+  @for $i from 0 through 15 {
     &--#{$i} {
       animation-name: showUp;
-      animation-duration: 2s;
+      animation-duration: 1s;
       animation-timing-function: ease-in-out;
       animation-iteration-count: 1;
-      animation-delay: #{$i + 0.5}s;
+      animation-delay: #{$i * 0.3}s;
       animation-fill-mode: forwards;
     }
   }

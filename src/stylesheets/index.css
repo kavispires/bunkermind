@@ -99,6 +99,18 @@
   }
 }
 
+@keyframes blink {
+  from {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -170,28 +182,28 @@ body {
 
 .floating-animation--2 {
   animation-name: float;
-  animation-duration: 2.35s;
+  animation-duration: 6.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 6.35s;
+  animation-duration: 1.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 7.35s;
+  animation-duration: 3.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--5 {
   animation-name: float;
-  animation-duration: 8.35s;
+  animation-duration: 2.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -363,6 +375,7 @@ body {
   display: flex;
   margin: 4px 0;
   background: rgba(255, 255, 255, 0.5);
+  position: relative;
 }
 .bunker--top {
   align-items: flex-end;
@@ -413,6 +426,30 @@ body {
 }
 .whos-ready-line .badge-container {
   margin: 0 4px 4px;
+}
+
+.bunker-active-blocker {
+  display: block;
+  width: 100px;
+  height: 8px;
+  border-radius: 8px;
+  background: #9b8579;
+  position: absolute;
+  top: -7px;
+  left: 5px;
+}
+
+.bunker-removed-blocker {
+  display: block;
+  width: 100px;
+  height: 8px;
+  border-radius: 8px;
+  background: #a01d0b;
+  position: absolute;
+  border-radius: 10px;
+  top: -7px;
+  left: 5px;
+  animation: blink 1.2s infinite ease-in-out;
 }
 
 .game-question-waiting {
@@ -595,118 +632,145 @@ body {
 
 .result-explanation__line--0 {
   animation-name: showUp;
-  animation-duration: 2s;
+  animation-duration: 1s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
-  animation-delay: 0.5s;
+  animation-delay: 0s;
   animation-fill-mode: forwards;
 }
 
 .result-explanation__line--1 {
   animation-name: showUp;
-  animation-duration: 2s;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 0.3s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--2 {
+  animation-name: showUp;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 0.6s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--3 {
+  animation-name: showUp;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 0.9s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--4 {
+  animation-name: showUp;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 1.2s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--5 {
+  animation-name: showUp;
+  animation-duration: 1s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
   animation-delay: 1.5s;
   animation-fill-mode: forwards;
 }
 
-.result-explanation__line--2 {
-  animation-name: showUp;
-  animation-duration: 2s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: 1;
-  animation-delay: 2.5s;
-  animation-fill-mode: forwards;
-}
-
-.result-explanation__line--3 {
-  animation-name: showUp;
-  animation-duration: 2s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: 1;
-  animation-delay: 3.5s;
-  animation-fill-mode: forwards;
-}
-
-.result-explanation__line--4 {
-  animation-name: showUp;
-  animation-duration: 2s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: 1;
-  animation-delay: 4.5s;
-  animation-fill-mode: forwards;
-}
-
-.result-explanation__line--5 {
-  animation-name: showUp;
-  animation-duration: 2s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: 1;
-  animation-delay: 5.5s;
-  animation-fill-mode: forwards;
-}
-
 .result-explanation__line--6 {
   animation-name: showUp;
-  animation-duration: 2s;
+  animation-duration: 1s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
-  animation-delay: 6.5s;
+  animation-delay: 1.8s;
   animation-fill-mode: forwards;
 }
 
 .result-explanation__line--7 {
   animation-name: showUp;
-  animation-duration: 2s;
+  animation-duration: 1s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
-  animation-delay: 7.5s;
+  animation-delay: 2.1s;
   animation-fill-mode: forwards;
 }
 
 .result-explanation__line--8 {
   animation-name: showUp;
-  animation-duration: 2s;
+  animation-duration: 1s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
-  animation-delay: 8.5s;
+  animation-delay: 2.4s;
   animation-fill-mode: forwards;
 }
 
 .result-explanation__line--9 {
   animation-name: showUp;
-  animation-duration: 2s;
+  animation-duration: 1s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
-  animation-delay: 9.5s;
+  animation-delay: 2.7s;
   animation-fill-mode: forwards;
 }
 
 .result-explanation__line--10 {
   animation-name: showUp;
-  animation-duration: 2s;
+  animation-duration: 1s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
-  animation-delay: 10.5s;
+  animation-delay: 3s;
   animation-fill-mode: forwards;
 }
 
 .result-explanation__line--11 {
   animation-name: showUp;
-  animation-duration: 2s;
+  animation-duration: 1s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
-  animation-delay: 11.5s;
+  animation-delay: 3.3s;
   animation-fill-mode: forwards;
 }
 
 .result-explanation__line--12 {
   animation-name: showUp;
-  animation-duration: 2s;
+  animation-duration: 1s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
-  animation-delay: 12.5s;
+  animation-delay: 3.6s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--13 {
+  animation-name: showUp;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 3.9s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--14 {
+  animation-name: showUp;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 4.2s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--15 {
+  animation-name: showUp;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 4.5s;
   animation-fill-mode: forwards;
 }
 

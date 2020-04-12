@@ -14,6 +14,7 @@
   display: flex;
   margin: $unit1 0;
   background: rgba(255, 255, 255, 0.5);
+  position: relative;
 
   &--top {
     align-items: flex-end;
@@ -72,4 +73,29 @@
   & .badge-container {
     margin: 0 $unit1 $unit1;
   }
+}
+
+.bunker-active-blocker {
+  display: block;
+  width: 100px;
+  height: $unit2;
+  border-radius: $unit2;
+  background: $color-brown;
+  position: absolute;
+
+  top: -7px;
+  left: 5px;
+}
+
+.bunker-removed-blocker {
+  display: block;
+  width: 100px;
+  height: $unit2;
+  border-radius: $unit2;
+  background: $color-red;
+  position: absolute;
+  border-radius: 10px;
+  top: -7px;
+  left: 5px;
+  animation: blink 1.2s infinite ease-in-out;
 }

@@ -55,8 +55,6 @@ const GameAnswer = () => {
     setAnswers(newAnswers);
   };
 
-  console.log(gameEngine.isEveryoneReady);
-
   return (
     <div className="game-game game-container game-answer">
       <GameHeader />

@@ -123,6 +123,7 @@ const mockTurns = (set) => {
         turn: 1,
         turnType: 1,
         players,
+        floorBlockers: { 1: true, 2: true, 3: false },
         turnOrder: shuffle(Object.keys(players)),
       };
     case 'question.active':

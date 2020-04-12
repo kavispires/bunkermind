@@ -31,9 +31,10 @@ const FLOOR_IMAGE_SOURCE = {
   6: floor6img,
 };
 
-const Floor = ({ floorNumber, players }) => {
+const Floor = ({ floorNumber, players, blocker = false }) => {
   return (
-    <div className="bunker bunker--2">
+    <div className={`bunker bunker--${floorNumber}`}>
+      {blocker && <span className="bunker-active-blocker"></span>}
       <img
         className="bunker__floor-image"
         src={FLOOR_IMAGE_SOURCE[floorNumber]}
@@ -100,7 +101,14 @@ const GameAnnouncement = () => {
         </div>
         {Object.values(floors).map((players, index) => {
           const floorNumber = index + 1;
-          return <Floor key={floorNumber} floorNumber={floorNumber} players={players} />;
+          return (
+            <Floor
+              key={floorNumber}
+              floorNumber={floorNumber}
+              players={players}
+              blocker={gameEngine.floorBlockers?.[floorNumber]}
+            />
+          );
         })}
       </div>
       {!gameEngine.isUserReady ? (

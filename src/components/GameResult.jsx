@@ -18,7 +18,6 @@ import { COLORS, TURN_TYPES, RESULT_ACTION } from '../utils/contants';
 
 import GameHeader from './GameHeader';
 import PlayerAvatar from './PlayerAvatar';
-import PlayerBadge from './PlayerBadge';
 
 const FLOOR_IMAGE_SOURCE = {
   1: floor1img,
@@ -37,9 +36,11 @@ const MOVE_ANIMATION_CLASS = {
   GAME_OVER: 'move-animation--game-over',
 };
 
-const FloorAnimated = ({ floorNumber, players }) => {
+const FloorAnimated = ({ floorNumber, players, blocker }) => {
+  const blockerClass = blocker === 'removed' ? 'bunker-removed-blocker' : 'bunker-active-blocker';
   return (
     <div className="bunker bunker--2">
+      {Boolean(blocker) && <span className={blockerClass}></span>}
       <img
         className="bunker__floor-image"
         src={FLOOR_IMAGE_SOURCE[floorNumber]}
@@ -75,7 +76,7 @@ const FloorExplanationSentence = ({ player }) => {
     case RESULT_ACTION.MOVE_UP:
       return (
         <Fragment>
-          <strong>{player.name}</strong> moved down from {player.from} to {player.to}
+          <strong>{player.name}</strong> moved down from {player.from} to {player.to}.
         </Fragment>
       );
     case RESULT_ACTION.MOVE_DOWN:
@@ -87,7 +88,7 @@ const FloorExplanationSentence = ({ player }) => {
     default:
       return (
         <Fragment>
-          <strong>{player.name}</strong> did something I don't know.
+          <strong>{player.name}</strong> didn't move.
         </Fragment>
       );
   }
@@ -121,18 +122,37 @@ const GameResult = () => {
         </div>
         {Object.values(gameEngine.orderedResults).map((players, index) => {
           const floorNumber = index + 1;
-          return <FloorAnimated key={floorNumber} floorNumber={floorNumber} players={players} />;
+          return (
+            <FloorAnimated
+              key={floorNumber}
+              floorNumber={floorNumber}
+              players={players}
+              blocker={gameEngine.blockerState[floorNumber]}
+            />
+          );
         })}
       </div>
 
       <ul className="result-explanation">
-        {Object.values(gameEngine.orderedResults)
-          .reverse()
-          .flat()
-          .map((player, index) => {
-            const key = `explanation-key-${index}`;
-            return <FloorExplanation key={key} player={player} position={index} />;
-          })}
+        {gameEngine.flatOrderResults.reverse().map((player, index) => {
+          const key = `explanation-key-${index}`;
+          return <FloorExplanation key={key} player={player} position={index} />;
+        })}
+
+        {Object.entries(gameEngine.blockerState).map(([floor, state], index) => {
+          if (!state) return null;
+
+          const position = gameEngine.flatOrderResults.length + index;
+          const key = `explanation-key-floor-${floor}`;
+          return (
+            <li
+              key={key}
+              className={`result-explanation__line result-explanation__line--${position}`}
+            >
+              <strong>The floor {floor}'s barrier will be removed.</strong>
+            </li>
+          );
+        })}
       </ul>
 
       <div className="action-button">

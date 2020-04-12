@@ -150,6 +150,7 @@ export class GameEngine {
 
   /**
    * Order restuls based on their result action
+   * @returns {object}
    */
   get orderedResults() {
     // For each floor, order by user first, game-over, move up, move down, save, then stay
@@ -188,6 +189,30 @@ export class GameEngine {
 
       return acc;
     }, {});
+  }
+
+  /**
+   * Returns a flat array of values of the orderResults
+   * @returns {array}
+   */
+  get flatOrderResults() {
+    return Object.values(this.orderedResults).flat();
+  }
+
+  /**
+   * Returns indication of what blockers were recently removed
+   * @returns {object}
+   */
+  get blockerState() {
+    const bState = { ...this.floorBlockers };
+
+    this.flatOrderResults.forEach((res) => {
+      if (res.action === RESULT_ACTION.SAVE) {
+        bState[res.from] = 'removed';
+      }
+    });
+
+    return bState;
   }
 
   /**
