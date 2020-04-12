@@ -217,6 +217,38 @@ describe('gameEngine', () => {
       expect(gameEngine.isUserReady).toBe(FALSE);
     });
 
+    it('orderedResults', () => {
+      gameEngine.result = {
+        '1': {},
+        '2': {},
+        '3': {},
+        '4': {},
+        '5': {
+          Beth: { action: 'STAY', from: 5, name: 'Beth', score: 4, to: 6 },
+          Cam: { action: 'GAME_OVER', from: 5, name: 'Cam', score: 3, to: 5 },
+          Danny: { action: 'MOVE_UP', from: 5, name: 'Danny', score: 2, to: 4 },
+          Evan: { action: 'MOVE_DOWN', from: 5, name: 'Evan', score: 4, to: 6 },
+          Tester: { action: 'SAVE', from: 5, name: 'Tester', score: 4, to: 6 },
+        },
+        '6': {},
+      };
+
+      expect(gameEngine.orderedResults).toStrictEqual({
+        '1': [],
+        '2': [],
+        '3': [],
+        '4': [],
+        '5': [
+          { action: 'SAVE', from: 5, name: 'Tester', score: 4, to: 6 },
+          { action: 'GAME_OVER', from: 5, name: 'Cam', score: 3, to: 5 },
+          { action: 'MOVE_UP', from: 5, name: 'Danny', score: 2, to: 4 },
+          { action: 'MOVE_DOWN', from: 5, name: 'Evan', score: 4, to: 6 },
+          { action: 'STAY', from: 5, name: 'Beth', score: 4, to: 6 },
+        ],
+        '6': [],
+      });
+    });
+
     it('user', () => {
       gameEngine.players = getPlayers({ number: 1 });
 
@@ -404,7 +436,14 @@ describe('gameEngine', () => {
           2: true,
           3: true,
         },
-        result: {},
+        result: {
+          '1': {},
+          '2': {},
+          '3': {},
+          '4': {},
+          '5': {},
+          '6': {},
+        },
         gameOver: true,
       });
 
@@ -436,7 +475,14 @@ describe('gameEngine', () => {
           2: true,
           3: true,
         },
-        result: {},
+        result: {
+          '1': {},
+          '2': {},
+          '3': {},
+          '4': {},
+          '5': {},
+          '6': {},
+        },
         gameOver: true,
       });
     });
@@ -1085,22 +1131,42 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': true },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {},
-              moveUp: { Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 3, to: 5 } },
-              stay: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
-                Cam: { from: 6, name: 'Cam', savedByBlocker: false, score: 4, to: 6 },
-                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
-                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 5, to: 6 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': true },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': {},
+                '6': {
+                  Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 },
+                  Cam: { action: 'STAY', from: 6, name: 'Cam', score: 4, to: 6 },
+                  Danny: { action: 'MOVE_UP', from: 6, name: 'Danny', score: 3, to: 5 },
+                  Evan: { action: 'STAY', from: 6, name: 'Evan', score: 4, to: 6 },
+                  Tester: { action: 'STAY', from: 6, name: 'Tester', score: 5, to: 6 },
+                },
               },
-            },
-          });
+            })
+          );
         });
 
         it('multiple lowest', () => {
@@ -1112,24 +1178,42 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': true },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {},
-              moveUp: {
-                Cam: { from: 6, name: 'Cam', savedByBlocker: false, score: 3, to: 5 },
-                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 3, to: 5 },
-                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': true },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': {},
+                '6': {
+                  Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 },
+                  Cam: { action: 'MOVE_UP', from: 6, name: 'Cam', score: 3, to: 5 },
+                  Danny: { action: 'MOVE_UP', from: 6, name: 'Danny', score: 3, to: 5 },
+                  Evan: { action: 'STAY', from: 6, name: 'Evan', score: 4, to: 6 },
+                  Tester: { action: 'MOVE_UP', from: 6, name: 'Tester', score: 3, to: 5 },
+                },
               },
-              stay: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
-                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
-              },
-            },
-          });
+            })
+          );
         });
 
         it('single lowest, removing blocker', () => {
@@ -1141,23 +1225,40 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': false },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {},
-              moveUp: {},
-              stay: {
-                Beth: { from: 3, name: 'Beth', savedByBlocker: false, score: 6, to: 3 },
-                Cam: { from: 4, name: 'Cam', savedByBlocker: false, score: 4, to: 4 },
-                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 5, to: 6 },
-                Evan: { from: 3, name: 'Evan', savedByBlocker: false, score: 4, to: 3 },
-                Tester: { from: 3, name: 'Tester', savedByBlocker: true, score: 3, to: 3 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': {
+                  Beth: { action: 'STAY', from: 3, name: 'Beth', score: 6, to: 3 },
+                  Evan: { action: 'STAY', from: 3, name: 'Evan', score: 4, to: 3 },
+                  Tester: { action: 'SAVE', from: 3, name: 'Tester', score: 3, to: 3 },
+                },
+                '4': { Cam: { action: 'STAY', from: 4, name: 'Cam', score: 4, to: 4 } },
+                '5': {},
+                '6': { Danny: { action: 'STAY', from: 6, name: 'Danny', score: 5, to: 6 } },
               },
-            },
-          });
+            })
+          );
         });
 
         it('multiple lowest, removing blockers', () => {
@@ -1174,31 +1275,46 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': false, '3': false },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {},
-              moveUp: {
-                Cam: { from: 4, name: 'Cam', savedByBlocker: false, score: 3, to: 3 },
-                Evan: { from: 3, name: 'Evan', savedByBlocker: false, score: 3, to: 2 },
-                Tester: { from: 2, name: 'Tester', savedByBlocker: false, score: 3, to: 1 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': false, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': { Tester: { action: 'MOVE_UP', from: 2, name: 'Tester', score: 3, to: 1 } },
+                '3': {
+                  Beth: { action: 'STAY', from: 3, name: 'Beth', score: 6, to: 3 },
+                  Evan: { action: 'MOVE_UP', from: 3, name: 'Evan', score: 3, to: 2 },
+                },
+                '4': { Cam: { action: 'MOVE_UP', from: 4, name: 'Cam', score: 3, to: 3 } },
+                '5': {},
+                '6': { Danny: { action: 'STAY', from: 6, name: 'Danny', score: 5, to: 6 } },
               },
-              stay: {
-                Beth: { from: 3, name: 'Beth', savedByBlocker: false, score: 6, to: 3 },
-                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 5, to: 6 },
-              },
-            },
-          });
+            })
+          );
         });
 
         it('single lowest, game over', () => {
           gameEngine.floorBlockers = {
             1: false,
             2: false,
-            3: true,
+            3: false,
           };
           gameEngine.players = getPlayers({
             number: 5,
@@ -1208,24 +1324,43 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': false, '2': false, '3': true },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {
-                Danny: { from: 1, name: 'Danny', savedByBlocker: false, score: 2, to: 0 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': false, '2': false, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: TRUE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {
+                  Danny: { action: 'GAME_OVER', from: 1, name: 'Danny', score: 2, to: 0 },
+                  Tester: { action: 'STAY', from: 1, name: 'Tester', score: 3, to: 1 },
+                },
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': {},
+                '6': {
+                  Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 },
+                  Cam: { action: 'STAY', from: 6, name: 'Cam', score: 4, to: 6 },
+                  Evan: { action: 'STAY', from: 6, name: 'Evan', score: 4, to: 6 },
+                },
               },
-              moveDown: {},
-              moveUp: {},
-              stay: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
-                Cam: { from: 6, name: 'Cam', savedByBlocker: false, score: 4, to: 6 },
-                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
-                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 3, to: 1 },
-              },
-            },
-          });
+            })
+          );
         });
 
         it('multiple lowest, game over', () => {
@@ -1242,25 +1377,39 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': false, '2': false, '3': false },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {
-                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 3, to: 0 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': false, '2': false, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: TRUE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': { Tester: { action: 'GAME_OVER', from: 1, name: 'Tester', score: 3, to: 0 } },
+                '2': { Danny: { action: 'MOVE_UP', from: 2, name: 'Danny', score: 3, to: 1 } },
+                '3': {},
+                '4': {},
+                '5': { Cam: { action: 'MOVE_UP', from: 5, name: 'Cam', score: 3, to: 4 } },
+                '6': {
+                  Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 },
+                  Evan: { action: 'STAY', from: 6, name: 'Evan', score: 4, to: 6 },
+                },
               },
-              moveDown: {},
-              moveUp: {
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 4 },
-                Danny: { from: 2, name: 'Danny', savedByBlocker: false, score: 3, to: 1 },
-              },
-              stay: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
-                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
-              },
-            },
-          });
+            })
+          );
         });
       });
 
@@ -1278,24 +1427,41 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': true },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {},
-              moveUp: {
-                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
-                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': true },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': { Cam: { action: 'STAY', from: 5, name: 'Cam', score: 4, to: 5 } },
+                '6': {
+                  Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 },
+                  Danny: { action: 'MOVE_UP', from: 6, name: 'Danny', score: 2, to: 5 },
+                  Evan: { action: 'STAY', from: 6, name: 'Evan', score: 4, to: 6 },
+                  Tester: { action: 'MOVE_UP', from: 6, name: 'Tester', score: 3, to: 5 },
+                },
               },
-              stay: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 4, to: 5 },
-                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
-              },
-            },
-          });
+            })
+          );
         });
 
         it('multiple for second lowest', () => {
@@ -1307,24 +1473,41 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': true },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {},
-              moveUp: {
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 4 },
-                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
-                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': true },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': { Cam: { action: 'MOVE_UP', from: 5, name: 'Cam', score: 3, to: 4 } },
+                '6': {
+                  Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 },
+                  Danny: { action: 'MOVE_UP', from: 6, name: 'Danny', score: 2, to: 5 },
+                  Evan: { action: 'STAY', from: 6, name: 'Evan', score: 4, to: 6 },
+                  Tester: { action: 'MOVE_UP', from: 6, name: 'Tester', score: 3, to: 5 },
+                },
               },
-              stay: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
-                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
-              },
-            },
-          });
+            })
+          );
         });
 
         it('multiple for second lowest removing blockers', () => {
@@ -1336,22 +1519,42 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': false },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {},
-              moveUp: { Cam: { from: 4, name: 'Cam', savedByBlocker: false, score: 3, to: 3 } },
-              stay: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
-                Danny: { from: 3, name: 'Danny', savedByBlocker: true, score: 2, to: 3 },
-                Evan: { from: 4, name: 'Evan', savedByBlocker: false, score: 4, to: 4 },
-                Tester: { from: 3, name: 'Tester', savedByBlocker: true, score: 3, to: 3 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': {
+                  Danny: { action: 'SAVE', from: 3, name: 'Danny', score: 2, to: 3 },
+                  Tester: { action: 'SAVE', from: 3, name: 'Tester', score: 3, to: 3 },
+                },
+                '4': {
+                  Cam: { action: 'MOVE_UP', from: 4, name: 'Cam', score: 3, to: 3 },
+                  Evan: { action: 'STAY', from: 4, name: 'Evan', score: 4, to: 4 },
+                },
+                '5': {},
+                '6': { Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 } },
               },
-            },
-          });
+            })
+          );
         });
 
         it('with game over', () => {
@@ -1368,25 +1571,40 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': false, '2': false, '3': false },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {
-                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 3, to: 0 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': false, '2': false, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: TRUE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': { Tester: { action: 'GAME_OVER', from: 1, name: 'Tester', score: 3, to: 0 } },
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': { Cam: { action: 'MOVE_UP', from: 5, name: 'Cam', score: 3, to: 4 } },
+                '6': {
+                  Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 },
+                  Danny: { action: 'MOVE_UP', from: 6, name: 'Danny', score: 2, to: 5 },
+                  Evan: { action: 'STAY', from: 6, name: 'Evan', score: 4, to: 6 },
+                },
               },
-              moveDown: {},
-              moveUp: {
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 4 },
-                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
-              },
-              stay: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
-                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
-              },
-            },
-          });
+            })
+          );
         });
       });
 
@@ -1404,24 +1622,41 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': true },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {},
-              moveUp: {
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 4, to: 4 },
-                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
-                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': true },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': { Cam: { action: 'MOVE_UP', from: 5, name: 'Cam', score: 4, to: 4 } },
+                '6': {
+                  Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 },
+                  Danny: { action: 'MOVE_UP', from: 6, name: 'Danny', score: 2, to: 5 },
+                  Evan: { action: 'STAY', from: 6, name: 'Evan', score: 6, to: 6 },
+                  Tester: { action: 'MOVE_UP', from: 6, name: 'Tester', score: 3, to: 5 },
+                },
               },
-              stay: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
-                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 6, to: 6 },
-              },
-            },
-          });
+            })
+          );
         });
 
         it('multiple for third lowest', () => {
@@ -1433,23 +1668,41 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': true },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {},
-              moveUp: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 4, to: 5 },
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 4 },
-                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
-                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 5 },
-                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 4, to: 5 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': true },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': { Cam: { action: 'MOVE_UP', from: 5, name: 'Cam', score: 3, to: 4 } },
+                '6': {
+                  Beth: { action: 'MOVE_UP', from: 6, name: 'Beth', score: 4, to: 5 },
+                  Danny: { action: 'MOVE_UP', from: 6, name: 'Danny', score: 2, to: 5 },
+                  Evan: { action: 'MOVE_UP', from: 6, name: 'Evan', score: 4, to: 5 },
+                  Tester: { action: 'MOVE_UP', from: 6, name: 'Tester', score: 4, to: 5 },
+                },
               },
-              stay: {},
-            },
-          });
+            })
+          );
         });
 
         it('multiple for third lowest removing blockers', () => {
@@ -1461,24 +1714,40 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': false },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {},
-              moveUp: {
-                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
-                Evan: { from: 4, name: 'Evan', savedByBlocker: false, score: 4, to: 3 },
-                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': { Cam: { action: 'SAVE', from: 3, name: 'Cam', score: 4, to: 3 } },
+                '4': { Evan: { action: 'MOVE_UP', from: 4, name: 'Evan', score: 4, to: 3 } },
+                '5': {},
+                '6': {
+                  Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 },
+                  Danny: { action: 'MOVE_UP', from: 6, name: 'Danny', score: 2, to: 5 },
+                  Tester: { action: 'MOVE_UP', from: 6, name: 'Tester', score: 3, to: 5 },
+                },
               },
-              stay: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
-                Cam: { from: 3, name: 'Cam', savedByBlocker: true, score: 4, to: 3 },
-              },
-            },
-          });
+            })
+          );
         });
 
         it('with game over', () => {
@@ -1495,23 +1764,40 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': false, '2': false, '3': false },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {
-                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 4, to: 0 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': false, '2': false, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: TRUE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': { Tester: { action: 'GAME_OVER', from: 1, name: 'Tester', score: 4, to: 0 } },
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': { Cam: { action: 'MOVE_UP', from: 5, name: 'Cam', score: 3, to: 4 } },
+                '6': {
+                  Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 },
+                  Danny: { action: 'MOVE_UP', from: 6, name: 'Danny', score: 2, to: 5 },
+                  Evan: { action: 'MOVE_UP', from: 6, name: 'Evan', score: 4, to: 5 },
+                },
               },
-              moveDown: {},
-              moveUp: {
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 4 },
-                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
-                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 5 },
-              },
-              stay: { Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 } },
-            },
-          });
+            })
+          );
         });
       });
 
@@ -1529,21 +1815,42 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': true },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: { Beth: { from: 5, name: 'Beth', savedByBlocker: false, score: 6, to: 6 } },
-              moveUp: { Danny: { from: 5, name: 'Danny', savedByBlocker: false, score: 2, to: 4 } },
-              stay: {
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 4, to: 5 },
-                Evan: { from: 5, name: 'Evan', savedByBlocker: false, score: 5, to: 5 },
-                Tester: { from: 5, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': true },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': {
+                  Beth: { action: 'MOVE_DOWN', from: 5, name: 'Beth', score: 6, to: 6 },
+                  Cam: { action: 'STAY', from: 5, name: 'Cam', score: 4, to: 5 },
+                  Danny: { action: 'MOVE_UP', from: 5, name: 'Danny', score: 2, to: 4 },
+                  Evan: { action: 'STAY', from: 5, name: 'Evan', score: 5, to: 5 },
+                  Tester: { action: 'STAY', from: 5, name: 'Tester', score: 3, to: 5 },
+                },
+                '6': {},
               },
-            },
-          });
+            })
+          );
         });
 
         it('multiple moving down', () => {
@@ -1555,23 +1862,42 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': true },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {
-                Beth: { from: 5, name: 'Beth', savedByBlocker: false, score: 4, to: 6 },
-                Evan: { from: 5, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
-                Tester: { from: 5, name: 'Tester', savedByBlocker: false, score: 4, to: 6 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': true },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': {
+                  Beth: { action: 'MOVE_DOWN', from: 5, name: 'Beth', score: 4, to: 6 },
+                  Cam: { action: 'STAY', from: 5, name: 'Cam', score: 3, to: 5 },
+                  Danny: { action: 'MOVE_UP', from: 5, name: 'Danny', score: 2, to: 4 },
+                  Evan: { action: 'MOVE_DOWN', from: 5, name: 'Evan', score: 4, to: 6 },
+                  Tester: { action: 'MOVE_DOWN', from: 5, name: 'Tester', score: 4, to: 6 },
+                },
+                '6': {},
               },
-              moveUp: { Danny: { from: 5, name: 'Danny', savedByBlocker: false, score: 2, to: 4 } },
-              stay: {
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 5 },
-              },
-            },
-          });
+            })
+          );
         });
 
         it('one moving down, one moving up removing blockers', () => {
@@ -1583,22 +1909,41 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': false },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: { Beth: { from: 5, name: 'Beth', savedByBlocker: false, score: 6, to: 6 } },
-              moveUp: {},
-              stay: {
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 4, to: 5 },
-                Danny: { from: 3, name: 'Danny', savedByBlocker: true, score: 2, to: 3 },
-                Evan: { from: 5, name: 'Evan', savedByBlocker: false, score: 4, to: 5 },
-                Tester: { from: 5, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': { Danny: { action: 'SAVE', from: 3, name: 'Danny', score: 2, to: 3 } },
+                '4': {},
+                '5': {
+                  Beth: { action: 'MOVE_DOWN', from: 5, name: 'Beth', score: 6, to: 6 },
+                  Cam: { action: 'STAY', from: 5, name: 'Cam', score: 4, to: 5 },
+                  Evan: { action: 'STAY', from: 5, name: 'Evan', score: 4, to: 5 },
+                  Tester: { action: 'STAY', from: 5, name: 'Tester', score: 3, to: 5 },
+                },
+                '6': {},
               },
-            },
-          });
+            })
+          );
         });
 
         it('saved from game over', () => {
@@ -1615,23 +1960,41 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': false, '2': false, '3': false },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {
-                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 7, to: 2 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': false, '2': false, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': { Tester: { action: 'MOVE_DOWN', from: 1, name: 'Tester', score: 7, to: 2 } },
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': {
+                  Beth: { action: 'STAY', from: 5, name: 'Beth', score: 6, to: 5 },
+                  Cam: { action: 'STAY', from: 5, name: 'Cam', score: 3, to: 5 },
+                  Danny: { action: 'MOVE_UP', from: 5, name: 'Danny', score: 2, to: 4 },
+                  Evan: { action: 'STAY', from: 5, name: 'Evan', score: 4, to: 5 },
+                },
+                '6': {},
               },
-              moveUp: { Danny: { from: 5, name: 'Danny', savedByBlocker: false, score: 2, to: 4 } },
-              stay: {
-                Beth: { from: 5, name: 'Beth', savedByBlocker: false, score: 6, to: 5 },
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 5 },
-                Evan: { from: 5, name: 'Evan', savedByBlocker: false, score: 4, to: 5 },
-              },
-            },
-          });
+            })
+          );
         });
 
         it('with game over', () => {
@@ -1648,22 +2011,41 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': false, '2': false, '3': false },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {
-                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 2, to: 0 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': false, '2': false, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: TRUE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': { Tester: { action: 'GAME_OVER', from: 1, name: 'Tester', score: 2, to: 0 } },
+                '2': {},
+                '3': {},
+                '4': {},
+                '5': {
+                  Beth: { action: 'MOVE_DOWN', from: 5, name: 'Beth', score: 6, to: 6 },
+                  Cam: { action: 'STAY', from: 5, name: 'Cam', score: 3, to: 5 },
+                  Danny: { action: 'MOVE_UP', from: 5, name: 'Danny', score: 2, to: 4 },
+                  Evan: { action: 'STAY', from: 5, name: 'Evan', score: 4, to: 5 },
+                },
+                '6': {},
               },
-              moveDown: { Beth: { from: 5, name: 'Beth', savedByBlocker: false, score: 6, to: 6 } },
-              moveUp: { Danny: { from: 5, name: 'Danny', savedByBlocker: false, score: 2, to: 4 } },
-              stay: {
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 5 },
-                Evan: { from: 5, name: 'Evan', savedByBlocker: false, score: 4, to: 5 },
-              },
-            },
-          });
+            })
+          );
         });
 
         it('can not go over 6', () => {
@@ -1675,23 +2057,39 @@ describe('gameEngine', () => {
 
           gameEngine.turnResult();
 
-          expect(gameEngine.save).toHaveBeenCalledWith({
-            floorBlockers: { '1': true, '2': true, '3': false },
-            lastUpdatedBy: 'Tester',
-            phase: GAME_PHASES.RESULT,
-            result: {
-              gameOver: {},
-              moveDown: {},
-              moveUp: {},
-              stay: {
-                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
-                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 5 },
-                Danny: { from: 3, name: 'Danny', savedByBlocker: true, score: 2, to: 3 },
-                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
-                Tester: { from: 4, name: 'Tester', savedByBlocker: false, score: 3, to: 4 },
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              floorBlockers: { '1': true, '2': true, '3': false },
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              phase: GAME_PHASES.RESULT,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              gameOver: FALSE,
+            })
+          );
+
+          expect(gameEngine.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+              result: {
+                '1': {},
+                '2': {},
+                '3': { Danny: { action: 'SAVE', from: 3, name: 'Danny', score: 2, to: 3 } },
+                '4': { Tester: { action: 'STAY', from: 4, name: 'Tester', score: 3, to: 4 } },
+                '5': { Cam: { action: 'STAY', from: 5, name: 'Cam', score: 3, to: 5 } },
+                '6': {
+                  Beth: { action: 'STAY', from: 6, name: 'Beth', score: 6, to: 6 },
+                  Evan: { action: 'STAY', from: 6, name: 'Evan', score: 4, to: 6 },
+                },
               },
-            },
-          });
+            })
+          );
         });
       });
     });

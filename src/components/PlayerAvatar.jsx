@@ -36,8 +36,14 @@ const AVATAR_IMAGE_SOURCE = {
   turtle: avatarTurtle,
 };
 
-const PlayerAvatar = ({ avatar }) => {
-  return <Avatar alt={avatar} src={AVATAR_IMAGE_SOURCE[avatar] || avatarUnknown} />;
+const PlayerAvatar = ({ avatar, classNames = '' }) => {
+  return (
+    <Avatar
+      alt={avatar}
+      src={AVATAR_IMAGE_SOURCE[avatar] || avatarUnknown}
+      className={classNames}
+    />
+  );
 };
 
 export default PlayerAvatar;

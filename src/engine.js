@@ -6,6 +6,7 @@ import {
   ONLINE_MINIUTE_THRESHOLD,
   TEST_NOW,
   ENGINE_TIMEOUT,
+  RESULT_ACTION,
 } from './utils/contants';
 
 import mockTurns from './firebase/mock-turns';
@@ -148,6 +149,48 @@ export class GameEngine {
   }
 
   /**
+   * Order restuls based on their result action
+   */
+  get orderedResults() {
+    // For each floor, order by user first, game-over, move up, move down, save, then stay
+
+    return Object.entries(this.result).reduce((acc, [key, floorObj]) => {
+      if (Object.keys(floorObj).length < 1) {
+        acc[key] = [];
+        return acc;
+      }
+
+      const orderedFloorObj = {
+        me: [],
+        [RESULT_ACTION.GAME_OVER]: [],
+        [RESULT_ACTION.MOVE_UP]: [],
+        [RESULT_ACTION.MOVE_DOWN]: [],
+        [RESULT_ACTION.SAVE]: [],
+        [RESULT_ACTION.STAY]: [],
+      };
+
+      Object.values(floorObj).forEach((playerResult) => {
+        if (playerResult.name === this.me) {
+          return orderedFloorObj.me.push(playerResult);
+        }
+
+        return orderedFloorObj[playerResult.action].push(playerResult);
+      });
+
+      acc[key] = [
+        ...orderedFloorObj.me,
+        ...orderedFloorObj[RESULT_ACTION.GAME_OVER],
+        ...orderedFloorObj[RESULT_ACTION.MOVE_UP],
+        ...orderedFloorObj[RESULT_ACTION.MOVE_DOWN],
+        ...orderedFloorObj[RESULT_ACTION.SAVE],
+        ...orderedFloorObj[RESULT_ACTION.STAY],
+      ];
+
+      return acc;
+    }, {});
+  }
+
+  /**
    * Gets user (me) from the live players object
    * @returns {object}
    */
@@ -260,8 +303,8 @@ export class GameEngine {
     this.answersSet = data.answersSet || [];
     this.compare = data.compare || null;
     this.floorBlockers = data.floorBlockers;
-    this.result = data.result || {};
     this.gameOver = data.gameOver;
+    this.result = data.result ? this.extendResult(data.result) : {};
 
     return this.state;
   }
@@ -690,11 +733,16 @@ export class GameEngine {
 
     // Create result object
     const result = {
-      moveUp: {},
-      moveDown: {},
-      stay: {},
-      gameOver: {},
+      1: {},
+      2: {},
+      3: {},
+      4: {},
+      5: {},
+      6: {},
     };
+
+    let isGameOver = false;
+
     const floorBlockersCopy = { ...this.floorBlockers };
     const newFloorBlockers = { ...this.floorBlockers };
     const highestScoreIndex = tiers.length - 1;
@@ -705,7 +753,7 @@ export class GameEngine {
         this.score = score;
         this.from = from;
         this.to = to;
-        this.savedByBlocker = savedByBlocker;
+        this.action = null;
       }
     }
 
@@ -720,12 +768,15 @@ export class GameEngine {
       const entry = new PlayerResult(player.nickname, player.score, player.floor, to, saved);
 
       if (entry.to === 0) {
-        result.gameOver[player.nickname] = { ...entry };
+        isGameOver = true;
+        entry.action = RESULT_ACTION.GAME_OVER;
       } else if (entry.to === entry.from) {
-        result.stay[player.nickname] = { ...entry };
+        entry.action = saved ? RESULT_ACTION.SAVE : RESULT_ACTION.STAY;
       } else {
-        result.moveUp[player.nickname] = { ...entry };
+        entry.action = RESULT_ACTION.MOVE_UP;
       }
+
+      result[entry.from][entry.name] = { ...entry };
     }
 
     function moveDown(player) {
@@ -734,10 +785,12 @@ export class GameEngine {
       const entry = new PlayerResult(player.nickname, player.score, player.floor, to);
 
       if (entry.from === 6) {
-        result.stay[player.nickname] = { ...entry };
+        entry.action = RESULT_ACTION.STAY;
       } else {
-        result.moveDown[player.nickname] = { ...entry };
+        entry.action = RESULT_ACTION.MOVE_DOWN;
       }
+
+      result[entry.from][entry.name] = { ...entry };
     }
 
     tiers.forEach((tier, index) => {
@@ -767,17 +820,41 @@ export class GameEngine {
 
       tier.forEach((player) => {
         const entry = new PlayerResult(player.nickname, player.score, player.floor, player.floor);
-        result.stay[player.nickname] = { ...entry };
+        entry.action = RESULT_ACTION.STAY;
+        result[entry.from][entry.name] = { ...entry };
       });
     });
+
+    this.unReadyPlayers();
 
     // Save
     this.save({
       lastUpdatedBy: this.me,
+      players: this.players,
       floorBlockers: newFloorBlockers,
       result,
       phase: GAME_PHASES.RESULT,
+      gameOver: isGameOver,
     });
+  }
+
+  // HELPERS
+
+  /**
+   * Ensures all 6 floors are present in the result object
+   * @param {object} resultObj
+   * @returns {object}
+   */
+  extendResult(resultObj) {
+    return {
+      1: {},
+      2: {},
+      3: {},
+      4: {},
+      5: {},
+      6: {},
+      ...resultObj,
+    };
   }
 
   /**

@@ -50,8 +50,16 @@ export const ENGINE_TIMEOUT = process.env.NODE_ENV === 'test' ? 0 : 1000;
 
 export const NOOP = () => {};
 
+export const RESULT_ACTION = {
+  MOVE_UP: 'MOVE_UP',
+  MOVE_DOWN: 'MOVE_DOWN',
+  SAVE: 'SAVE',
+  STAY: 'STAY',
+  GAME_OVER: 'GAME_OVER',
+};
+
 export const TURN_TYPES = {
-  0: 'The lowest scores move up, the highets scores move down!',
+  0: 'The lowest scores move up, the highest scores move down!',
   1: 'The lowest scores move up!',
   2: 'The 2 lowest scores move up!',
   3: 'The 3 lowest scores move up!',

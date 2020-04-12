@@ -218,6 +218,25 @@ const mockTurns = (set) => {
         players,
         turnOrder: [...playersNames].slice(0, 4),
       };
+    case 'compare.result.animation':
+      players = getPlayers({
+        number: 12,
+        floor: [6, 6, 6, 6, 6, 6, 5, 4, 4, 3, 2, 1],
+        isReady: [false, true, true, true, true, true, true, true, true, true, true, true],
+        addAnswers: true,
+        score: [5, 1, 6, 1, 5, 5, 7, 7, 1, 1, 5, 1],
+      });
+      return {
+        ...basics,
+        currentQuestionID: 'q1',
+        phase: GAME_PHASES.COMPARE,
+        turn: 1,
+        turnType: 0,
+        players,
+        turnOrder: [...playersNames].slice(0, 4),
+        floorBlockers: { 1: false, 2: false, 3: true }, // not possible, only to check anymation
+      };
+
     default:
       return {
         ...basics,

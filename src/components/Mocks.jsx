@@ -61,6 +61,13 @@ const Mocks = ({ avatar }) => {
           <Button variant="contained" size="small" onClick={() => gameEngine.mock('compare.ready')}>
             Compare Ready 1 up
           </Button>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => gameEngine.mock('compare.result.animation')}
+          >
+            Compare 12 to result animation
+          </Button>
         </div>
       )}
     </Fragment>

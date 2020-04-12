@@ -12,6 +12,7 @@ import GameAnnouncement from './GameAnnouncement';
 import GameQuestion from './GameQuestion';
 import GameAnswer from './GameAnswer';
 import GameCompare from './GameCompare';
+import GameResult from './GameResult';
 
 let disconnectInterval;
 
@@ -29,6 +30,8 @@ const GameScreen = () => {
       return <GameAnswer />;
     case GAME_PHASES.COMPARE:
       return <GameCompare />;
+    case GAME_PHASES.RESULT:
+      return <GameResult />;
     default:
       return <GameWaitingRoom justLoading />;
   }
