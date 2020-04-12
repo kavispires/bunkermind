@@ -5,6 +5,7 @@ import {
   ONE_MINUTE,
   ONLINE_MINIUTE_THRESHOLD,
   TEST_NOW,
+  ENGINE_TIMEOUT,
 } from './utils/contants';
 
 import mockTurns from './firebase/mock-turns';
@@ -353,6 +354,9 @@ export class GameEngine {
     });
   }
 
+  /**
+   * Locks games and take users to announcement
+   */
   lockAndStart() {
     this.save({
       turnOrder: shuffle(Object.keys(this.players)),
@@ -377,7 +381,7 @@ export class GameEngine {
   }
 
   /**
-   * Set user's/player's isReady to true with new timestamp
+   * Set user/player's isReady to true with new timestamp
    */
   setUserReady() {
     if (this.me) {
@@ -393,7 +397,7 @@ export class GameEngine {
         if (this.isEveryoneReady && this.phase !== GAME_PHASES.QUESTION) {
           this.goToQuestionPhase();
         }
-      }, 1000);
+      }, ENGINE_TIMEOUT);
     }
   }
 
@@ -423,31 +427,6 @@ export class GameEngine {
     });
   }
 
-  goToComparePhase() {
-    this.print('Going to COMPARE phase...');
-
-    this.answersSet = [
-      ...new Set(
-        Object.values(this.players)
-          .map((player) => Object.values(player.answers).map((answer) => answer.text))
-          .flat()
-          .sort()
-          .reverse()
-      ),
-    ];
-
-    this.save({
-      lastUpdatedBy: this.me,
-      phase: GAME_PHASES.COMPARE,
-      answersSet: this.answersSet,
-    });
-
-    setTimeout(() => {
-      // After a second, prepare
-      this.prepareCompare();
-    }, 1000);
-  }
-
   submitAnswers(answers) {
     if (this.me) {
       // Set answers, uppercase
@@ -471,8 +450,33 @@ export class GameEngine {
         if (this.isEveryoneReady && this.phase !== GAME_PHASES.COMPARE) {
           this.goToComparePhase();
         }
-      }, 1000);
+      }, ENGINE_TIMEOUT);
     }
+  }
+
+  goToComparePhase() {
+    this.print('Going to COMPARE phase...');
+
+    this.answersSet = [
+      ...new Set(
+        Object.values(this.players)
+          .map((player) => Object.values(player.answers).map((answer) => answer.text))
+          .flat()
+          .sort()
+          .reverse()
+      ),
+    ];
+
+    this.save({
+      lastUpdatedBy: this.me,
+      phase: GAME_PHASES.COMPARE,
+      answersSet: this.answersSet,
+    });
+
+    setTimeout(() => {
+      // After a second, prepare
+      this.prepareCompare();
+    }, ENGINE_TIMEOUT);
   }
 
   prepareCompare() {
@@ -591,14 +595,14 @@ export class GameEngine {
       if (this.isEveryoneReady && this.phase === GAME_PHASES.COMPARE) {
         this.score();
       }
-    }, 1000);
+    }, ENGINE_TIMEOUT);
   }
 
   score() {
     // Build invalid dictionary
     const invalidDict = Object.values(this.compare.matches).reduce((acc, matchEntry) => {
       const numPlayers = Object.keys(this.players).length;
-      const numDownvotes = Object.keys(matchEntry).length;
+      const numDownvotes = Object.keys(matchEntry?.downvotes || {}).length;
 
       if (!matchEntry.isLocked && numDownvotes / numPlayers > 0.4) {
         acc[matchEntry.answer] = true;
@@ -618,7 +622,7 @@ export class GameEngine {
         // Remove any non exact macthes that were accepted from answersSet
         const toRemoveIndex = this.answersSet.findIndex((a) => a === matchEntry.answer);
         if (toRemoveIndex > -1) {
-          this.answersSet[toRemoveIndex] = '';
+          this.answersSet[toRemoveIndex] = undefined;
         }
       }
     });
@@ -631,7 +635,7 @@ export class GameEngine {
     });
 
     // Reset set
-    this.answersSet = [...new Set(this.answersSet)];
+    this.answersSet = this.answersSet.filter((a) => a);
 
     // Save
     this.save({
@@ -642,7 +646,6 @@ export class GameEngine {
     });
 
     setTimeout(() => {
-      console.log(this.answersSet);
       // Call prepare or result if no more words in set
       if (this.answersSet.length > 0) {
         console.log('PREPARE!!!');
@@ -651,11 +654,23 @@ export class GameEngine {
         console.log('RESULTS!!!');
         this.turnResult();
       }
-    }, 1000);
+    }, ENGINE_TIMEOUT);
   }
 
   turnResult() {
     console.log('turnResult!');
+    // Split players into groups by score
+    console.log(this.players);
+    const tiers = Object.values(this.players)
+      .reduce((tiersAcc, player) => {
+        if (tiersAcc[player.score] === undefined) {
+          tiersAcc[player.score] = [];
+        }
+        tiersAcc[player.score].push(player);
+
+        return tiersAcc;
+      }, [])
+      .filter((entry) => entry);
   }
 
   /**

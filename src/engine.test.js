@@ -1,6 +1,17 @@
 import { GameEngine } from './engine';
 
-import { GAME_PHASES, TEST_NOW } from './utils/contants';
+import { deepCopy } from './utils';
+import { AVATARS, GAME_PHASES, TEST_NOW } from './utils/contants';
+
+import {
+  mockPlayersComparePhase,
+  mockCompare,
+  mockPlayersRemoveMatch,
+  mockCompareUpvote,
+  mockCompareDownvote,
+  mockResultsScore3PlayersUpvoted,
+  mockResultsScore3PlayersDownvoted,
+} from './utils/engine-mock';
 
 import { getPlayers } from './firebase/mock-turns';
 import mockFirebaseDbRef from './firebase/mock-firebase';
@@ -483,10 +494,517 @@ describe('gameEngine', () => {
     });
   });
 
-  // describe('SAVERS', () => {
-  //   beforeEach(() => {
-  //     gameEngine.me = NICKNAME;
-  //     gameEngine._dbRef = mockFirebaseDbRef();
-  //   });
-  // });
+  describe('SAVERS', () => {
+    beforeEach(() => {
+      gameEngine.me = NICKNAME;
+      gameEngine._dbRef = mockFirebaseDbRef();
+      gameEngine.avatars = [...AVATARS];
+      gameEngine._isAdmin = false;
+    });
+
+    it('setPlayer for the first time', () => {
+      gameEngine.setPlayer(NICKNAME);
+
+      expect(gameEngine._dbRef.update2).toHaveBeenCalledWith({
+        Tester: {
+          answers: {},
+          avatar: 'axolotl',
+          floor: 6,
+          isReady: false,
+          lastUpdated: 1586640900000,
+          nickname: 'Tester',
+          score: 0,
+        },
+      });
+    });
+
+    it('setPlayer for admin', () => {
+      gameEngine._isAdmin = true;
+      gameEngine.setPlayer(NICKNAME);
+
+      expect(gameEngine._dbRef.update2).toHaveBeenCalledWith({
+        Tester: {
+          answers: {},
+          avatar: 'axolotl',
+          floor: 6,
+          isAdmin: true,
+          isReady: false,
+          lastUpdated: 1586640900000,
+          nickname: 'Tester',
+          score: 0,
+        },
+      });
+    });
+
+    it('setPlayer for returning player', () => {
+      gameEngine.players = getPlayers({ number: 2 });
+      gameEngine.setPlayer('Beth');
+
+      expect(gameEngine._dbRef.update2).toHaveBeenCalledWith({
+        Beth: {
+          answers: {},
+          avatar: 'cardinal',
+          floor: 6,
+          isReady: false,
+          isAdmin: false,
+          lastUpdated: 1586640900000,
+          nickname: 'Beth',
+          score: 0,
+        },
+      });
+    });
+
+    it('setPlayer errors when game is full', () => {
+      gameEngine.players = getPlayers({ number: 12 });
+
+      function catcher() {
+        gameEngine.setPlayer('John');
+      }
+
+      expect(catcher).toThrowError('Game is full, try a different game ID');
+
+      expect(gameEngine._dbRef.update2).not.toHaveBeenCalled();
+    });
+
+    it('setPlayer errors when game is lock and is new player', () => {
+      gameEngine.players = getPlayers({ number: 3 });
+      gameEngine.isLocked = true;
+
+      function catcher() {
+        gameEngine.setPlayer('John');
+      }
+
+      expect(catcher).toThrowError('Game is locked, you can not join this time');
+
+      expect(gameEngine._dbRef.update2).not.toHaveBeenCalled();
+    });
+
+    it('lockAndStart', () => {
+      gameEngine.players = getPlayers({ number: 3 });
+
+      gameEngine.lockAndStart();
+
+      const args = gameEngine._dbRef.update.mock.calls[0][0];
+
+      expect(gameEngine._dbRef.update).toHaveBeenCalledWith({
+        isLocked: true,
+        lastUpdatedBy: 'Tester',
+        phase: GAME_PHASES.ANNOUNCEMENT,
+        turn: 1,
+        turnOrder: args.turnOrder,
+        turnType: 1,
+      });
+    });
+
+    it('refresh', () => {
+      gameEngine.players = getPlayers({ number: 1, isOnline: false });
+
+      gameEngine.refresh();
+
+      expect(gameEngine._dbRef.child).toHaveBeenCalledWith('players');
+      expect(gameEngine._dbRef.child2).toHaveBeenCalledWith(NICKNAME);
+      expect(gameEngine._dbRef.update3).toHaveBeenCalledWith({ lastUpdated: 1586640900000 });
+    });
+
+    it('setUserReady', () => {
+      gameEngine.setUserReady();
+
+      expect(gameEngine._dbRef.child).toHaveBeenCalledWith('players');
+      expect(gameEngine._dbRef.child2).toHaveBeenCalledWith(NICKNAME);
+      expect(gameEngine._dbRef.update3).toHaveBeenCalledWith({
+        isReady: true,
+        lastUpdated: 1586640900000,
+      });
+    });
+
+    it('goToQuestionPhase', () => {
+      gameEngine.save = jest.fn();
+
+      gameEngine.goToQuestionPhase();
+
+      expect(gameEngine.save).toHaveBeenCalledWith({
+        phase: GAME_PHASES.QUESTION,
+        lastUpdatedBy: NICKNAME,
+      });
+    });
+
+    it('goToAnswerPhase', () => {
+      gameEngine.save = jest.fn();
+      gameEngine.usedQuestions = { q1: true, q2: true };
+
+      gameEngine.goToAnswerPhase('q3');
+
+      expect(gameEngine.save).toHaveBeenCalledWith({
+        lastUpdatedBy: NICKNAME,
+        phase: GAME_PHASES.ANSWER,
+        currentQuestionID: 'q3',
+        usedQuestions: {
+          q1: true,
+          q2: true,
+          q3: true,
+        },
+        players: {},
+      });
+    });
+
+    it('submitAnswers', () => {
+      gameEngine.currentQuestionID = 'q1';
+
+      gameEngine.submitAnswers(['ALPHA', 'BRAVO', 'CHARLIE']);
+
+      expect(gameEngine._dbRef.child).toHaveBeenCalledWith('players');
+      expect(gameEngine._dbRef.child2).toHaveBeenCalledWith(NICKNAME);
+      expect(gameEngine._dbRef.update3).toHaveBeenCalledWith({
+        isReady: true,
+        lastUpdated: 1586640900000,
+        answers: {
+          'q1;Tester;0': {
+            isMatch: false,
+            text: 'ALPHA',
+          },
+          'q1;Tester;1': {
+            isMatch: false,
+            text: 'BRAVO',
+          },
+          'q1;Tester;2': {
+            isMatch: false,
+            text: 'CHARLIE',
+          },
+        },
+      });
+    });
+
+    it('goToComparePhase', () => {
+      // jest doesn't test Array.flat
+      // gameEngine.save = jest.fn();
+      // gameEngine.players = deepCopy(mockPlayersComparePhase);
+      // gameEngine.goToComparePhase();
+      // expect(gameEngine.save).toHaveBeenCalledWith({});
+    });
+
+    it('prepareCompare', () => {
+      gameEngine.save = jest.fn();
+      gameEngine.players = deepCopy(mockPlayersComparePhase);
+      gameEngine.answersSet = ['FOXTROT', 'ECHO', 'DELTA', 'CHARLIE', 'BRAVO', 'ALPHA'];
+
+      gameEngine.prepareCompare();
+
+      expect(gameEngine.save).toHaveBeenCalledWith({
+        lastUpdatedBy: NICKNAME,
+        phase: GAME_PHASES.COMPARE,
+        players: gameEngine.players,
+        answersSet: ['FOXTROT', 'ECHO', 'DELTA', 'CHARLIE', 'BRAVO'],
+        compare: {
+          currentAnswer: 'ALPHA',
+          matches: {
+            Beth: {
+              answer: 'ALPHA',
+              answerId: 'q1;Beth;0',
+              isLocked: true,
+            },
+            Cam: {
+              answer: 'ALPHA',
+              answerId: 'q1;Cam;2',
+              isLocked: true,
+            },
+          },
+        },
+      });
+    });
+
+    it('addMatch', () => {
+      gameEngine.save = jest.fn();
+      gameEngine.players = deepCopy(mockPlayersComparePhase);
+      gameEngine.compare = deepCopy(mockCompare);
+
+      gameEngine.addMatch('q1;Tester;0', NICKNAME);
+
+      expect(gameEngine.save).toHaveBeenCalledWith({
+        lastUpdatedBy: 'Tester',
+        compare: {
+          currentAnswer: 'ALPHA',
+          matches: {
+            Beth: {
+              answer: 'ALPHA',
+              answerId: 'q1;Beth;0',
+              isLocked: true,
+            },
+            Tester: {
+              answer: 'FOXTROT',
+              answerId: 'q1;Tester;0',
+              downvotes: {
+                Tester: true,
+              },
+              isLocked: false,
+            },
+          },
+        },
+        players: {
+          Tester: {
+            avatar: 'axolotl',
+            isAdmin: true,
+            lastUpdated: 1586640900000,
+            nickname: 'Tester',
+            floor: 6,
+            isReady: false,
+            score: 0,
+            answers: {
+              'q1;Tester;0': {
+                isMatch: true,
+                text: 'FOXTROT',
+              },
+              'q1;Tester;1': {
+                isMatch: false,
+                text: 'BRAVO',
+              },
+              'q1;Tester;2': {
+                isMatch: false,
+                text: 'CHARLIE',
+              },
+            },
+          },
+          Beth: {
+            avatar: 'cardinal',
+            isAdmin: false,
+            lastUpdated: 1586640900000,
+            nickname: 'Beth',
+            floor: 6,
+            isReady: false,
+            score: 0,
+            answers: {
+              'q1;Beth;0': {
+                isMatch: false,
+                text: 'ALPHA',
+              },
+              'q1;Beth;1': {
+                isMatch: false,
+                text: 'DELTA',
+              },
+              'q1;Beth;2': {
+                isMatch: false,
+                text: 'ECHO',
+              },
+            },
+          },
+          Cam: {
+            avatar: 'fox',
+            isAdmin: false,
+            lastUpdated: 1586640900000,
+            nickname: 'Cam',
+            floor: 6,
+            isReady: false,
+            score: 0,
+            answers: {
+              'q1;Cam;0': {
+                isMatch: false,
+                text: 'ECHO',
+              },
+              'q1;Cam;1': {
+                isMatch: false,
+                text: 'CHARLIE',
+              },
+              'q1;Cam;2': {
+                isMatch: false,
+                text: 'ALPHA',
+              },
+            },
+          },
+        },
+      });
+
+      expect(gameEngine._dbRef.child).toHaveBeenCalledWith('players');
+      expect(gameEngine._dbRef.child2).toHaveBeenCalledWith(NICKNAME);
+      expect(gameEngine._dbRef.update3).toHaveBeenCalledWith({
+        answers: {
+          'q1;Tester;0': {
+            isMatch: true,
+            text: 'FOXTROT',
+          },
+          'q1;Tester;1': {
+            isMatch: false,
+            text: 'BRAVO',
+          },
+          'q1;Tester;2': {
+            isMatch: false,
+            text: 'CHARLIE',
+          },
+        },
+        lastUpdated: 1586640900000,
+      });
+    });
+
+    it('removeMatch', () => {
+      gameEngine.save = jest.fn();
+      gameEngine.players = deepCopy(mockPlayersRemoveMatch);
+      gameEngine.compare = deepCopy(mockCompare);
+
+      gameEngine.removeMatch('q1;Tester;0', NICKNAME);
+
+      expect(gameEngine.save).toHaveBeenCalledWith({
+        lastUpdatedBy: 'Tester',
+        compare: {
+          currentAnswer: 'ALPHA',
+          matches: {
+            Beth: {
+              answer: 'ALPHA',
+              answerId: 'q1;Beth;0',
+              isLocked: true,
+            },
+            Tester: {},
+          },
+        },
+      });
+
+      expect(gameEngine._dbRef.child).toHaveBeenCalledWith('players');
+      expect(gameEngine._dbRef.child2).toHaveBeenCalledWith(NICKNAME);
+      expect(gameEngine._dbRef.update3).toHaveBeenCalledWith({
+        answers: {
+          'q1;Tester;0': {
+            isMatch: false,
+            text: 'FOXTROT',
+          },
+          'q1;Tester;1': {
+            isMatch: false,
+            text: 'BRAVO',
+          },
+          'q1;Tester;2': {
+            isMatch: false,
+            text: 'CHARLIE',
+          },
+        },
+        lastUpdated: 1586640900000,
+      });
+    });
+
+    it('voteForAnswer to add downvote', () => {
+      gameEngine.save = jest.fn();
+      gameEngine.compare = deepCopy(mockCompareUpvote);
+
+      gameEngine.voteForAnswer('Cam', NICKNAME);
+
+      expect(gameEngine.save).toHaveBeenCalledWith({
+        compare: {
+          ...deepCopy(mockCompareDownvote),
+        },
+        lastUpdatedBy: 'Tester',
+      });
+    });
+
+    it('voteForAnswer to remove downvote', () => {
+      gameEngine.save = jest.fn();
+      gameEngine.compare = deepCopy(mockCompareDownvote);
+
+      gameEngine.voteForAnswer('Cam', NICKNAME);
+
+      expect(gameEngine.save).toHaveBeenCalledWith({
+        compare: {
+          ...deepCopy(mockCompareUpvote),
+        },
+        lastUpdatedBy: 'Tester',
+      });
+    });
+
+    it('doneComparing', () => {
+      gameEngine.doneComparing();
+
+      expect(gameEngine._dbRef.child).toHaveBeenCalledWith('players');
+      expect(gameEngine._dbRef.child2).toHaveBeenCalledWith(NICKNAME);
+      expect(gameEngine._dbRef.update3).toHaveBeenCalledWith({
+        isReady: true,
+        lastUpdated: 1586640900000,
+      });
+    });
+
+    describe('score', () => {
+      beforeEach(() => {
+        gameEngine.save = jest.fn();
+        gameEngine.answersSet = ['ALPHA', 'BRAVO', 'CHARLIE', 'FOXTROT'];
+      });
+
+      it('for 3 players with little downvote', () => {
+        gameEngine.players = deepCopy(mockPlayersRemoveMatch);
+        gameEngine.compare = deepCopy(mockCompareUpvote);
+
+        gameEngine.score();
+
+        expect(gameEngine.save).toHaveBeenCalledWith({
+          answersSet: ['BRAVO', 'CHARLIE'],
+          compare: {
+            currentAnswer: 'ALPHA',
+            matches: {
+              Beth: {
+                answer: 'ALPHA',
+                answerId: 'q1;Beth;0',
+                isLocked: true,
+              },
+              Cam: {
+                answer: 'FOXTROT',
+                answerId: 'q1;Cam;0',
+                downvotes: {
+                  Cam: true,
+                },
+                isLocked: false,
+              },
+            },
+          },
+          lastUpdatedBy: 'Tester',
+          players: mockResultsScore3PlayersUpvoted,
+        });
+      });
+
+      it('for 3 players with large downvote', () => {
+        gameEngine.players = deepCopy(mockPlayersRemoveMatch);
+        gameEngine.compare = deepCopy(mockCompareDownvote);
+
+        gameEngine.score();
+
+        expect(gameEngine.save).toHaveBeenCalledWith({
+          answersSet: ['BRAVO', 'CHARLIE', 'FOXTROT'],
+          compare: {
+            currentAnswer: 'ALPHA',
+            matches: {
+              Beth: {
+                answer: 'ALPHA',
+                answerId: 'q1;Beth;0',
+                isLocked: true,
+              },
+            },
+          },
+          lastUpdatedBy: 'Tester',
+          players: mockResultsScore3PlayersDownvoted,
+        });
+      });
+    });
+
+    describe('turnResult', () => {
+      beforeEach(() => {
+        gameEngine.save = jest.fn();
+      });
+
+      describe('turnType 1: one up', () => {
+        beforeEach(() => {
+          gameEngine.save = jest.fn();
+        });
+
+        // it('single lowest', () => {
+        //   gameEngine.players = getPlayers({ number: 5, scores: [5, 6, 4, 3, 4] });
+
+        //   gameEngine.turnResult();
+
+        //   expect(gameEngine.save).toHaveBeenCalledWith({});
+        // });
+      });
+    });
+
+    // it.only('saver', () => {
+    //   gameEngine.save = jest.fn();
+    //   // Prepare
+
+    //   gameEngine.saver();
+
+    //   expect(gameEngine._dbRef.update).toHaveBeenCalledWith({});
+
+    //   expect(gameEngine.state).toStrictEqual({});
+    // });
+  });
 });

@@ -42,6 +42,7 @@ export const getPlayers = ({
   isReady = false,
   addAnswers = false,
   isOnline = true,
+  scores,
 }) => {
   const result = {};
 
@@ -53,7 +54,7 @@ export const getPlayers = ({
       nickname: playersNames[i],
       floor: typeof floor === 'number' ? floor : floor[i] || 6,
       isReady: Array.isArray(isReady) ? isReady[i] || false : isReady,
-      score: 0,
+      score: scores ? scores[i] || 0 : 0,
       answers: addAnswers ? getAnswers(playersNames[i]) : {},
     };
   }
