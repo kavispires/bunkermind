@@ -74,6 +74,13 @@ describe('gameEngine', () => {
         usedQuestions: {},
         answersSet: [],
         compare: null,
+        floorBlockers: {
+          1: true,
+          2: true,
+          3: true,
+        },
+        result: {},
+        gameOver: false,
       });
     });
 
@@ -348,6 +355,12 @@ describe('gameEngine', () => {
         turn: 10,
         turnType: 1,
         phase: GAME_PHASES.WAITING_ROOM,
+        floorBlockers: {
+          1: true,
+          2: true,
+          3: true,
+        },
+        gameOver: false,
       });
 
       expect(gameEngine.state).toStrictEqual({
@@ -362,6 +375,13 @@ describe('gameEngine', () => {
         usedQuestions: {},
         answersSet: [],
         compare: null,
+        floorBlockers: {
+          1: true,
+          2: true,
+          3: true,
+        },
+        result: {},
+        gameOver: false,
       });
 
       gameEngine.update({
@@ -379,6 +399,13 @@ describe('gameEngine', () => {
         compare: {
           matches: {},
         },
+        floorBlockers: {
+          1: false,
+          2: true,
+          3: true,
+        },
+        result: {},
+        gameOver: true,
       });
 
       expect(gameEngine.state).toStrictEqual({
@@ -404,6 +431,13 @@ describe('gameEngine', () => {
         usedQuestions: { q1: true, q2: true },
         answersSet: [],
         compare: { matches: {} },
+        floorBlockers: {
+          1: false,
+          2: true,
+          3: true,
+        },
+        result: {},
+        gameOver: true,
       });
     });
 
@@ -431,6 +465,12 @@ describe('gameEngine', () => {
       gameEngine.usedQuestions = { q1: true, q2: true };
       gameEngine.answersSet = [];
       gameEngine.compare = { matches: {} };
+      gameEngine.floorBlockers = {
+        '4': false,
+        '5': true,
+        '6': true,
+      };
+      gameEngine.gameOver = true;
 
       gameEngine.reset();
 
@@ -446,6 +486,13 @@ describe('gameEngine', () => {
         usedQuestions: {},
         answersSet: [],
         compare: null,
+        floorBlockers: {
+          1: true,
+          2: true,
+          3: true,
+        },
+        result: {},
+        gameOver: false,
       });
 
       expect(gameEngine._dbRef).toBeFalsy();
@@ -635,15 +682,11 @@ describe('gameEngine', () => {
       gameEngine.goToAnswerPhase('q3');
 
       expect(gameEngine.save).toHaveBeenCalledWith({
-        lastUpdatedBy: NICKNAME,
-        phase: GAME_PHASES.ANSWER,
         currentQuestionID: 'q3',
-        usedQuestions: {
-          q1: true,
-          q2: true,
-          q3: true,
-        },
+        lastUpdatedBy: 'Tester',
+        phase: 'ANSWER',
         players: {},
+        usedQuestions: { q1: true, q2: true, q3: true },
       });
     });
 
@@ -655,22 +698,13 @@ describe('gameEngine', () => {
       expect(gameEngine._dbRef.child).toHaveBeenCalledWith('players');
       expect(gameEngine._dbRef.child2).toHaveBeenCalledWith(NICKNAME);
       expect(gameEngine._dbRef.update3).toHaveBeenCalledWith({
+        answers: {
+          'q1;Tester;0': { isMatch: false, text: 'ALPHA' },
+          'q1;Tester;1': { isMatch: false, text: 'BRAVO' },
+          'q1;Tester;2': { isMatch: false, text: 'CHARLIE' },
+        },
         isReady: true,
         lastUpdated: 1586640900000,
-        answers: {
-          'q1;Tester;0': {
-            isMatch: false,
-            text: 'ALPHA',
-          },
-          'q1;Tester;1': {
-            isMatch: false,
-            text: 'BRAVO',
-          },
-          'q1;Tester;2': {
-            isMatch: false,
-            text: 'CHARLIE',
-          },
-        },
       });
     });
 
@@ -690,23 +724,58 @@ describe('gameEngine', () => {
       gameEngine.prepareCompare();
 
       expect(gameEngine.save).toHaveBeenCalledWith({
-        lastUpdatedBy: NICKNAME,
-        phase: GAME_PHASES.COMPARE,
-        players: gameEngine.players,
         answersSet: ['FOXTROT', 'ECHO', 'DELTA', 'CHARLIE', 'BRAVO'],
         compare: {
           currentAnswer: 'ALPHA',
           matches: {
-            Beth: {
-              answer: 'ALPHA',
-              answerId: 'q1;Beth;0',
-              isLocked: true,
+            Beth: { answer: 'ALPHA', answerId: 'q1;Beth;0', isLocked: true },
+            Cam: { answer: 'ALPHA', answerId: 'q1;Cam;2', isLocked: true },
+          },
+        },
+        lastUpdatedBy: 'Tester',
+        phase: 'COMPARE',
+        players: {
+          Beth: {
+            answers: {
+              'q1;Beth;0': { isMatch: true, text: 'ALPHA' },
+              'q1;Beth;1': { isMatch: false, text: 'DELTA' },
+              'q1;Beth;2': { isMatch: false, text: 'ECHO' },
             },
-            Cam: {
-              answer: 'ALPHA',
-              answerId: 'q1;Cam;2',
-              isLocked: true,
+            avatar: 'cardinal',
+            floor: 6,
+            isAdmin: false,
+            isReady: false,
+            lastUpdated: 1586640900000,
+            nickname: 'Beth',
+            score: 0,
+          },
+          Cam: {
+            answers: {
+              'q1;Cam;0': { isMatch: false, text: 'ECHO' },
+              'q1;Cam;1': { isMatch: false, text: 'CHARLIE' },
+              'q1;Cam;2': { isMatch: true, text: 'ALPHA' },
             },
+            avatar: 'fox',
+            floor: 6,
+            isAdmin: false,
+            isReady: false,
+            lastUpdated: 1586640900000,
+            nickname: 'Cam',
+            score: 0,
+          },
+          Tester: {
+            answers: {
+              'q1;Tester;0': { isMatch: false, text: 'FOXTROT' },
+              'q1;Tester;1': { isMatch: false, text: 'BRAVO' },
+              'q1;Tester;2': { isMatch: false, text: 'CHARLIE' },
+            },
+            avatar: 'axolotl',
+            floor: 6,
+            isAdmin: true,
+            isReady: false,
+            lastUpdated: 1586640900000,
+            nickname: 'Tester',
+            score: 0,
           },
         },
       });
@@ -720,94 +789,61 @@ describe('gameEngine', () => {
       gameEngine.addMatch('q1;Tester;0', NICKNAME);
 
       expect(gameEngine.save).toHaveBeenCalledWith({
-        lastUpdatedBy: 'Tester',
         compare: {
           currentAnswer: 'ALPHA',
           matches: {
-            Beth: {
-              answer: 'ALPHA',
-              answerId: 'q1;Beth;0',
-              isLocked: true,
-            },
+            Beth: { answer: 'ALPHA', answerId: 'q1;Beth;0', isLocked: true },
             Tester: {
               answer: 'FOXTROT',
               answerId: 'q1;Tester;0',
-              downvotes: {
-                Tester: true,
-              },
+              downvotes: { Tester: true },
               isLocked: false,
             },
           },
         },
+        lastUpdatedBy: 'Tester',
         players: {
-          Tester: {
-            avatar: 'axolotl',
-            isAdmin: true,
-            lastUpdated: 1586640900000,
-            nickname: 'Tester',
-            floor: 6,
-            isReady: false,
-            score: 0,
-            answers: {
-              'q1;Tester;0': {
-                isMatch: true,
-                text: 'FOXTROT',
-              },
-              'q1;Tester;1': {
-                isMatch: false,
-                text: 'BRAVO',
-              },
-              'q1;Tester;2': {
-                isMatch: false,
-                text: 'CHARLIE',
-              },
-            },
-          },
           Beth: {
+            answers: {
+              'q1;Beth;0': { isMatch: false, text: 'ALPHA' },
+              'q1;Beth;1': { isMatch: false, text: 'DELTA' },
+              'q1;Beth;2': { isMatch: false, text: 'ECHO' },
+            },
             avatar: 'cardinal',
+            floor: 6,
             isAdmin: false,
+            isReady: false,
             lastUpdated: 1586640900000,
             nickname: 'Beth',
-            floor: 6,
-            isReady: false,
             score: 0,
-            answers: {
-              'q1;Beth;0': {
-                isMatch: false,
-                text: 'ALPHA',
-              },
-              'q1;Beth;1': {
-                isMatch: false,
-                text: 'DELTA',
-              },
-              'q1;Beth;2': {
-                isMatch: false,
-                text: 'ECHO',
-              },
-            },
           },
           Cam: {
+            answers: {
+              'q1;Cam;0': { isMatch: false, text: 'ECHO' },
+              'q1;Cam;1': { isMatch: false, text: 'CHARLIE' },
+              'q1;Cam;2': { isMatch: false, text: 'ALPHA' },
+            },
             avatar: 'fox',
+            floor: 6,
             isAdmin: false,
+            isReady: false,
             lastUpdated: 1586640900000,
             nickname: 'Cam',
-            floor: 6,
-            isReady: false,
             score: 0,
+          },
+          Tester: {
             answers: {
-              'q1;Cam;0': {
-                isMatch: false,
-                text: 'ECHO',
-              },
-              'q1;Cam;1': {
-                isMatch: false,
-                text: 'CHARLIE',
-              },
-              'q1;Cam;2': {
-                isMatch: false,
-                text: 'ALPHA',
-              },
+              'q1;Tester;0': { isMatch: true, text: 'FOXTROT' },
+              'q1;Tester;1': { isMatch: false, text: 'BRAVO' },
+              'q1;Tester;2': { isMatch: false, text: 'CHARLIE' },
             },
+            avatar: 'axolotl',
+            floor: 6,
+            isAdmin: true,
+            isReady: false,
+            lastUpdated: 1586640900000,
+            nickname: 'Tester',
+            score: 0,
           },
         },
       });
@@ -816,18 +852,9 @@ describe('gameEngine', () => {
       expect(gameEngine._dbRef.child2).toHaveBeenCalledWith(NICKNAME);
       expect(gameEngine._dbRef.update3).toHaveBeenCalledWith({
         answers: {
-          'q1;Tester;0': {
-            isMatch: true,
-            text: 'FOXTROT',
-          },
-          'q1;Tester;1': {
-            isMatch: false,
-            text: 'BRAVO',
-          },
-          'q1;Tester;2': {
-            isMatch: false,
-            text: 'CHARLIE',
-          },
+          'q1;Tester;0': { isMatch: true, text: 'FOXTROT' },
+          'q1;Tester;1': { isMatch: false, text: 'BRAVO' },
+          'q1;Tester;2': { isMatch: false, text: 'CHARLIE' },
         },
         lastUpdated: 1586640900000,
       });
@@ -841,36 +868,20 @@ describe('gameEngine', () => {
       gameEngine.removeMatch('q1;Tester;0', NICKNAME);
 
       expect(gameEngine.save).toHaveBeenCalledWith({
-        lastUpdatedBy: 'Tester',
         compare: {
           currentAnswer: 'ALPHA',
-          matches: {
-            Beth: {
-              answer: 'ALPHA',
-              answerId: 'q1;Beth;0',
-              isLocked: true,
-            },
-            Tester: {},
-          },
+          matches: { Beth: { answer: 'ALPHA', answerId: 'q1;Beth;0', isLocked: true }, Tester: {} },
         },
+        lastUpdatedBy: 'Tester',
       });
 
       expect(gameEngine._dbRef.child).toHaveBeenCalledWith('players');
       expect(gameEngine._dbRef.child2).toHaveBeenCalledWith(NICKNAME);
       expect(gameEngine._dbRef.update3).toHaveBeenCalledWith({
         answers: {
-          'q1;Tester;0': {
-            isMatch: false,
-            text: 'FOXTROT',
-          },
-          'q1;Tester;1': {
-            isMatch: false,
-            text: 'BRAVO',
-          },
-          'q1;Tester;2': {
-            isMatch: false,
-            text: 'CHARLIE',
-          },
+          'q1;Tester;0': { isMatch: false, text: 'FOXTROT' },
+          'q1;Tester;1': { isMatch: false, text: 'BRAVO' },
+          'q1;Tester;2': { isMatch: false, text: 'CHARLIE' },
         },
         lastUpdated: 1586640900000,
       });
@@ -932,23 +943,60 @@ describe('gameEngine', () => {
           compare: {
             currentAnswer: 'ALPHA',
             matches: {
-              Beth: {
-                answer: 'ALPHA',
-                answerId: 'q1;Beth;0',
-                isLocked: true,
-              },
+              Beth: { answer: 'ALPHA', answerId: 'q1;Beth;0', isLocked: true },
               Cam: {
                 answer: 'FOXTROT',
                 answerId: 'q1;Cam;0',
-                downvotes: {
-                  Cam: true,
-                },
+                downvotes: { Cam: true },
                 isLocked: false,
               },
             },
           },
           lastUpdatedBy: 'Tester',
-          players: mockResultsScore3PlayersUpvoted,
+          players: {
+            Beth: {
+              answers: {
+                'q1;Beth;0': { isMatch: false, text: 'ALPHA' },
+                'q1;Beth;1': { isMatch: false, text: 'DELTA' },
+                'q1;Beth;2': { isMatch: false, text: 'ECHO' },
+              },
+              avatar: 'cardinal',
+              floor: 6,
+              isAdmin: false,
+              isReady: false,
+              lastUpdated: 1586640900000,
+              nickname: 'Beth',
+              score: 2,
+            },
+            Cam: {
+              answers: {
+                'q1;Cam;0': { isMatch: false, text: 'ECHO' },
+                'q1;Cam;1': { isMatch: false, text: 'CHARLIE' },
+                'q1;Cam;2': { isMatch: false, text: 'ALPHA' },
+              },
+              avatar: 'fox',
+              floor: 6,
+              isAdmin: false,
+              isReady: false,
+              lastUpdated: 1586640900000,
+              nickname: 'Cam',
+              score: 2,
+            },
+            Tester: {
+              answers: {
+                'q1;Tester;0': { isMatch: true, text: 'FOXTROT' },
+                'q1;Tester;1': { isMatch: false, text: 'BRAVO' },
+                'q1;Tester;2': { isMatch: false, text: 'CHARLIE' },
+              },
+              avatar: 'axolotl',
+              floor: 6,
+              isAdmin: true,
+              isReady: false,
+              lastUpdated: 1586640900000,
+              nickname: 'Tester',
+              score: 0,
+            },
+          },
         });
       });
 
@@ -962,16 +1010,53 @@ describe('gameEngine', () => {
           answersSet: ['BRAVO', 'CHARLIE', 'FOXTROT'],
           compare: {
             currentAnswer: 'ALPHA',
-            matches: {
-              Beth: {
-                answer: 'ALPHA',
-                answerId: 'q1;Beth;0',
-                isLocked: true,
-              },
-            },
+            matches: { Beth: { answer: 'ALPHA', answerId: 'q1;Beth;0', isLocked: true } },
           },
           lastUpdatedBy: 'Tester',
-          players: mockResultsScore3PlayersDownvoted,
+          players: {
+            Beth: {
+              answers: {
+                'q1;Beth;0': { isMatch: false, text: 'ALPHA' },
+                'q1;Beth;1': { isMatch: false, text: 'DELTA' },
+                'q1;Beth;2': { isMatch: false, text: 'ECHO' },
+              },
+              avatar: 'cardinal',
+              floor: 6,
+              isAdmin: false,
+              isReady: false,
+              lastUpdated: 1586640900000,
+              nickname: 'Beth',
+              score: 1,
+            },
+            Cam: {
+              answers: {
+                'q1;Cam;0': { isMatch: false, text: 'ECHO' },
+                'q1;Cam;1': { isMatch: false, text: 'CHARLIE' },
+                'q1;Cam;2': { isMatch: false, text: 'ALPHA' },
+              },
+              avatar: 'fox',
+              floor: 6,
+              isAdmin: false,
+              isReady: false,
+              lastUpdated: 1586640900000,
+              nickname: 'Cam',
+              score: 0,
+            },
+            Tester: {
+              answers: {
+                'q1;Tester;0': { isMatch: true, text: 'FOXTROT' },
+                'q1;Tester;1': { isMatch: false, text: 'BRAVO' },
+                'q1;Tester;2': { isMatch: false, text: 'CHARLIE' },
+              },
+              avatar: 'axolotl',
+              floor: 6,
+              isAdmin: true,
+              isReady: false,
+              lastUpdated: 1586640900000,
+              nickname: 'Tester',
+              score: 0,
+            },
+          },
         });
       });
     });
@@ -979,20 +1064,635 @@ describe('gameEngine', () => {
     describe('turnResult', () => {
       beforeEach(() => {
         gameEngine.save = jest.fn();
+        gameEngine.floorBlockers = {
+          1: true,
+          2: true,
+          3: true,
+        };
       });
 
       describe('turnType 1: one up', () => {
         beforeEach(() => {
-          gameEngine.save = jest.fn();
+          gameEngine.turnType = 1;
         });
 
-        // it('single lowest', () => {
-        //   gameEngine.players = getPlayers({ number: 5, scores: [5, 6, 4, 3, 4] });
+        it('single lowest', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [5, 6, 4, 3, 4],
+            floor: [6, 6, 6, 6, 6],
+          });
 
-        //   gameEngine.turnResult();
+          gameEngine.turnResult();
 
-        //   expect(gameEngine.save).toHaveBeenCalledWith({});
-        // });
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': true },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {},
+              moveUp: { Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 3, to: 5 } },
+              stay: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
+                Cam: { from: 6, name: 'Cam', savedByBlocker: false, score: 4, to: 6 },
+                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
+                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 5, to: 6 },
+              },
+            },
+          });
+        });
+
+        it('multiple lowest', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 3, 3, 4],
+            floor: [6, 6, 6, 6, 6],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': true },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {},
+              moveUp: {
+                Cam: { from: 6, name: 'Cam', savedByBlocker: false, score: 3, to: 5 },
+                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 3, to: 5 },
+                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+              },
+              stay: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
+                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
+              },
+            },
+          });
+        });
+
+        it('single lowest, removing blocker', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 4, 5, 4],
+            floor: [3, 3, 4, 6, 3],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': false },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {},
+              moveUp: {},
+              stay: {
+                Beth: { from: 3, name: 'Beth', savedByBlocker: false, score: 6, to: 3 },
+                Cam: { from: 4, name: 'Cam', savedByBlocker: false, score: 4, to: 4 },
+                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 5, to: 6 },
+                Evan: { from: 3, name: 'Evan', savedByBlocker: false, score: 4, to: 3 },
+                Tester: { from: 3, name: 'Tester', savedByBlocker: true, score: 3, to: 3 },
+              },
+            },
+          });
+        });
+
+        it('multiple lowest, removing blockers', () => {
+          gameEngine.floorBlockers = {
+            1: true,
+            2: false,
+            3: false,
+          };
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 3, 5, 3],
+            floor: [2, 3, 4, 6, 3],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': false, '3': false },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {},
+              moveUp: {
+                Cam: { from: 4, name: 'Cam', savedByBlocker: false, score: 3, to: 3 },
+                Evan: { from: 3, name: 'Evan', savedByBlocker: false, score: 3, to: 2 },
+                Tester: { from: 2, name: 'Tester', savedByBlocker: false, score: 3, to: 1 },
+              },
+              stay: {
+                Beth: { from: 3, name: 'Beth', savedByBlocker: false, score: 6, to: 3 },
+                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 5, to: 6 },
+              },
+            },
+          });
+        });
+
+        it('single lowest, game over', () => {
+          gameEngine.floorBlockers = {
+            1: false,
+            2: false,
+            3: true,
+          };
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 4, 2, 4],
+            floor: [1, 6, 6, 1, 6],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': false, '2': false, '3': true },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {
+                Danny: { from: 1, name: 'Danny', savedByBlocker: false, score: 2, to: 0 },
+              },
+              moveDown: {},
+              moveUp: {},
+              stay: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
+                Cam: { from: 6, name: 'Cam', savedByBlocker: false, score: 4, to: 6 },
+                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
+                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 3, to: 1 },
+              },
+            },
+          });
+        });
+
+        it('multiple lowest, game over', () => {
+          gameEngine.floorBlockers = {
+            1: false,
+            2: false,
+            3: false,
+          };
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 3, 3, 4],
+            floor: [1, 6, 5, 2, 6],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': false, '2': false, '3': false },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {
+                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 3, to: 0 },
+              },
+              moveDown: {},
+              moveUp: {
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 4 },
+                Danny: { from: 2, name: 'Danny', savedByBlocker: false, score: 3, to: 1 },
+              },
+              stay: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
+                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
+              },
+            },
+          });
+        });
+      });
+
+      describe('turnType 2: two up', () => {
+        beforeEach(() => {
+          gameEngine.turnType = 2;
+        });
+
+        it('one each for lowest', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 4, 2, 4],
+            floor: [6, 6, 5, 6, 6],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': true },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {},
+              moveUp: {
+                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
+                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+              },
+              stay: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 4, to: 5 },
+                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
+              },
+            },
+          });
+        });
+
+        it('multiple for second lowest', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 3, 2, 4],
+            floor: [6, 6, 5, 6, 6],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': true },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {},
+              moveUp: {
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 4 },
+                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
+                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+              },
+              stay: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
+                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
+              },
+            },
+          });
+        });
+
+        it('multiple for second lowest removing blockers', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 3, 2, 4],
+            floor: [3, 6, 4, 3, 4],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': false },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {},
+              moveUp: { Cam: { from: 4, name: 'Cam', savedByBlocker: false, score: 3, to: 3 } },
+              stay: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
+                Danny: { from: 3, name: 'Danny', savedByBlocker: true, score: 2, to: 3 },
+                Evan: { from: 4, name: 'Evan', savedByBlocker: false, score: 4, to: 4 },
+                Tester: { from: 3, name: 'Tester', savedByBlocker: true, score: 3, to: 3 },
+              },
+            },
+          });
+        });
+
+        it('with game over', () => {
+          gameEngine.floorBlockers = {
+            1: false,
+            2: false,
+            3: false,
+          };
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 3, 2, 4],
+            floor: [1, 6, 5, 6, 6],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': false, '2': false, '3': false },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {
+                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 3, to: 0 },
+              },
+              moveDown: {},
+              moveUp: {
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 4 },
+                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
+              },
+              stay: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
+                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
+              },
+            },
+          });
+        });
+      });
+
+      describe('turnType 3: three up', () => {
+        beforeEach(() => {
+          gameEngine.turnType = 3;
+        });
+
+        it('one each for lowest', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 4, 2, 6],
+            floor: [6, 6, 5, 6, 6],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': true },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {},
+              moveUp: {
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 4, to: 4 },
+                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
+                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+              },
+              stay: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
+                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 6, to: 6 },
+              },
+            },
+          });
+        });
+
+        it('multiple for third lowest', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [4, 4, 3, 2, 4],
+            floor: [6, 6, 5, 6, 6],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': true },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {},
+              moveUp: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 4, to: 5 },
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 4 },
+                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
+                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 5 },
+                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 4, to: 5 },
+              },
+              stay: {},
+            },
+          });
+        });
+
+        it('multiple for third lowest removing blockers', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 4, 2, 4],
+            floor: [6, 6, 3, 6, 4],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': false },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {},
+              moveUp: {
+                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
+                Evan: { from: 4, name: 'Evan', savedByBlocker: false, score: 4, to: 3 },
+                Tester: { from: 6, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+              },
+              stay: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
+                Cam: { from: 3, name: 'Cam', savedByBlocker: true, score: 4, to: 3 },
+              },
+            },
+          });
+        });
+
+        it('with game over', () => {
+          gameEngine.floorBlockers = {
+            1: false,
+            2: false,
+            3: false,
+          };
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [4, 6, 3, 2, 4],
+            floor: [1, 6, 5, 6, 6],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': false, '2': false, '3': false },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {
+                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 4, to: 0 },
+              },
+              moveDown: {},
+              moveUp: {
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 4 },
+                Danny: { from: 6, name: 'Danny', savedByBlocker: false, score: 2, to: 5 },
+                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 5 },
+              },
+              stay: { Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 } },
+            },
+          });
+        });
+      });
+
+      describe('turnType 0: one up, one down', () => {
+        beforeEach(() => {
+          gameEngine.turnType = 0;
+        });
+
+        it('one up, one down', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 4, 2, 5],
+            floor: [5, 5, 5, 5, 5],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': true },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: { Beth: { from: 5, name: 'Beth', savedByBlocker: false, score: 6, to: 6 } },
+              moveUp: { Danny: { from: 5, name: 'Danny', savedByBlocker: false, score: 2, to: 4 } },
+              stay: {
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 4, to: 5 },
+                Evan: { from: 5, name: 'Evan', savedByBlocker: false, score: 5, to: 5 },
+                Tester: { from: 5, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+              },
+            },
+          });
+        });
+
+        it('multiple moving down', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [4, 4, 3, 2, 4],
+            floor: [5, 5, 5, 5, 5],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': true },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {
+                Beth: { from: 5, name: 'Beth', savedByBlocker: false, score: 4, to: 6 },
+                Evan: { from: 5, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
+                Tester: { from: 5, name: 'Tester', savedByBlocker: false, score: 4, to: 6 },
+              },
+              moveUp: { Danny: { from: 5, name: 'Danny', savedByBlocker: false, score: 2, to: 4 } },
+              stay: {
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 5 },
+              },
+            },
+          });
+        });
+
+        it('one moving down, one moving up removing blockers', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 4, 2, 4],
+            floor: [5, 5, 5, 3, 5],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': false },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: { Beth: { from: 5, name: 'Beth', savedByBlocker: false, score: 6, to: 6 } },
+              moveUp: {},
+              stay: {
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 4, to: 5 },
+                Danny: { from: 3, name: 'Danny', savedByBlocker: true, score: 2, to: 3 },
+                Evan: { from: 5, name: 'Evan', savedByBlocker: false, score: 4, to: 5 },
+                Tester: { from: 5, name: 'Tester', savedByBlocker: false, score: 3, to: 5 },
+              },
+            },
+          });
+        });
+
+        it('saved from game over', () => {
+          gameEngine.floorBlockers = {
+            1: false,
+            2: false,
+            3: false,
+          };
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [7, 6, 3, 2, 4],
+            floor: [1, 5, 5, 5, 5],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': false, '2': false, '3': false },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {
+                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 7, to: 2 },
+              },
+              moveUp: { Danny: { from: 5, name: 'Danny', savedByBlocker: false, score: 2, to: 4 } },
+              stay: {
+                Beth: { from: 5, name: 'Beth', savedByBlocker: false, score: 6, to: 5 },
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 5 },
+                Evan: { from: 5, name: 'Evan', savedByBlocker: false, score: 4, to: 5 },
+              },
+            },
+          });
+        });
+
+        it('with game over', () => {
+          gameEngine.floorBlockers = {
+            1: false,
+            2: false,
+            3: false,
+          };
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [2, 6, 3, 2, 4],
+            floor: [1, 5, 5, 5, 5],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': false, '2': false, '3': false },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {
+                Tester: { from: 1, name: 'Tester', savedByBlocker: false, score: 2, to: 0 },
+              },
+              moveDown: { Beth: { from: 5, name: 'Beth', savedByBlocker: false, score: 6, to: 6 } },
+              moveUp: { Danny: { from: 5, name: 'Danny', savedByBlocker: false, score: 2, to: 4 } },
+              stay: {
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 5 },
+                Evan: { from: 5, name: 'Evan', savedByBlocker: false, score: 4, to: 5 },
+              },
+            },
+          });
+        });
+
+        it('can not go over 6', () => {
+          gameEngine.players = getPlayers({
+            number: 5,
+            scores: [3, 6, 3, 2, 4],
+            floor: [4, 6, 5, 3, 6],
+          });
+
+          gameEngine.turnResult();
+
+          expect(gameEngine.save).toHaveBeenCalledWith({
+            floorBlockers: { '1': true, '2': true, '3': false },
+            lastUpdatedBy: 'Tester',
+            phase: GAME_PHASES.RESULT,
+            result: {
+              gameOver: {},
+              moveDown: {},
+              moveUp: {},
+              stay: {
+                Beth: { from: 6, name: 'Beth', savedByBlocker: false, score: 6, to: 6 },
+                Cam: { from: 5, name: 'Cam', savedByBlocker: false, score: 3, to: 5 },
+                Danny: { from: 3, name: 'Danny', savedByBlocker: true, score: 2, to: 3 },
+                Evan: { from: 6, name: 'Evan', savedByBlocker: false, score: 4, to: 6 },
+                Tester: { from: 4, name: 'Tester', savedByBlocker: false, score: 3, to: 4 },
+              },
+            },
+          });
+        });
       });
     });
 

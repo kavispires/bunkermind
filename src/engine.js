@@ -29,6 +29,13 @@ export class GameEngine {
     this.currentQuestionID = null;
     this.answersSet = [];
     this.compare = null;
+    this.floorBlockers = {
+      1: true,
+      2: true,
+      3: true,
+    };
+    this.result = {};
+    this.gameOver = false;
 
     // Used by delay save
     this._interval = null;
@@ -54,6 +61,9 @@ export class GameEngine {
       usedQuestions: this.usedQuestions,
       answersSet: this.answersSet,
       compare: this.compare,
+      floorBlockers: this.floorBlockers,
+      result: this.result,
+      gameOver: this.gameOver,
     };
   }
 
@@ -249,6 +259,9 @@ export class GameEngine {
     this.usedQuestions = data.usedQuestions || {};
     this.answersSet = data.answersSet || [];
     this.compare = data.compare || null;
+    this.floorBlockers = data.floorBlockers;
+    this.result = data.result || {};
+    this.gameOver = data.gameOver;
 
     return this.state;
   }
@@ -271,6 +284,13 @@ export class GameEngine {
     this.compare = null;
     this._interval = null;
     this._tempSaveObj = null;
+    this.floorBlockers = {
+      1: true,
+      2: true,
+      3: true,
+    };
+    this.result = {};
+    this.gameOver = false;
 
     this.save(this.state);
   }
@@ -658,9 +678,7 @@ export class GameEngine {
   }
 
   turnResult() {
-    console.log('turnResult!');
     // Split players into groups by score
-    console.log(this.players);
     const tiers = Object.values(this.players)
       .reduce((tiersAcc, player) => {
         if (tiersAcc[player.score] === undefined) {
@@ -671,6 +689,97 @@ export class GameEngine {
         return tiersAcc;
       }, [])
       .filter((entry) => entry);
+
+    // Create result object
+    const result = {
+      moveUp: {},
+      moveDown: {},
+      stay: {},
+      gameOver: {},
+    };
+    const floorBlockersCopy = { ...this.floorBlockers };
+    const newFloorBlockers = { ...this.floorBlockers };
+    const highestScoreIndex = tiers.length - 1;
+
+    class PlayerResult {
+      constructor(name, score, from, to, savedByBlocker = false) {
+        this.name = name;
+        this.score = score;
+        this.from = from;
+        this.to = to;
+        this.savedByBlocker = savedByBlocker;
+      }
+    }
+
+    function moveUp(player) {
+      const saved = floorBlockersCopy[player.floor];
+      // Remove blocker if used(saved)
+      if (saved) {
+        newFloorBlockers[player.floor] = false;
+      }
+      const to = saved ? player.floor : player.floor - 1;
+
+      const entry = new PlayerResult(player.nickname, player.score, player.floor, to, saved);
+
+      if (entry.to === 0) {
+        result.gameOver[player.nickname] = { ...entry };
+      } else if (entry.to === entry.from) {
+        result.stay[player.nickname] = { ...entry };
+      } else {
+        result.moveUp[player.nickname] = { ...entry };
+      }
+    }
+
+    function moveDown(player) {
+      const to = player.floor === 6 ? player.floor : player.floor + 1;
+
+      const entry = new PlayerResult(player.nickname, player.score, player.floor, to);
+
+      if (entry.from === 6) {
+        result.stay[player.nickname] = { ...entry };
+      } else {
+        result.moveDown[player.nickname] = { ...entry };
+      }
+    }
+
+    tiers.forEach((tier, index) => {
+      // TurnType 0, move down (only when more than one tier)
+      if (this.turnType === 0 && tiers.length > 1 && highestScoreIndex === index) {
+        tier.forEach(moveDown);
+        return;
+      }
+
+      // Add lowest scores
+      if (index === 0 && highestScoreIndex !== index) {
+        tier.forEach(moveUp);
+        return;
+      }
+
+      // Add second lowest scores
+      if (this.turnType >= 2 && index === 1) {
+        tier.forEach(moveUp);
+        return;
+      }
+
+      // Add third lowest scores
+      if (this.turnType === 3 && index === 2) {
+        tier.forEach(moveUp);
+        return;
+      }
+
+      tier.forEach((player) => {
+        const entry = new PlayerResult(player.nickname, player.score, player.floor, player.floor);
+        result.stay[player.nickname] = { ...entry };
+      });
+    });
+
+    // Save
+    this.save({
+      lastUpdatedBy: this.me,
+      floorBlockers: newFloorBlockers,
+      result,
+      phase: GAME_PHASES.RESULT,
+    });
   }
 
   /**
