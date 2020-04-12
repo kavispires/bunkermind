@@ -67,6 +67,12 @@ export const basics = {
   phase: GAME_PHASES.WAITING_ROOM,
   turn: 0,
   isLocked: true,
+  gameOver: false,
+  floorBlockers: {
+    1: true,
+    2: true,
+    3: true,
+  },
 };
 
 const mockTurns = (set) => {
@@ -177,7 +183,7 @@ const mockTurns = (set) => {
         turn: 1,
         turnType: 1,
         players,
-        turnOrder: [...playersNames],
+        turnOrder: [...playersNames].slice(0, 3),
       };
     case 'answer.ready4':
       players = getPlayers({
@@ -193,7 +199,24 @@ const mockTurns = (set) => {
         turn: 1,
         turnType: 1,
         players,
-        turnOrder: [...playersNames],
+        turnOrder: [...playersNames].slice(0, 4),
+      };
+    case 'compare.ready':
+      players = getPlayers({
+        number: 4,
+        floor: 5,
+        isReady: [false, true, true, true],
+        addAnswers: true,
+        score: [5, 3, 6, 4],
+      });
+      return {
+        ...basics,
+        currentQuestionID: 'q1',
+        phase: GAME_PHASES.COMPARE,
+        turn: 1,
+        turnType: 1,
+        players,
+        turnOrder: [...playersNames].slice(0, 4),
       };
     default:
       return {

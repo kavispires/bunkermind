@@ -33,9 +33,12 @@ const GameAnswer = () => {
 
   // Get questions on mount
   useEffect(() => {
+    const userAnswers = Object.values(gameEngine.userAnswers);
     const gotQuestion = getQuestion(gameEngine.currentQuestionID);
     setCurrentQuestion(gotQuestion);
-    setAnswers(new Array(gotQuestion.answers).fill(''));
+    setAnswers(
+      new Array(gotQuestion.answers).fill('').map((a, index) => userAnswers[index]?.text || '')
+    );
   }, [setCurrentQuestion, setAnswers]);
 
   useEffect(() => {
@@ -52,6 +55,8 @@ const GameAnswer = () => {
     setAnswers(newAnswers);
   };
 
+  console.log(gameEngine.isEveryoneReady);
+
   return (
     <div className="game-game game-container game-answer">
       <GameHeader />
@@ -63,6 +68,7 @@ const GameAnswer = () => {
       {answers.map((answer, index) => {
         const answerNumber = `answer-${index + 1}`;
         const answerLabel = `Answer ${index + 1}`;
+
         return (
           <div className="game-answer__answers" key={answerNumber}>
             {ANSWER_ICONS[index]}
@@ -71,6 +77,7 @@ const GameAnswer = () => {
               label={answerLabel}
               variant="outlined"
               className="answer-input-field"
+              defaultValue={answers[index] || ''}
               onChange={(e) => updateAnswer(e.target.value, index)}
               disabled={gameEngine.isUserReady}
               inputProps={{ autoComplete: 'off' }}
@@ -93,7 +100,7 @@ const GameAnswer = () => {
           {gameEngine.isUserReady ? <DoneOutlineIcon /> : 'Submit Answers'}
         </Button>
       </div>
-      {gameEngine?.me?.isAdmin && (
+      {gameEngine.user?.isAdmin && (
         <div className="game-admin-actions">
           <span className="game-admin-actions__warning">
             This action should be automatic. Only use the button if the next phase fails to trigger

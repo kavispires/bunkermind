@@ -668,10 +668,8 @@ export class GameEngine {
     setTimeout(() => {
       // Call prepare or result if no more words in set
       if (this.answersSet.length > 0) {
-        console.log('PREPARE!!!');
         this.prepareCompare();
       } else {
-        console.log('RESULTS!!!');
         this.turnResult();
       }
     }, ENGINE_TIMEOUT);

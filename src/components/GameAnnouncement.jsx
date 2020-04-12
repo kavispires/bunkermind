@@ -134,7 +134,7 @@ const GameAnnouncement = () => {
           )}
         </div>
       )}
-      {gameEngine?.me?.isAdmin && (
+      {gameEngine.user?.isAdmin && (
         <div className="game-admin-actions">
           <Button
             variant="contained"

@@ -10,10 +10,11 @@ import { SCREENS, COLORS } from '../utils/contants';
 import toastService from '../utils/toastService';
 
 import PlayerBadge from './PlayerBadge';
+import GameLoading from './GameLoading';
 
 let timeoutID = null;
 
-const GameWaitingRoom = () => {
+const GameWaitingRoom = ({ justLoading }) => {
   // Global States
   const [dbRef] = useGlobalState('dbRef');
   const [game] = useGlobalState('game');
@@ -41,6 +42,10 @@ const GameWaitingRoom = () => {
       }, 500);
     }
   }, [dbRef, nickname, setGameID, setScreen, setToast, toast, game]);
+
+  if (justLoading) {
+    return <GameLoading />;
+  }
 
   return (
     <div className="game game-waiting-room">
@@ -85,7 +90,7 @@ const GameWaitingRoom = () => {
           />
         ))}
       </div>
-      {gameEngine?.me?.isAdmin && (
+      {gameEngine.user?.isAdmin && (
         <fieldset className="game-admin-actions">
           <legend>Admin Actions</legend>
           <Button

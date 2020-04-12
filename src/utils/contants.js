@@ -44,7 +44,7 @@ export const ONLINE_MINIUTE_THRESHOLD = 5;
 
 export const DISCONNECT_MINIUTE_THRESHOLD = 15;
 
-export const TEST_NOW = 1586640900000;
+export const TEST_NOW = process.env.NODE_ENV === 'test' ? 1586640900000 : Date.now();
 
 export const ENGINE_TIMEOUT = process.env.NODE_ENV === 'test' ? 0 : 1000;
 
