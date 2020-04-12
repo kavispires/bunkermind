@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
 import Button from '@material-ui/core/Button';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
@@ -14,7 +14,7 @@ import floor6img from '../images/bunker/floor-6.svg';
 
 import gameEngine from '../engine';
 import useGlobalState from '../useGlobalState';
-import { COLORS, TURN_TYPES } from '../utils/contants';
+import { COLORS, TURN_TYPES, RESULT_ACTION } from '../utils/contants';
 
 import GameHeader from './GameHeader';
 import PlayerAvatar from './PlayerAvatar';
@@ -58,11 +58,54 @@ const FloorAnimated = ({ floorNumber, players }) => {
   );
 };
 
+const FloorExplanationSentence = ({ player }) => {
+  switch (player.action) {
+    case RESULT_ACTION.GAME_OVER:
+      return (
+        <Fragment>
+          <strong>{player.name}</strong> has left the bunker. Game Over!
+        </Fragment>
+      );
+    case RESULT_ACTION.SAVE:
+      return (
+        <Fragment>
+          <strong>{player.name}</strong> got a low score, but was saved this time.
+        </Fragment>
+      );
+    case RESULT_ACTION.MOVE_UP:
+      return (
+        <Fragment>
+          <strong>{player.name}</strong> moved down from {player.from} to {player.to}
+        </Fragment>
+      );
+    case RESULT_ACTION.MOVE_DOWN:
+      return (
+        <Fragment>
+          <strong>{player.name}</strong> had a highest score moved one floor down!
+        </Fragment>
+      );
+    default:
+      return (
+        <Fragment>
+          <strong>{player.name}</strong> did something I don't know.
+        </Fragment>
+      );
+  }
+};
+
+const FloorExplanation = ({ player, position }) => {
+  return (
+    <li className={`result-explanation__line result-explanation__line--${position}`}>
+      <FloorExplanationSentence player={player} />
+    </li>
+  );
+};
+
 const GameResult = () => {
   const [game] = useGlobalState('game');
 
   return (
-    <div className="game game-container game-announcement">
+    <div className="game game-container game-result">
       <GameHeader />
       <div className="game-announcement__content">
         <div className="bunker bunker--top">
@@ -81,36 +124,29 @@ const GameResult = () => {
           return <FloorAnimated key={floorNumber} floorNumber={floorNumber} players={players} />;
         })}
       </div>
-      {!gameEngine.isUserReady ? (
-        <div className="action-button">
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={gameEngine.isUserReady}
-            onClick={() => gameEngine.doSomething()}
-            style={{ background: COLORS.PRIMARY }}
-          >
-            {gameEngine.isUserReady ? <DoneOutlineIcon /> : 'OK'}
-          </Button>
-        </div>
-      ) : (
-        <div className="action-button">
-          <h3>Waiting for all players to be ready</h3>
-          {gameEngine.whosReady?.length && (
-            <div className="whos-ready-line">
-              {gameEngine.whosReady.map((player, index) => (
-                <PlayerBadge
-                  key={player.nickname}
-                  player={player}
-                  showName
-                  orderNumber={index}
-                  isFloating
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+
+      <ul className="result-explanation">
+        {Object.values(gameEngine.orderedResults)
+          .reverse()
+          .flat()
+          .map((player, index) => {
+            const key = `explanation-key-${index}`;
+            return <FloorExplanation key={key} player={player} position={index} />;
+          })}
+      </ul>
+
+      <div className="action-button">
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={gameEngine.isUserReady}
+          onClick={() => gameEngine.readyForNewTurn()}
+          style={{ background: COLORS.PRIMARY }}
+        >
+          {gameEngine.isUserReady ? <DoneOutlineIcon /> : 'OK'}
+        </Button>
+      </div>
+
       {gameEngine.user?.isAdmin && (
         <div className="game-admin-actions">
           <Button

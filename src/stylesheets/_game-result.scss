@@ -42,3 +42,25 @@
     animation-fill-mode: forwards;
   }
 }
+
+.result-explanation {
+  list-style: none;
+  padding-left: 0;
+  &__line {
+    opacity: 0;
+    text-align: center;
+  }
+}
+
+.result-explanation__line {
+  @for $i from 0 through 12 {
+    &--#{$i} {
+      animation-name: showUp;
+      animation-duration: 2s;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: 1;
+      animation-delay: #{$i + 0.5}s;
+      animation-fill-mode: forwards;
+    }
+  }
+}

@@ -88,6 +88,17 @@
   }
 }
 
+@keyframes showUp {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 body {
   margin: 0;
   font-family: 'Roboto', sans-serif;
@@ -152,7 +163,7 @@ body {
 
 .floating-animation--1 {
   animation-name: float;
-  animation-duration: 2.35s;
+  animation-duration: 4.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -166,7 +177,7 @@ body {
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 1.35s;
+  animation-duration: 6.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -180,7 +191,7 @@ body {
 
 .floating-animation--5 {
   animation-name: float;
-  animation-duration: 3.35s;
+  animation-duration: 8.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -570,6 +581,132 @@ body {
   animation-timing-function: ease-in-out;
   animation-iteration-count: 1;
   animation-delay: 5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation {
+  list-style: none;
+  padding-left: 0;
+}
+.result-explanation__line {
+  opacity: 0;
+  text-align: center;
+}
+
+.result-explanation__line--0 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--1 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 1.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--2 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 2.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--3 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 3.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--4 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 4.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--5 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 5.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--6 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 6.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--7 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 7.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--8 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 8.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--9 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 9.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--10 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 10.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--11 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 11.5s;
+  animation-fill-mode: forwards;
+}
+
+.result-explanation__line--12 {
+  animation-name: showUp;
+  animation-duration: 2s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-delay: 12.5s;
   animation-fill-mode: forwards;
 }
 
