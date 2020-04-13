@@ -285,6 +285,7 @@ export class GameEngine {
     return {
       gameID: this.gameID,
       avatars: this.avatars,
+      phase: GAME_PHASES.WAITING_ROOM,
     };
   }
 
