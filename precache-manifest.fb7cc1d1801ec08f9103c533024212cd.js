@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "65e38a9159bd77f0fc37b73ad16b538e",
+    "revision": "acc6bbc8b864f8526a48a42e72f1fb9f",
     "url": "/bunkermind/index.html"
   },
   {
-    "revision": "02384b27a0540948fec0",
+    "revision": "0d631e1a19463bc8b569",
     "url": "/bunkermind/static/css/main.a2874522.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/bunkermind/static/js/2.70bb5184.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "02384b27a0540948fec0",
-    "url": "/bunkermind/static/js/main.3f92364e.chunk.js"
+    "revision": "0d631e1a19463bc8b569",
+    "url": "/bunkermind/static/js/main.7b7bf845.chunk.js"
   },
   {
     "revision": "456db29ba85e74e839cd",

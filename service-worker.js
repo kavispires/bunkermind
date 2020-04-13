@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/bunkermind/precache-manifest.7683aef55792eab6bc42cebfac7cde55.js"
+  "/bunkermind/precache-manifest.fb7cc1d1801ec08f9103c533024212cd.js"
 );
 
 self.addEventListener('message', (event) => {
