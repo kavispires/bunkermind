@@ -1,0 +1,56 @@
+.game-question-waiting {
+  max-width: 500px;
+
+  h1,
+  h2 {
+    text-align: center;
+  }
+
+  &__spinner {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__rules {
+    font-size: 90%;
+
+    & li {
+      margin-bottom: $unit2;
+    }
+  }
+
+  .tip {
+    &--ok {
+      color: $color-green;
+    }
+
+    &--not-ok {
+      color: $color-red;
+    }
+  }
+}
+
+.game-question-selection {
+  max-width: 500px;
+
+  h2 {
+    text-align: center;
+  }
+
+  &__icon {
+    text-align: center;
+    margin-top: $unit3;
+  }
+
+  p {
+    font-size: 90%;
+    text-align: center;
+  }
+
+  &__question {
+    margin: $unit2 0;
+    border: 2px solid $color-orange;
+    border-radius: $unit1;
+    transform: translateX($unit3);
+  }
+}

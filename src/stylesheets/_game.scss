@@ -1,0 +1,36 @@
+.game-container {
+  width: 100%;
+}
+
+.action-button {
+  margin: $unit3 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__warning {
+    text-align: center;
+    font-size: 80%;
+    margin-bottom: $unit2;
+    color: $color-brown;
+  }
+}
+
+.game-loading {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.general-error {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $unit3 $unit2;
+  background: red;
+  color: $color-white;
+}

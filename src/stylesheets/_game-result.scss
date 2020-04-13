@@ -1,0 +1,70 @@
+.game-result {
+  background: $color-pale-darker;
+}
+
+.move-animation {
+  &--up {
+    animation-name: resultMoveUp;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+  }
+
+  &--down {
+    animation-name: resultMoveDown;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    animation-delay: 3s;
+    animation-fill-mode: forwards;
+  }
+
+  &--save {
+    animation-name: resultMoveSave;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-delay: 0s;
+  }
+
+  &--stay {
+    animation-name: float;
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-delay: 0s;
+  }
+
+  &--game-over {
+    animation-name: resultMoveGameOver;
+    animation-duration: 7s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    animation-delay: 5s;
+    animation-fill-mode: forwards;
+  }
+}
+
+.result-explanation {
+  list-style: none;
+  padding-left: 0;
+  &__line {
+    opacity: 0;
+    text-align: center;
+  }
+}
+
+.result-explanation__line {
+  @for $i from 0 through 15 {
+    &--#{$i} {
+      animation-name: showUp;
+      animation-duration: 1s;
+      animation-timing-function: ease-in-out;
+      animation-iteration-count: 1;
+      animation-delay: #{$i * 0.3}s;
+      animation-fill-mode: forwards;
+    }
+  }
+}

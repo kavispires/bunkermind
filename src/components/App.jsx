@@ -7,14 +7,17 @@ import { SCREENS } from '../utils/contants';
 
 import Home from './Home';
 import Toast from './Toast';
-import WaitingRoom from './WaitingRoom';
+import Game from './Game';
+import Mocks from './Mocks';
+
+const version = '0.6.735'; // patch number is always equal to the number of questions
 
 const Screen = () => {
   const [screen] = useGlobalState('screen');
 
   switch (screen) {
-    case SCREENS.WAITINGROOM:
-      return <WaitingRoom />;
+    case SCREENS.GAME:
+      return <Game />;
     default:
       return <Home />;
   }
@@ -29,6 +32,8 @@ const App = () => {
       {isLoading ? <LinearProgress /> : <div className="progress-bar-placeholder" />}
       <Screen />
       <Toast />
+      <Mocks />
+      <span className="release-number">v{version}</span>
     </Container>
   );
 };

@@ -86,6 +86,13 @@ class LocalStorageService {
       nickname,
     });
   }
+
+  resetGameID() {
+    this.set({
+      nickname: this.store.nickname,
+      gameID: null,
+    });
+  }
 }
 
 export default new LocalStorageService();

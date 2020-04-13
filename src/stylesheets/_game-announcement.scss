@@ -1,0 +1,101 @@
+.game-announcement {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    max-width: 450px;
+  }
+}
+
+.bunker {
+  display: flex;
+  margin: $unit1 0;
+  background: rgba(255, 255, 255, 0.5);
+  position: relative;
+
+  &--top {
+    align-items: flex-end;
+  }
+
+  &__info-container {
+    width: 100%;
+    text-align: center;
+    background: $color-white;
+    border-radius: $unit2;
+    padding: $unit2;
+    margin: $unit2;
+
+    h2 {
+      margin: $unit1;
+    }
+  }
+
+  &__floor-image {
+    height: 40px;
+
+    &--top {
+      height: 107px;
+    }
+  }
+}
+
+.bunker-info {
+  &--flavor-text {
+    font-style: italic;
+    font-size: 85%;
+    color: $color-brown;
+  }
+
+  &--turn-type {
+    color: $color-orange;
+  }
+
+  &--risk-warning {
+    border: 2px solid $color-orange;
+    margin-bottom: $unit1;
+    padding: $unit1;
+    font-size: 85%;
+  }
+}
+
+.whos-ready-line {
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  margin: 0 $unit1;
+  padding: $unit2;
+  border: 1px solid $color-brown;
+
+  & .badge-container {
+    margin: 0 $unit1 $unit1;
+  }
+}
+
+.bunker-active-blocker {
+  display: block;
+  width: 100px;
+  height: $unit2;
+  border-radius: $unit2;
+  background: $color-brown;
+  position: absolute;
+
+  top: -7px;
+  left: 5px;
+}
+
+.bunker-removed-blocker {
+  display: block;
+  width: 100px;
+  height: $unit2;
+  border-radius: $unit2;
+  background: $color-red;
+  position: absolute;
+  border-radius: 10px;
+  top: -7px;
+  left: 5px;
+  animation: blink 1.2s infinite ease-in-out;
+}

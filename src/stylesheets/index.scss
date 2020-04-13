@@ -1,4 +1,25 @@
 // Contants
 @import './constants';
+// Animations
+@import './animations';
 // Global
 @import './global';
+// Material UI Modifiers
+@import './mui-modifiers';
+
+// Components
+@import './player-badge';
+@import './answer-chip';
+
+// Screens
+@import './home';
+@import './game';
+@import './admin-actions';
+@import './waiting-room';
+@import './game-header';
+@import './game-announcement';
+@import './game-questions';
+@import './game-answer';
+@import './game-compare';
+@import './game-result';
+@import './game-over';
