@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/bunkermind/static/css/main.2d71aff9.chunk.css",
-    "main.js": "/bunkermind/static/js/main.76142949.chunk.js",
-    "main.js.map": "/bunkermind/static/js/main.76142949.chunk.js.map",
+    "main.css": "/bunkermind/static/css/main.a2874522.chunk.css",
+    "main.js": "/bunkermind/static/js/main.3f92364e.chunk.js",
+    "main.js.map": "/bunkermind/static/js/main.3f92364e.chunk.js.map",
     "runtime-main.js": "/bunkermind/static/js/runtime-main.fd419642.js",
     "runtime-main.js.map": "/bunkermind/static/js/runtime-main.fd419642.js.map",
     "static/js/2.70bb5184.chunk.js": "/bunkermind/static/js/2.70bb5184.chunk.js",
     "static/js/2.70bb5184.chunk.js.map": "/bunkermind/static/js/2.70bb5184.chunk.js.map",
     "index.html": "/bunkermind/index.html",
-    "precache-manifest.51582ae8a53c459a111e2e87070fae72.js": "/bunkermind/precache-manifest.51582ae8a53c459a111e2e87070fae72.js",
+    "precache-manifest.7683aef55792eab6bc42cebfac7cde55.js": "/bunkermind/precache-manifest.7683aef55792eab6bc42cebfac7cde55.js",
     "service-worker.js": "/bunkermind/service-worker.js",
-    "static/css/main.2d71aff9.chunk.css.map": "/bunkermind/static/css/main.2d71aff9.chunk.css.map",
+    "static/css/main.a2874522.chunk.css.map": "/bunkermind/static/css/main.a2874522.chunk.css.map",
     "static/js/2.70bb5184.chunk.js.LICENSE.txt": "/bunkermind/static/js/2.70bb5184.chunk.js.LICENSE.txt",
     "static/media/avatar-axolotl.svg": "/bunkermind/static/media/avatar-axolotl.b014f492.svg",
     "static/media/avatar-cardinal.svg": "/bunkermind/static/media/avatar-cardinal.99644b12.svg",
@@ -40,7 +40,7 @@
   "entrypoints": [
     "static/js/runtime-main.fd419642.js",
     "static/js/2.70bb5184.chunk.js",
-    "static/css/main.2d71aff9.chunk.css",
-    "static/js/main.76142949.chunk.js"
+    "static/css/main.a2874522.chunk.css",
+    "static/js/main.3f92364e.chunk.js"
   ]
 }
