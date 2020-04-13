@@ -76,7 +76,7 @@ const FloorExplanationSentence = ({ player }) => {
     case RESULT_ACTION.MOVE_UP:
       return (
         <Fragment>
-          <strong>{player.name}</strong> moved down from {player.from} to {player.to}.
+          <strong>{player.name}</strong> moved up from {player.from} to {player.to}.
         </Fragment>
       );
     case RESULT_ACTION.MOVE_DOWN:
