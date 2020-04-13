@@ -22,4 +22,24 @@
   & .badge-container {
     margin: 0 $unit3 $unit3;
   }
+
+  &__game-id {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .game-id-label,
+    .military-translation {
+      display: block;
+      font-size: 80%;
+      user-select: none;
+    }
+
+    .game-id {
+      display: block;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+  }
 }

@@ -6,6 +6,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import gameEngine from '../engine';
 import useGlobalState from '../useGlobalState';
 
+import { getMilitaryTranslation } from '../utils';
 import { SCREENS, COLORS } from '../utils/contants';
 import toastService from '../utils/toastService';
 
@@ -52,6 +53,11 @@ const GameWaitingRoom = ({ justLoading }) => {
       <header className="game-waiting-room__title">
         <CircularProgress style={{ color: COLORS.PRIMARY }} />
         <h1>Waiting Room</h1>
+        <div className="game-waiting-room__game-id">
+          <span className="game-id-label">game id</span>
+          <span className="game-id">{gameEngine.gameID}</span>
+          <span className="military-translation">{getMilitaryTranslation(gameEngine.gameID)}</span>
+        </div>
       </header>
       <main>
         <p>

@@ -3,6 +3,7 @@ import {
   ONLINE_MINIUTE_THRESHOLD,
   TURN_TYPES_FLAVOR_TEXT,
   LOSER_FLAVOR_TEXT,
+  MILITARY_ALPHABET,
 } from './contants';
 import QUESTIONS from './questions.json';
 
@@ -145,3 +146,10 @@ export const deepCopy = (obj) => {
 export const shuffledFlavorTextsIDs = (function () {
   return shuffle(Object.keys(LOSER_FLAVOR_TEXT));
 })();
+
+export const getMilitaryTranslation = (gameID = '') => {
+  return gameID
+    .split('')
+    .map((letter) => MILITARY_ALPHABET[letter])
+    .join(' • ');
+};

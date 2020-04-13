@@ -186,35 +186,35 @@ body {
 
 .floating-animation--1 {
   animation-name: float;
-  animation-duration: 5.35s;
+  animation-duration: 8.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--2 {
   animation-name: float;
-  animation-duration: 3.35s;
+  animation-duration: 6.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--3 {
   animation-name: float;
-  animation-duration: 2.35s;
+  animation-duration: 4.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--4 {
   animation-name: float;
-  animation-duration: 5.35s;
+  animation-duration: 3.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
 
 .floating-animation--5 {
   animation-name: float;
-  animation-duration: 6.35s;
+  animation-duration: 8.35s;
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
@@ -332,6 +332,24 @@ body {
 
 .game-waiting-room .badge-container {
   margin: 0 16px 16px;
+}
+
+.game-waiting-room__game-id {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.game-waiting-room__game-id .game-id-label,
+.game-waiting-room__game-id .military-translation {
+  display: block;
+  font-size: 80%;
+  user-select: none;
+}
+.game-waiting-room__game-id .game-id {
+  display: block;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
 .game-header.MuiAppBar-root {
