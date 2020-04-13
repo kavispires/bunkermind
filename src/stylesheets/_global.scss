@@ -6,6 +6,21 @@ body {
   background-color: $color-pale;
 }
 
+.release-number {
+  position: absolute;
+  right: $unit2;
+  top: $unit1;
+  color: $color-brown;
+  font-size: 0.5rem;
+  text-align: left;
+  transform: rotate(-90deg);
+  transform-origin: right;
+}
+
+.app-container {
+  padding-bottom: 3rem;
+}
+
 .mock-buttons {
   display: flex;
   flex-wrap: wrap;

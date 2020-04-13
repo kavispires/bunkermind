@@ -1,4 +1,4 @@
-import { deepCopy, getTurnType, shuffle } from './utils';
+import { deepCopy, getTurnType, shuffle, shuffledFlavorTextsIDs } from './utils';
 import {
   AVATARS,
   GAME_PHASES,
@@ -147,7 +147,10 @@ export class GameEngine {
   get losers() {
     return this.flatOrderResults.reduce((acc, player) => {
       if (player.action === RESULT_ACTION.GAME_OVER) {
-        acc.push(player.name);
+        acc.push({
+          name: player.name,
+          flavorTextID: player.flavorTextID,
+        });
       }
       return acc;
     }, []);
@@ -372,8 +375,14 @@ export class GameEngine {
     };
     this.result = {};
     this.gameOver = false;
+  }
 
-    this.save(this.state);
+  deleteGame() {
+    this.reset();
+
+    this._dbRef().set({
+      gameID: this.gameID,
+    });
   }
 
   // SETTERS
@@ -795,7 +804,7 @@ export class GameEngine {
       }
     }
 
-    function moveUp(player) {
+    function moveUp(player, index) {
       const saved = floorBlockersCopy[player.floor];
       // Remove blocker if used(saved)
       if (saved) {
@@ -808,6 +817,8 @@ export class GameEngine {
       if (entry.to === 0) {
         isGameOver = true;
         entry.action = RESULT_ACTION.GAME_OVER;
+
+        entry.flavorTextID = shuffledFlavorTextsIDs[index];
       } else if (entry.to === entry.from) {
         entry.action = saved ? RESULT_ACTION.SAVE : RESULT_ACTION.STAY;
       } else {
@@ -839,7 +850,7 @@ export class GameEngine {
       }
 
       // Add lowest scores
-      if (index === 0 && highestScoreIndex !== index) {
+      if (index === 0 && (this.turnType !== 0 || highestScoreIndex !== index)) {
         tier.forEach(moveUp);
         return;
       }
@@ -888,7 +899,7 @@ export class GameEngine {
       setTimeout(() => {
         // If everybody is ready, trigger next phase
         if (this.isEveryoneReady && this.phase !== GAME_PHASES.ANNOUNCEMENT) {
-          this.startNewTurn();
+          this.startNextTurn();
         }
       }, ENGINE_TIMEOUT);
     }
@@ -930,7 +941,7 @@ export class GameEngine {
       player.isReady = false;
       player.floor = getNewFloor(player.nickname);
       player.score = 0;
-      player.anwers = {};
+      player.answers = {};
     });
   }
 

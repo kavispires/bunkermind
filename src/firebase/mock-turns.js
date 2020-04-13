@@ -234,10 +234,128 @@ const mockTurns = (set) => {
         turn: 1,
         turnType: 0,
         players,
-        turnOrder: [...playersNames].slice(0, 4),
+        turnOrder: [...playersNames],
         floorBlockers: { 1: false, 2: false, 3: true }, // not possible, only to check anymation
       };
-
+    case 'result':
+      players = getPlayers({
+        number: 12,
+        floor: [6, 6, 6, 6, 6, 6, 5, 4, 4, 3, 2, 1],
+        isReady: [false, true, true, true, true, true, true, true, true, true, true, true],
+        addAnswers: true,
+        score: [5, 1, 6, 1, 5, 5, 7, 7, 1, 1, 5, 1],
+      });
+      return {
+        ...basics,
+        currentQuestionID: 'q1',
+        phase: GAME_PHASES.RESULT,
+        turn: 1,
+        turnType: 0,
+        players,
+        turnOrder: [...playersNames],
+        floorBlockers: { 1: false, 2: false, 3: true }, // not possible, only to check anymation
+        result: [
+          null,
+          {
+            Lin: {
+              action: 'GAME_OVER',
+              flavorTextID: 'lft16',
+              from: 1,
+              name: 'Lin',
+              score: 0,
+              to: 0,
+            },
+          },
+          {
+            Kelly: {
+              action: 'MOVE_UP',
+              from: 2,
+              name: 'Kelly',
+              score: 0,
+              to: 1,
+            },
+          },
+          {
+            Jack: {
+              action: 'SAVE',
+              from: 3,
+              name: 'Jack',
+              score: 0,
+              to: 3,
+            },
+          },
+          {
+            Helen: {
+              action: 'MOVE_UP',
+              from: 4,
+              name: 'Helen',
+              score: 0,
+              to: 3,
+            },
+            Ian: {
+              action: 'MOVE_UP',
+              from: 4,
+              name: 'Ian',
+              score: 0,
+              to: 3,
+            },
+          },
+          {
+            Gabi: {
+              action: 'MOVE_UP',
+              from: 5,
+              name: 'Gabi',
+              score: 0,
+              to: 4,
+            },
+          },
+          {
+            Adam: {
+              action: 'STAY',
+              from: 6,
+              name: 'Adam',
+              score: 1,
+              to: 6,
+            },
+            Beth: {
+              action: 'MOVE_UP',
+              from: 6,
+              name: 'Beth',
+              score: 0,
+              to: 5,
+            },
+            Cam: {
+              action: 'MOVE_UP',
+              from: 6,
+              name: 'Cam',
+              score: 0,
+              to: 5,
+            },
+            Danny: {
+              action: 'MOVE_UP',
+              from: 6,
+              name: 'Danny',
+              score: 0,
+              to: 5,
+            },
+            Evan: {
+              action: 'MOVE_UP',
+              from: 6,
+              name: 'Evan',
+              score: 0,
+              to: 5,
+            },
+            Fred: {
+              action: 'MOVE_UP',
+              from: 6,
+              name: 'Fred',
+              score: 0,
+              to: 5,
+            },
+          },
+        ],
+        gameOver: true,
+      };
     default:
       return {
         ...basics,

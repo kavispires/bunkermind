@@ -22,18 +22,4 @@
 @import './game-answer';
 @import './game-compare';
 @import './game-result';
-
-.release-number {
-  position: absolute;
-  right: $unit2;
-  top: $unit1;
-  color: $color-brown;
-  font-size: 0.5rem;
-  text-align: left;
-  transform: rotate(-90deg);
-  transform-origin: right;
-}
-
-.app-container {
-  padding-bottom: 3rem;
-}
+@import './game-over';

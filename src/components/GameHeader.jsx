@@ -82,7 +82,9 @@ const GameHeader = () => {
   return (
     <AppBar position="static" style={{ background: COLORS.PRIMARY }} className="game-header">
       <Player player={currentPlayer} />
-      {gameEngine.phase === GAME_PHASES.COMPARE && <Score score={currentPlayer.score} />}
+      {(gameEngine.phase === GAME_PHASES.COMPARE || gameEngine.phase === GAME_PHASES.RESULT) && (
+        <Score score={currentPlayer.score} />
+      )}
       <TurnIcon turnType={game.turnType} />
       <FloorPosition floor={currentPlayer.floor} />
     </AppBar>

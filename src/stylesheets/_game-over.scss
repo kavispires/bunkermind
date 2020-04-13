@@ -1,0 +1,22 @@
+.game-game-over {
+  &__icon {
+    text-align: center;
+    margin-top: $unit4;
+  }
+
+  h2 {
+    text-align: center;
+    margin: 0;
+  }
+
+  h3 {
+    text-align: center;
+  }
+
+  &__results {
+    background: $color-pale-darker;
+    padding: $unit2;
+    list-style: none;
+    border-radius: $unit1;
+  }
+}

@@ -1,4 +1,9 @@
-import { ONE_MINUTE, ONLINE_MINIUTE_THRESHOLD, TURN_TYPES_FLAVOR_TEXT } from './contants';
+import {
+  ONE_MINUTE,
+  ONLINE_MINIUTE_THRESHOLD,
+  TURN_TYPES_FLAVOR_TEXT,
+  LOSER_FLAVOR_TEXT,
+} from './contants';
 import QUESTIONS from './questions.json';
 
 /**
@@ -129,3 +134,14 @@ export const getQuestion = (questionID) => {
 export const deepCopy = (obj) => {
   return JSON.parse(JSON.stringify(obj));
 };
+
+/**
+ * Shuffled flavor texts ids
+ * @param {*} list
+ * @param {*} cache
+ * @returns
+ */
+
+export const shuffledFlavorTextsIDs = (function () {
+  return shuffle(Object.keys(LOSER_FLAVOR_TEXT));
+})();

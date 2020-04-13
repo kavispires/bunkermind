@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 
@@ -17,8 +18,6 @@ const GameCompare = () => {
   const [nickname] = useGlobalState('nickname');
   // Local States
   const [currentQuestion, setCurrentQuestion] = useState(null);
-  // const [answers, setAnswers] = useState([]);
-  // const [areAnswersValid, setAreAnswersValid] = useState(false);
 
   // Get questions on mount
   useEffect(() => {
@@ -34,7 +33,7 @@ const GameCompare = () => {
           <div className="game-compare__icon">
             <QuestionAnswerIcon fontSize="large" />
           </div>
-          <h2>Compare Answers</h2>
+          <h2>Compare Answers ({gameEngine.answersSet.length + 1} left)</h2>
           <h3 className="game-compare__current-question">{currentQuestion?.question}</h3>
 
           <div className="game-compare__accepted-answers">
@@ -104,7 +103,10 @@ const GameCompare = () => {
           </div>
         </Fragment>
       ) : (
-        <div className="general-error">What? Something's wrong</div>
+        <div className="game-compare-loading">
+          <CircularProgress style={{ color: COLORS.PRIMARY }} />
+          <p>Loading or something's wrong. I'm not sure</p>
+        </div>
       )}
     </div>
   );

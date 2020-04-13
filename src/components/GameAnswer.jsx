@@ -51,7 +51,7 @@ const GameAnswer = () => {
 
   const updateAnswer = (value, answerIndex) => {
     const newAnswers = [...answers];
-    newAnswers[answerIndex] = value;
+    newAnswers[answerIndex] = value.trim();
     setAnswers(newAnswers);
   };
 

@@ -10,7 +10,7 @@ import Toast from './Toast';
 import Game from './Game';
 import Mocks from './Mocks';
 
-const version = '0.2.642'; // patch number is always equal to the number of questions
+const version = '0.5.642'; // patch number is always equal to the number of questions
 
 const Screen = () => {
   const [screen] = useGlobalState('screen');

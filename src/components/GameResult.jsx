@@ -140,7 +140,7 @@ const GameResult = () => {
         })}
 
         {Object.entries(gameEngine.blockerState).map(([floor, state], index) => {
-          if (!state) return null;
+          if (state !== 'removed') return null;
 
           const position = gameEngine.flatOrderResults.length + index;
           const key = `explanation-key-floor-${floor}`;

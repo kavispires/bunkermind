@@ -124,14 +124,12 @@ const Home = () => {
 
   return (
     <div className="home">
-      {/* <button className="btn-invisible" onClick={() => createGameSecret()}> */}
       <img
         className="home__logo"
         src={logo}
         alt="Bunker Mind logo"
         onClick={() => createGameSecret()}
       />
-      {/* </button> */}
       <div className="home-section join-game">
         <TextField
           className="mui-full-width"

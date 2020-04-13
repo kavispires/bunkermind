@@ -1,3 +1,7 @@
+.game-result {
+  background: $color-pale-darker;
+}
+
 .move-animation {
   &--up {
     animation-name: resultMoveUp;

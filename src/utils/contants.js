@@ -91,3 +91,26 @@ export const TURN_TYPES_FLAVOR_TEXT = {
     'Pandemic! Pandemic! Pandemic!',
   ],
 };
+
+export const LOSER_FLAVOR_TEXT = {
+  lft1: 'died of the virus',
+  lft2: 'is making a plan to destroy the bunker in vengeance',
+  lft3: 'stole all the toilet paper left right before leaving',
+  lft4: 'was murdered withing 2 minutes by wastelanders',
+  lft5: 'became a zombie',
+  lft6: 'has become immune to the virus',
+  lft7: 'has done plastic surgery and switch places with someone here in the bunker. Gasp!',
+  lft8: 'fled to the north and created a new society where is considered a God.',
+  lft9: 'found the cure for the pandemic, healed the world, and never told you people about it',
+  lft10: 'join the wastelanders, and soon became their leader',
+  lft11: 'simply disappeard',
+  lft12: 'cried',
+  lft13: 'found love and lived a long life',
+  lft14: 'is happy now',
+  lft15: 'died of the virus',
+  lft16: 'died of the virus',
+  lft17: 'died of the virus',
+  lft18: 'died of the virus',
+  lft19: 'died of the virus',
+  lft20: 'died of the virus',
+};
